@@ -44,8 +44,8 @@ OZ_dat_sup7=OZ_dat_sup7[-c(2:15)]
 OZ_dat_sup7[c(2:9)]=OZ_dat_sup7[c(2:9)]*100
 OZ_dat_sup6[c(3:11)]=OZ_dat_sup6[c(3:11)]*100
 # OZ_dat_sup8=OZ_dat_sup8[c(1,12:16)]
-HUD_vac$res_prop=HUD_vac$res_prop*100
-HUD_vac$bus_prop=HUD_vac$bus_prop*100
+# HUD_vac$res_prop=HUD_vac$res_prop*100
+# HUD_vac$bus_prop=HUD_vac$bus_prop*100
 OZ_dat_sup9=OZ_dat_sup9[c(1,13:22)]
 var.labels_sup9=var.labels_sup9[c(1,3:12)]
 OZ_dat_sup9[c(2:11)]=OZ_dat_sup9[c(2:11)]*100
@@ -125,33 +125,36 @@ res = tibble::rownames_to_column(res, "VALUE")
 res %>% arrange(least_corr)
 res %>% arrange(desc(least_corr))
 
-OZ_dat$changeepop00_17=squish(OZ_dat$changeepop00_17,quantile(OZ_dat$changeepop00_17,c(.008,.992),na.rm=T))
-OZ_dat$changeepop13_17=squish(OZ_dat$changeepop13_17,quantile(OZ_dat$changeepop13_17,c(.008,.992),na.rm=T))
-OZ_dat$changeunempl00_17=squish(OZ_dat$changeunempl00_17,quantile(OZ_dat$changeunempl00_17,c(.008,.992),na.rm=T))
-OZ_dat$changeunempl13_17=squish(OZ_dat$changeunempl13_17,quantile(OZ_dat$changeunempl13_17,c(.008,.992),na.rm=T))
-OZ_dat$changepop00_17=squish(OZ_dat$changepop00_17,quantile(OZ_dat$changepop00_17,c(.008,.992),na.rm=T))
-OZ_dat$changepop13_17=squish(OZ_dat$changepop13_17,quantile(OZ_dat$changepop13_17,c(.008,.992),na.rm=T))
-OZ_dat$changemanufacturing00_17=squish(OZ_dat$changemanufacturing00_17,quantile(OZ_dat$changemanufacturing00_17,c(.008,.992),na.rm=T))
-OZ_dat$changemanufacturing13_17=squish(OZ_dat$changemanufacturing13_17,quantile(OZ_dat$changemanufacturing13_17,c(.008,.992),na.rm=T))
-OZ_dat$bus_pct_change=squish(OZ_dat$bus_pct_change,quantile(OZ_dat$bus_pct_change,c(.008,.992),na.rm=T))
-OZ_dat$res_pct_change=squish(OZ_dat$res_pct_change,quantile(OZ_dat$res_pct_change,c(.008,.992),na.rm=T))
-OZ_dat$ams_pct_change=squish(OZ_dat$ams_pct_change,quantile(OZ_dat$ams_pct_change,c(.008,.992),na.rm=T))
-OZ_dat$lt_perc_pop=squish(OZ_dat$lt_perc_pop,quantile(OZ_dat$lt_perc_pop,c(.008,.992),na.rm=T))
-OZ_dat$mt_perc_pop=squish(OZ_dat$mt_perc_pop,quantile(OZ_dat$mt_perc_pop,c(.008,.992),na.rm=T))
-OZ_dat$lt_perc_inc=squish(OZ_dat$lt_perc_inc,quantile(OZ_dat$lt_perc_inc,c(.008,.992),na.rm=T))
-OZ_dat$ChangeMedHomePrice=squish(OZ_dat$ChangeMedHomePrice,quantile(OZ_dat$ChangeMedHomePrice,c(.008,.992),na.rm=T))
-OZ_dat$ChangeIncome=squish(OZ_dat$ChangeIncome,quantile(OZ_dat$ChangeIncome,c(.008,.992),na.rm=T))
-OZ_dat$decline_manufacturing_absolute=squish(OZ_dat$decline_manufacturing_absolute,quantile(OZ_dat$decline_manufacturing_absolute,c(.008,.992),na.rm=T))
-OZ_dat$decline_population=squish(OZ_dat$decline_population,quantile(OZ_dat$decline_population,c(.008,.992),na.rm=T))
-OZ_dat$decline_employment_rate=squish(OZ_dat$decline_employment_rate,quantile(OZ_dat$decline_employment_rate,c(.008,.992),na.rm=T))
-OZ_dat$decline_manufacturing_rel_ind=squish(OZ_dat$decline_manufacturing_rel_ind,quantile(OZ_dat$decline_manufacturing_rel_ind,c(.008,.992),na.rm=T))
-OZ_dat$decline_manufacturing_rel_pop=squish(OZ_dat$decline_manufacturing_rel_pop,quantile(OZ_dat$decline_manufacturing_rel_pop,c(.008,.992),na.rm=T))
-OZ_dat$changeMedHHinc00_17=squish(OZ_dat$changeMedHHinc00_17,quantile(OZ_dat$changeMedHHinc00_17,c(.008,.992),na.rm=T))
-OZ_dat$changeMedHHinc13_17=squish(OZ_dat$changeMedHHinc13_17,quantile(OZ_dat$changeMedHHinc13_17,c(.008,.992),na.rm=T))
-OZ_dat$changePoverty00_17=squish(OZ_dat$changePoverty00_17,quantile(OZ_dat$changePoverty00_17,c(.008,.992),na.rm=T))
-OZ_dat$changePoverty13_17=squish(OZ_dat$changePoverty13_17,quantile(OZ_dat$changePoverty13_17,c(.008,.992),na.rm=T))
-OZ_dat$changeHomeValue13_17=squish(OZ_dat$changeHomeValue13_17,quantile(OZ_dat$changeHomeValue13_17,c(.008,.992),na.rm=T))
+OZ_dat$changeepop00_17=squish(OZ_dat$changeepop00_17,quantile(OZ_dat$changeepop00_17,c(.005,.995),na.rm=T))
+OZ_dat$changeepop13_17=squish(OZ_dat$changeepop13_17,quantile(OZ_dat$changeepop13_17,c(.005,.995),na.rm=T))
+OZ_dat$changeunempl00_17=squish(OZ_dat$changeunempl00_17,quantile(OZ_dat$changeunempl00_17,c(.005,.995),na.rm=T))
+OZ_dat$changeunempl13_17=squish(OZ_dat$changeunempl13_17,quantile(OZ_dat$changeunempl13_17,c(.005,.995),na.rm=T))
+OZ_dat$changepop00_17=squish(OZ_dat$changepop00_17,quantile(OZ_dat$changepop00_17,c(.005,.995),na.rm=T))
+OZ_dat$changepop13_17=squish(OZ_dat$changepop13_17,quantile(OZ_dat$changepop13_17,c(.005,.995),na.rm=T))
+OZ_dat$changemanufacturing00_17=squish(OZ_dat$changemanufacturing00_17,quantile(OZ_dat$changemanufacturing00_17,c(.005,.995),na.rm=T))
+OZ_dat$changemanufacturing13_17=squish(OZ_dat$changemanufacturing13_17,quantile(OZ_dat$changemanufacturing13_17,c(.005,.995),na.rm=T))
+OZ_dat$bus_pct_change=squish(OZ_dat$bus_pct_change,quantile(OZ_dat$bus_pct_change,c(.005,.995),na.rm=T))
+OZ_dat$res_pct_change=squish(OZ_dat$res_pct_change,quantile(OZ_dat$res_pct_change,c(.005,.995),na.rm=T))
+OZ_dat$ams_pct_change=squish(OZ_dat$ams_pct_change,quantile(OZ_dat$ams_pct_change,c(.005,.995),na.rm=T))
+OZ_dat$lt_perc_pop=squish(OZ_dat$lt_perc_pop,quantile(OZ_dat$lt_perc_pop,c(.005,.995),na.rm=T))
+OZ_dat$mt_perc_pop=squish(OZ_dat$mt_perc_pop,quantile(OZ_dat$mt_perc_pop,c(.005,.995),na.rm=T))
+OZ_dat$lt_perc_inc=squish(OZ_dat$lt_perc_inc,quantile(OZ_dat$lt_perc_inc,c(.005,.995),na.rm=T))
+OZ_dat$ChangeMedHomePrice=squish(OZ_dat$ChangeMedHomePrice,quantile(OZ_dat$ChangeMedHomePrice,c(.005,.995),na.rm=T))
+OZ_dat$ChangeIncome=squish(OZ_dat$ChangeIncome,quantile(OZ_dat$ChangeIncome,c(.005,.995),na.rm=T))
+OZ_dat$decline_manufacturing_absolute=squish(OZ_dat$decline_manufacturing_absolute,quantile(OZ_dat$decline_manufacturing_absolute,c(.005,.995),na.rm=T))
+OZ_dat$decline_population=squish(OZ_dat$decline_population,quantile(OZ_dat$decline_population,c(.005,.995),na.rm=T))
+OZ_dat$decline_employment_rate=squish(OZ_dat$decline_employment_rate,quantile(OZ_dat$decline_employment_rate,c(.005,.995),na.rm=T))
+OZ_dat$decline_manufacturing_rel_ind=squish(OZ_dat$decline_manufacturing_rel_ind,quantile(OZ_dat$decline_manufacturing_rel_ind,c(.005,.995),na.rm=T))
+OZ_dat$decline_manufacturing_rel_pop=squish(OZ_dat$decline_manufacturing_rel_pop,quantile(OZ_dat$decline_manufacturing_rel_pop,c(.005,.995),na.rm=T))
+OZ_dat$changeMedHHinc00_17=squish(OZ_dat$changeMedHHinc00_17,quantile(OZ_dat$changeMedHHinc00_17,c(.005,.995),na.rm=T))
+OZ_dat$changeMedHHinc13_17=squish(OZ_dat$changeMedHHinc13_17,quantile(OZ_dat$changeMedHHinc13_17,c(.005,.995),na.rm=T))
+OZ_dat$changePoverty00_17=squish(OZ_dat$changePoverty00_17,quantile(OZ_dat$changePoverty00_17,c(.005,.995),na.rm=T))
+OZ_dat$changePoverty13_17=squish(OZ_dat$changePoverty13_17,quantile(OZ_dat$changePoverty13_17,c(.005,.995),na.rm=T))
+OZ_dat$changeHomeValue13_17=squish(OZ_dat$changeHomeValue13_17,quantile(OZ_dat$changeHomeValue13_17,c(.005,.995),na.rm=T))
 OZ_dat$Naturalized = OZ_dat$ForeignBorn - OZ_dat$PCT_B05001006 
+
+OZ_dat$PCT_Age45to54 = OZ_dat$PCT_B01001016 + OZ_dat$PCT_B01001015 + OZ_dat$PCT_B01001040 + OZ_dat$PCT_B01001039
+OZ_dat$PCT_Age55to64 = OZ_dat$PCT_B01001019 + OZ_dat$PCT_B01001018 + OZ_dat$PCT_B01001017 + OZ_dat$PCT_B01001043 + OZ_dat$PCT_B01001042+ OZ_dat$PCT_B01001041
 
 OZ_dat = subset(OZ_dat, select = -c( # Remove GEO Vars
 #              var.name                                                                        var.label             
@@ -434,14 +437,14 @@ OZ_dat = subset(OZ_dat, select = -c( # Remove GEO Vars
 		# ,B01002001 #                            Median Age -- Total              
 		# ,B01001001 #                            Total Population             
 		# ,A00002_002 #                           Population Density (Per Sq. Mile)            
-		,decline_manufacturing_absolute #         decline in the number of workers in manufacturing
+		,decline_manufacturing_absolute #         decline in the number of manufacturing workers 
 		,decline_population #                     Percent decline in population (2013-2017 vs 2009-2013)
 		,decline_employment_rate #                Percentage point decline in employment rate
 		,decline_manufacturing_rel_ind #         Percentage point decline in manufacturing's share of employed 
 		,decline_manufacturing_rel_pop #   	Percentage point decline in manufacturing workers' share of the population
-		,bus_pct_change  #				business address change 2015-2017
-		,res_pct_change #					residential address change 2015-2017
-		,ams_pct_change #					total address change 2015-2017
+		,bus_pct_change  #				business address change 2016-2017
+		,res_pct_change #					residential address change 2016-2017
+		,ams_pct_change #					total address change 2016-2017
 		#,res_prop
 		#,bus_prop
 		#,MedHHInc2017
@@ -458,14 +461,16 @@ OZ_dat = subset(OZ_dat, select = -c( # Remove GEO Vars
 		# ,PCT_A01001_006 #		 "Total Population: 18 to 24 Years"
 		# ,PCT_A01001_007 #		 "Total Population: 25 to 34 Years"
 		# ,PCT_A01001_008 #		 "Total Population: 35 to 44 Years"
-		# ,PCT_Age45to64  #		 "Total Population: 45 to 64 Years"
+		,PCT_Age45to64  #		 "Total Population: 45 to 64 Years"
+		# ,PCT_Age45to54   # Split Middle-Age # 1
+		# ,PCT_Age55to64   # Split Middle-Age # 2
 		# ,PCT_A01001_011 #		 "Total Population: 65 to 74 Years"
 		# ,PCT_A01001_012 #		 "Total Population: 75 to 84 Years"
 		# ,PCT_A01001_013 #		 "Total Population: 85 Years and Over"
 		,PCT_65over #                	% Pop 65 and over
-		,PCT_25to64 #                 	% Pop 25 to 64
+		,PCT_25to64 #                 % Pop 25 to 64
 		,PCT_18to24 #                	% Pop 18 to 24
-		,PCT_Under18 #            		% Pop under 18
+		,PCT_Under18 #            	% Pop under 18
 		,changeepop00_17
 		,changeepop13_17
 		,changeunempl00_17
@@ -586,22 +591,68 @@ ACS_dat=subset(ACS_dat, select = -c(B01001001 # Remove population count and othe
 	,PerWorkerWageIncome
 	,LFPR2554
 	,EPOP2554
-	#,ForeignBorn
+	,ForeignBorn
 	# ,NonHispanicWhite
 	,changepop00_17
 	,vehicles_2plus
-	,PercentFemale
-	,PCT_A01001_002 #		 "Total Population: Under 5 Years"
-	,PCT_Age5to17   #		 "Total Population: 5 to 17 Years"
-	,PCT_A01001_006 #		 "Total Population: 18 to 24 Years"
-	,PCT_A01001_007 #		 "Total Population: 25 to 34 Years"
-	,PCT_A01001_008 #		 "Total Population: 35 to 44 Years"
-	,PCT_Age45to64  #		 "Total Population: 45 to 64 Years"
-	,PCT_A01001_011 #		 "Total Population: 65 to 74 Years"
-	,PCT_A01001_012 #		 "Total Population: 75 to 84 Years"
-	,PCT_A01001_013 #		 "Total Population: 85 Years and Over"
-
+	# ,PercentFemale
+	# ,PCT_A01001_002 #		 "Total Population: Under 5 Years"
+	# ,PCT_Age5to17   #		 "Total Population: 5 to 17 Years"
+	# ,PCT_A01001_006 #		 "Total Population: 18 to 24 Years"
+	# ,PCT_A01001_007 #		 "Total Population: 25 to 34 Years"
+	# ,PCT_A01001_008 #		 "Total Population: 35 to 44 Years"
+	# ,PCT_Age45to64  #		 "Total Population: 45 to 64 Years"
+	# ,PCT_A01001_011 #		 "Total Population: 65 to 74 Years"
+	# ,PCT_A01001_012 #		 "Total Population: 75 to 84 Years"
+	# ,PCT_A01001_013 #		 "Total Population: 85 Years and Over"
+	,PCT_B01001049 #             % Total Population: Female: 85 Years and Over
+	,PCT_B01001048 #                % Total Population: Female: 80 to 84 Years
+	,PCT_B01001047 #                % Total Population: Female: 75 to 79 Years
+	,PCT_B01001046 #                % Total Population: Female: 70 to 74 Years
+	,PCT_B01001045 #                % Total Population: Female: 67 to 69 Years
+	,PCT_B01001044 #               % Total Population: Female: 65 and 66 Years
+	,PCT_B01001043 #                % Total Population: Female: 62 to 64 Years
+	,PCT_B01001042 #               % Total Population: Female: 60 and 61 Years
+	,PCT_B01001041 #                % Total Population: Female: 55 to 59 Years
+	,PCT_B01001040 #                % Total Population: Female: 50 to 54 Years
+	,PCT_B01001039 #                % Total Population: Female: 45 to 49 Years
+	,PCT_B01001038 #                % Total Population: Female: 40 to 44 Years
+	,PCT_B01001037 #                % Total Population: Female: 35 to 39 Years
+	,PCT_B01001036 #                % Total Population: Female: 30 to 34 Years
+	,PCT_B01001035 #                % Total Population: Female: 25 to 29 Years
+	,PCT_B01001034 #                % Total Population: Female: 22 to 24 Years
+	,PCT_B01001033 #                      % Total Population: Female: 21 Years
+	,PCT_B01001032 #                      % Total Population: Female: 20 Years
+	,PCT_B01001031 #               % Total Population: Female: 18 and 19 Years
+	,PCT_B01001030 #                % Total Population: Female: 15 to 17 Years
+	,PCT_B01001029 #                % Total Population: Female: 10 to 14 Years
+	,PCT_B01001028 #                  % Total Population: Female: 5 to 9 Years
+	,PCT_B01001027 #                 % Total Population: Female: Under 5 Years
+	,PCT_B01001025 #               % Total Population: Male: 85 Years and Over
+	,PCT_B01001024 #                  % Total Population: Male: 80 to 84 Years
+	,PCT_B01001023 #                  % Total Population: Male: 75 to 79 Years
+	,PCT_B01001022 #                  % Total Population: Male: 70 to 74 Years
+	,PCT_B01001021 #                  % Total Population: Male: 67 to 69 Years
+	,PCT_B01001020 #                 % Total Population: Male: 65 and 66 Years
+	,PCT_B01001019 #                  % Total Population: Male: 62 to 64 Years
+	,PCT_B01001018 #                 % Total Population: Male: 60 and 61 Years
+	,PCT_B01001017 #                  % Total Population: Male: 55 to 59 Years
+	,PCT_B01001016 #                  % Total Population: Male: 50 to 54 Years
+	,PCT_B01001015 #                  % Total Population: Male: 45 to 49 Years
+	,PCT_B01001014 #                  % Total Population: Male: 40 to 44 Years
+	,PCT_B01001013 #                  % Total Population: Male: 35 to 39 Years
+	,PCT_B01001012 #                  % Total Population: Male: 30 to 34 Years
+	,PCT_B01001011 #                  % Total Population: Male: 25 to 29 Years
+	,PCT_B01001010 #                  % Total Population: Male: 22 to 24 Years
+	,PCT_B01001009 #                        % Total Population: Male: 21 Years
+	,PCT_B01001008 #                        % Total Population: Male: 20 Years
+	,PCT_B01001007 #                 % Total Population: Male: 18 and 19 Years
+	,PCT_B01001006 #                  % Total Population: Male: 15 to 17 Years
+	,PCT_B01001005 #                  % Total Population: Male: 10 to 14 Years
+	,PCT_B01001004 #                    % Total Population: Male: 5 to 9 Years
+	,PCT_B01001003 #                   % Total Population: Male: Under 5 Years
 ))
+
 ACS_dat %>% summarise_all(funs(sum(is.na(.) )))
 
 ACS_dat_names = ACS_dat[,1]
@@ -631,10 +682,10 @@ comp3 = data.frame(pc$x[,1:92])
 gc()
 
 # Larger Age Components
-comp1 = data.frame(pc$x[,1:119])
-comp2 = data.frame(pc$x[,1:122])
-comp3 = data.frame(pc$x[,1:127])
-gc()
+# comp1 = data.frame(pc$x[,1:119])
+# comp2 = data.frame(pc$x[,1:122])
+# comp3 = data.frame(pc$x[,1:127])
+# gc()
 
 #### K-Means Implimentation #### 
 
@@ -643,7 +694,7 @@ gc()
 # k_pca_13_1= kmeans(comp1, centers = 13, nstart=45, iter.max=5000);gc()
 k_pca_14_1= kmeans(comp1, centers = 14, nstart=45, iter.max=5000);gc()
 k_pca_15_1= kmeans(comp1, centers = 15, nstart=45, iter.max=5000);gc()
-k_pca_16_1= kmeans(comp1, centers = 16, nstart=45, iter.max=5000);gc()
+k_pca_16_1= kmeans(comp1, centers = 16, nstart=50, iter.max=5000);gc()
 # k_pca_17_1= kmeans(comp1, centers = 17, nstart=45, iter.max=5000);gc()
 # k_pca_18_1= kmeans(comp1, centers = 18, nstart=45, iter.max=30500);gc()
 # k_pca_19_1= kmeans(comp1, centers = 19, nstart=31, iter.max=30500);gc()
@@ -652,9 +703,9 @@ k_pca_16_1= kmeans(comp1, centers = 16, nstart=45, iter.max=5000);gc()
 # k_pca_11_2= kmeans(comp2, centers = 11, nstart=45, iter.max=5500);gc()
 # k_pca_12_2= kmeans(comp2, centers = 12, nstart=45, iter.max=5500);gc()
 # k_pca_13_2= kmeans(comp2, centers = 13,  nstart=45, iter.max=5000);gc()
-k_pca_14_2= kmeans(comp2, centers = 14, nstart=45, iter.max=5000);gc()
-k_pca_15_2= kmeans(comp2, centers = 15, nstart=45, iter.max=5000);gc()
-k_pca_16_2= kmeans(comp2, centers = 16, nstart=45, iter.max=5000);gc()
+k_pca_14_2= kmeans(comp2, centers = 14, nstart=50, iter.max=5000);gc()
+k_pca_15_2= kmeans(comp2, centers = 15, nstart=50, iter.max=5000);gc()
+k_pca_16_2= kmeans(comp2, centers = 16, nstart=50, iter.max=5000);gc()
 # k_pca_17_2= kmeans(comp2, centers = 17, nstart=45, iter.max=5000);gc()
 # k_pca_18_2= kmeans(comp2, centers = 18, nstart=45, iter.max=9500);gc()
 # k_pca_19_2= kmeans(comp2, centers = 19, nstart=45, iter.max=9500);gc()
@@ -663,9 +714,9 @@ k_pca_16_2= kmeans(comp2, centers = 16, nstart=45, iter.max=5000);gc()
 # k_pca_11_3= kmeans(comp3, centers = 11, nstart=25, iter.max=5000);gc()
 # k_pca_12_3= kmeans(comp3, centers = 12, nstart=25, iter.max=5000);gc()
 # k_pca_13_3= kmeans(comp3, centers = 13, nstart=45, iter.max=5000);gc()
-k_pca_14_3= kmeans(comp3, centers = 14, nstart=45, iter.max=5000);gc()
-k_pca_15_3= kmeans(comp3, centers = 15, nstart=45, iter.max=5000);gc()
-k_pca_16_3= kmeans(comp3, centers = 16, nstart=45, iter.max=5000);gc()
+k_pca_14_3= kmeans(comp3, centers = 14, nstart=50, iter.max=5000);gc()
+k_pca_15_3= kmeans(comp3, centers = 15, nstart=50, iter.max=5000);gc()
+k_pca_16_3= kmeans(comp3, centers = 16, nstart=50, iter.max=5000);gc()
 # k_pca_17_3= kmeans(comp3, centers = 17, nstart=31, iter.max=9500);gc()
 # k_pca_18_3= kmeans(comp3, centers = 18, nstart=25, iter.max=9500);gc()
 # k_pca_19_3= kmeans(comp3, centers = 19, nstart=25, iter.max=5000);gc()
