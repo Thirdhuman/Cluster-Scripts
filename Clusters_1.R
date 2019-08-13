@@ -175,7 +175,7 @@ OZ_dat = subset(OZ_dat, select = -c( # Remove GEO Vars
 		# ,UninsuredRate #                                            % Total: No Health Insurance Coverage   
 		# ,PCT_B13010002 # % Women 15 to 50 Years for Whom Poverty Status Is Determined: Women Who Had a Birth
 		# ,UnemploymentRate #               % Civilian Population in Labor Force 16 Years and Over: Unemployed   
-		# ,SSIRate #                                            Percent of households with SSI income
+		# ,SSIRate #                                                Percent of households with SSI income
 		# ,PovertyRate #                                              Percent of population under the FPL        
 		# ,PCT_C24050071 # % Civilian Employed Population 16 Years and Over: Production, Transportation, an      
 		# ,PCT_C24050057 # % Civilian Employed Population 16 Years and Over: Natural Resources, Constructio      
@@ -485,7 +485,7 @@ OZ_dat = subset(OZ_dat, select = -c( # Remove GEO Vars
 		,changeMedHHinc13_17
 		,changeMedHomeValue00_17
 		,changeMedHomeValue13_17
-		#,non_familyHH
+		#, non_familyHH
 		# ,LFPR2554
 		# ,EPOP2554
 		# ,pov_200
@@ -696,17 +696,17 @@ gc()
 k_pca_14_1= kmeans(comp1, centers = 14, nstart=200, iter.max=50000);gc()
 k_pca_15_1= kmeans(comp1, centers = 15, nstart=200, iter.max=50000);gc()
 k_pca_16_1= kmeans(comp1, centers = 16, nstart=200, iter.max=50000);gc()
-# k_pca_17_1= kmeans(comp1, centers = 17, nstart=50, iter.max=5000);gc()
+k_pca_17_1= kmeans(comp1, centers = 17, nstart=200, iter.max=5000);gc()
 # k_pca_18_1= kmeans(comp1, centers = 18, nstart=50, iter.max=30500);gc()
 # k_pca_19_1= kmeans(comp1, centers = 19, nstart=50, iter.max=30500);gc()
 # k_pca_20_1= kmeans(comp1, centers = 20, nstart=50, iter.max=9500);gc()
 
 # k_pca_12_2= kmeans(comp2, centers = 12, nstart=50, iter.max=5500);gc()
-# k_pca_13_2= kmeans(comp2, centers = 13,  nstart=50, iter.max=5000);gc()
+k_pca_13_2= kmeans(comp2, centers = 13,  nstart=50, iter.max=5000);gc()
 k_pca_14_2= kmeans(comp2, centers = 14, nstart=200, iter.max=50000);gc()
 k_pca_15_2= kmeans(comp2, centers = 15, nstart=200, iter.max=50000);gc()
 k_pca_16_2= kmeans(comp2, centers = 16, nstart=200, iter.max=50000);gc()
-# k_pca_17_2= kmeans(comp2, centers = 17, nstart=50, iter.max=5000);gc()
+k_pca_17_2= kmeans(comp2, centers = 17, nstart=200, iter.max=5000);gc()
 # k_pca_18_2= kmeans(comp2, centers = 18, nstart=50, iter.max=9500);gc()
 # k_pca_19_2= kmeans(comp2, centers = 19, nstart=50, iter.max=9500);gc()
 # k_pca_20_2= kmeans(comp2, centers = 20, nstart=50, iter.max=9500);gc()
@@ -726,17 +726,17 @@ k_pca_16_3= kmeans(ACS_matrix, centers = 16, nstart=200, iter.max=50000);gc()
 ACS_test=cbind(ACS_dat_OZs,k_pca_14_1=k_pca_14_1$cluster)
 ACS_test=cbind(ACS_test,k_pca_15_1=k_pca_15_1$cluster)
 ACS_test=cbind(ACS_test,k_pca_16_1=k_pca_16_1$cluster)
-# ACS_test=cbind(ACS_test,k_pca_17_1=k_pca_17_1$cluster)
+ACS_test=cbind(ACS_test,k_pca_17_1=k_pca_17_1$cluster)
 # ACS_test=cbind(ACS_test,k_pca_18_1=k_pca_18_1$cluster)
 # ACS_test=cbind(ACS_test,k_pca_19_1=k_pca_19_1$cluster)
 # ACS_test=cbind(ACS_test,k_pca_20_1=k_pca_20_1$cluster)
 
 # ACS_test=cbind(ACS_test,k_pca_12_2=k_pca_12_2$cluster)
-# ACS_test=cbind(ACS_test,k_pca_13_2=k_pca_13_2$cluster)
+ACS_test=cbind(ACS_test,k_pca_13_2=k_pca_13_2$cluster)
 ACS_test=cbind(ACS_test,k_pca_14_2=k_pca_14_2$cluster)
 ACS_test=cbind(ACS_test,k_pca_15_2=k_pca_15_2$cluster)
 ACS_test=cbind(ACS_test,k_pca_16_2=k_pca_16_2$cluster)
-# ACS_test=cbind(ACS_test,k_pca_17_2=k_pca_17_2$cluster)
+ACS_test=cbind(ACS_test,k_pca_17_2=k_pca_17_2$cluster)
 # ACS_test=cbind(ACS_test,k_pca_18_2=k_pca_18_2$cluster)
 # ACS_test=cbind(ACS_test,k_pca_19_2=k_pca_19_2$cluster)
 # ACS_test=cbind(ACS_test,k_pca_20_2=k_pca_20_2$cluster)
@@ -765,15 +765,6 @@ ACS_test=cbind(ACS_test,k_pca_16_3=k_pca_16_3$cluster)
 # ACS_test=cbind(ACS_test,pca_clara_13_2=pca_c13_2$clustering)
 # ACS_test=cbind(ACS_test,pca_clara_14_2=pca_c14_2$clustering)
 # ACS_test=cbind(ACS_test,pca_clara_15_2=pca_c15_2$clustering)
-# 
-# ACS_test=cbind(ACS_test,pca_clara_12_3=pca_c12_3$clustering)
-# ACS_test=cbind(ACS_test,pca_clara_13_3=pca_c13_3$clustering)
-# ACS_test=cbind(ACS_test,pca_clara_14_3=pca_c14_3$clustering)
-
-# ACS_test=cbind(ACS_test,cluster_12=k_12$cluster)
-# ACS_test=cbind(ACS_test,cluster_13=k_13$cluster)
-# ACS_test=cbind(ACS_test,cluster_14=k_14$cluster)
-# ACS_test=cbind(ACS_test,cluster_15=k_15$cluster)
 
 OZ_dat_lang = readstata13::read.dta13("~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/cluster_inputs/languagesupplement.dta")
 OZ_dat_lang$St_Code=stringi::stri_sub(OZ_dat_lang$FIPS, from=1, to=2)
@@ -788,18 +779,18 @@ rm(OZ_dat_lang)
 ACS_test$k_pca_14_1[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
 ACS_test$k_pca_15_1[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
 ACS_test$k_pca_16_1[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-# ACS_test$k_pca_17_1[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+ACS_test$k_pca_17_1[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
 # ACS_test$k_pca_18_1[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
 # ACS_test$k_pca_19_1[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
 # ACS_test$k_pca_20_1[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
 
 # ACS_test$k_pca_11_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
 # ACS_test$k_pca_12_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-# ACS_test$k_pca_13_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+ACS_test$k_pca_13_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
 ACS_test$k_pca_14_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
 ACS_test$k_pca_15_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
 ACS_test$k_pca_16_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-# ACS_test$k_pca_17_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+ACS_test$k_pca_17_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
 # ACS_test$k_pca_18_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
 # ACS_test$k_pca_19_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
 # ACS_test$k_pca_20_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
@@ -820,17 +811,17 @@ ACS_test$k_pca_16_3[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
 ACS_test$k_pca_14_1[is.na(ACS_test$k_pca_14_1)] = "Sparsely Populated"
 ACS_test$k_pca_15_1[is.na(ACS_test$k_pca_15_1)] = "Sparsely Populated"
 ACS_test$k_pca_16_1[is.na(ACS_test$k_pca_16_1)] = "Sparsely Populated"
-# ACS_test$k_pca_17_1[is.na(ACS_test$k_pca_17_1)] = "Sparsely Populated"
+ACS_test$k_pca_17_1[is.na(ACS_test$k_pca_17_1)] = "Sparsely Populated"
 # ACS_test$k_pca_18_1[is.na(ACS_test$k_pca_18_1)] = "Sparsely Populated"
 # ACS_test$k_pca_19_1[is.na(ACS_test$k_pca_19_1)] = "Sparsely Populated"
 # ACS_test$k_pca_20_1[is.na(ACS_test$k_pca_20_1)] = "Sparsely Populated"
 
 # ACS_test$k_pca_12_2[is.na(ACS_test$k_pca_12_2)] = "Sparsely Populated"
-# ACS_test$k_pca_13_2[is.na(ACS_test$k_pca_13_2)] = "Sparsely Populated"
+ACS_test$k_pca_13_2[is.na(ACS_test$k_pca_13_2)] = "Sparsely Populated"
 ACS_test$k_pca_14_2[is.na(ACS_test$k_pca_14_2)] = "Sparsely Populated"
 ACS_test$k_pca_15_2[is.na(ACS_test$k_pca_15_2)] = "Sparsely Populated"
 ACS_test$k_pca_16_2[is.na(ACS_test$k_pca_16_2)] = "Sparsely Populated"
-# ACS_test$k_pca_17_2[is.na(ACS_test$k_pca_17_2)] = "Sparsely Populated"
+ACS_test$k_pca_17_2[is.na(ACS_test$k_pca_17_2)] = "Sparsely Populated"
 # ACS_test$k_pca_18_2[is.na(ACS_test$k_pca_18_2)] = "Sparsely Populated"
 # ACS_test$k_pca_19_2[is.na(ACS_test$k_pca_19_2)] = "Sparsely Populated"
 # ACS_test$k_pca_20_2[is.na(ACS_test$k_pca_20_2)] = "Sparsely Populated"
