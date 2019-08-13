@@ -57,6 +57,7 @@ OZ_dat_sup10$pov_200=(OZ_dat_sup10$PCT_C17002002+OZ_dat_sup10$PCT_C17002003+OZ_d
 OZ_dat_sup10$pov_200=OZ_dat_sup10$pov_200 *100
 OZ_dat_sup10$armed_forces_perc = (OZ_dat_sup10$B23025006 / OZ_dat_sup10$B23025001) * 100
 OZ_dat_sup10=OZ_dat_sup10[c('FIPS', 'PCT_C17002002','LFPR2554','EPOP2554','pov_200','armed_forces_perc')]
+PCT_C17002002$PCT_C17002002 = PCT_C17002002$PCT_C17002002*100
 OZ_dat_sup11=subset(OZ_dat_sup11,Year==2017)
 as.data.frame(OZ_dat_sup11) %>% summarise_all(funs(sum(is.na(.)))) %>% gather()
 OZ_dat_sup11=OZ_dat_sup11[c('FIPS', 'PerCapitaIncome','PerWorkerWageIncome')]
@@ -116,14 +117,14 @@ OZ_dat = subset(OZ_dat, is.na(B01001001) == F)
 OZ_dat = subset(OZ_dat, (B01001001) > 150 )
 OZ_dat = subset(OZ_dat, select = -c(GEOID, St_Code)) # Remove GEO Vars
 
-menon=subset(OZ_dat, German >= 50 | Spanish >= 50)
-res = cor(menon[,-c(1:2)],use = "complete.obs")
-res=round(res, 2)
-res=as.data.frame(res[,c('German','Spanish')])
-res$least_corr = -1*(res$German - res$Spanish)
-res = tibble::rownames_to_column(res, "VALUE")
-res %>% arrange(least_corr)
-res %>% arrange(desc(least_corr))
+# menon=subset(OZ_dat, German >= 50 | Spanish >= 50)
+# res = cor(menon[,-c(1:2)],use = "complete.obs")
+# res=round(res, 2)
+# res=as.data.frame(res[,c('German','Spanish')])
+# res$least_corr = -1*(res$German - res$Spanish)
+# res = tibble::rownames_to_column(res, "VALUE")
+# res %>% arrange(least_corr)
+# res %>% arrange(desc(least_corr))
 
 OZ_dat$changeepop00_17=squish(OZ_dat$changeepop00_17,quantile(OZ_dat$changeepop00_17,c(.005,.995),na.rm=T))
 OZ_dat$changeepop13_17=squish(OZ_dat$changeepop13_17,quantile(OZ_dat$changeepop13_17,c(.005,.995),na.rm=T))
@@ -155,6 +156,7 @@ OZ_dat$Naturalized = OZ_dat$ForeignBorn - OZ_dat$PCT_B05001006
 
 OZ_dat$PCT_Age45to54 = OZ_dat$PCT_B01001016 + OZ_dat$PCT_B01001015 + OZ_dat$PCT_B01001040 + OZ_dat$PCT_B01001039
 OZ_dat$PCT_Age55to64 = OZ_dat$PCT_B01001019 + OZ_dat$PCT_B01001018 + OZ_dat$PCT_B01001017 + OZ_dat$PCT_B01001043 + OZ_dat$PCT_B01001042+ OZ_dat$PCT_B01001041
+OZ_dat$non_familyHH =OZ_dat$PCT_B11011018+OZ_dat$PCT_B11011017+OZ_dat$PCT_B11011019 # % Households: Nonfamily Households   
 
 OZ_dat = subset(OZ_dat, select = -c( # Remove GEO Vars
 #              var.name                                                                        var.label             
@@ -171,7 +173,7 @@ OZ_dat = subset(OZ_dat, select = -c( # Remove GEO Vars
 		,PCT_B190010_IncQ2 #                                                                             <NA>    
 		,PCT_B190010_IncQ1 #                                                                             <NA>    
 		# ,UninsuredRate #                                            % Total: No Health Insurance Coverage   
-		# ,PCT_B13010002 # % Women 15 to 50 Years for Whom Poverty Status Is Determined: Women Who Had a Bi
+		# ,PCT_B13010002 # % Women 15 to 50 Years for Whom Poverty Status Is Determined: Women Who Had a Birth
 		# ,UnemploymentRate #               % Civilian Population in Labor Force 16 Years and Over: Unemployed   
 		# ,SSIRate #                                            Percent of households with SSI income
 		# ,PovertyRate #                                              Percent of population under the FPL        
@@ -204,7 +206,7 @@ OZ_dat = subset(OZ_dat, select = -c( # Remove GEO Vars
 		,PCT_B25034009        #                                       Housing Units: Built 1950 to 1959
 		,PCT_B25034010        #                                       Housing Units: Built 1940 to 1949
 		# ,PCT_B25034011        #                                    Housing Units: Built 1939 or Earlier
-		,PCT_B25024011 #      #                                      % Housing Units: Boat, Rv, Van, Etc.        
+		,PCT_B25024011 #      #                                      % Housing Units: Boat, Rv, Van, Etc.
 		# ,PCT_B25024010 #                                                     % Housing Units: Mobile Home      
 		# ,PCT_B25024009 #                                                      % Housing Units: 50 or More      
 		# ,PCT_B25024008 #                                                        % Housing Units: 20 to 49      
@@ -275,12 +277,12 @@ OZ_dat = subset(OZ_dat, select = -c( # Remove GEO Vars
 		,PCT_B14005028 # % Population 16 to 19 Years: Female: Not Enrolled in School: Not High School Gra        
 		,PCT_B14005027 # % Population 16 to 19 Years: Female: Not Enrolled in School: Not High School Gra        
 		,PCT_B14005024 # % Population 16 to 19 Years: Female: Not Enrolled in School: High School Graduat        
-		,PCT_B14005017 #                        % Population 16 to 19 Years: Female: Enrolled in School  60451001
+		,PCT_B14005017 #                        % Population 16 to 19 Years: Female: Enrolled in School  
 		,PCT_B14005015 # % Population 16 to 19 Years: Male: Not Enrolled in School: Not High School Gradu        
 		,PCT_B14005014 # % Population 16 to 19 Years: Male: Not Enrolled in School: Not High School Gradu        
 		,PCT_B14005013 # % Population 16 to 19 Years: Male: Not Enrolled in School: Not High School Gradu        
 		,PCT_B14005010 # % Population 16 to 19 Years: Male: Not Enrolled in School: High School Graduate         
-		,PCT_B14005003 #                          % Population 16 to 19 Years: Male: Enrolled in School  60047995
+		,PCT_B14005003 #                          % Population 16 to 19 Years: Male: Enrolled in School  
 		,PCT_B14004024 # % Population 15 Years and Over: Female: Enrolled in Private College or Graduate         
 		,PCT_B14004019 # % Population 15 Years and Over: Female: Enrolled in Public College or Graduate S        
 		,PCT_B14004008 # % Population 15 Years and Over: Male: Enrolled in Private College or Graduate Sc        
@@ -294,7 +296,7 @@ OZ_dat = subset(OZ_dat, select = -c( # Remove GEO Vars
 		,PCT_B11009005 # % Households: Unmarried-Partner Households: Female Householder and Female Partne        
 		,PCT_B11009003 #    % Households: Unmarried-Partner Households: Male Householder and Male Partner        
 		# ,PCT_B11001003 #                           % Households: Family Households: Married-Couple Family      
-		,PCT_B09005005 # % Population Under 18 Years in Households (Excluding Householders, Spouses, and         
+		# ,PCT_B09005005 #		 % Percent Children In Single Female HH	         
 		# ,PCT_B08303013 #         % Workers 16 Years and Over Who Did Not Work At Home: 90 or More Minutes      
 		# ,PCT_B08303012 #           % Workers 16 Years and Over Who Did Not Work At Home: 60 to 89 Minutes      
 		# ,PCT_B08303011 #           % Workers 16 Years and Over Who Did Not Work At Home: 45 to 59 Minutes      
@@ -308,26 +310,26 @@ OZ_dat = subset(OZ_dat, select = -c( # Remove GEO Vars
 		# ,PCT_B08303003 #             % Workers 16 Years and Over Who Did Not Work At Home: 5 to 9 Minutes      
 		# ,PCT_B08301010 #           % Workers 16 Years and Over: Public Transportation (Excluding Taxicab)      
 		# ,vehicles_2plus #		 2 or more vehicles
-		,PCT_B08301002 #           % Workers 16 Years and Over: Car, Truck, or Van               9.659572
+		,PCT_B08301002 #           % Workers 16 Years and Over: Car, Truck, or Van               
 		,PCT_B08014007 #          % Workers 16 Years and Over in Households: 5 or More Vehicles Available        
 		,PCT_B08014006 #                  % Workers 16 Years and Over in Households: 4 Vehicles Available        
 		,PCT_B08014005 #                  % Workers 16 Years and Over in Households: 3 Vehicles Available        
 		,PCT_B08014004 #                  % Workers 16 Years and Over in Households: 2 Vehicles Available        
 		,PCT_B08014003 #                   % Workers 16 Years and Over in Households: 1 Vehicle Available        
 		# ,PCT_B08014002 #                  % Workers 16 Years and Over in Households: No Vehicle Available      
-		,PCT_B07204015 # % Population Elsewhere_Different_County_Different_State_West					   
-		,PCT_B07204014 # % Population Elsewhere_Different_County_Different_State_South			         
-		,PCT_B07204013 # % Population Elsewhere_Different_County_Different_State_Midwest			         
-		,PCT_B07204012 # % Population Elsewhere_Different_County_Different_State_Northeast			         
-		,PCT_B07204011 # % Population Elsewhere_Different_County_Different_State				         
-		,PCT_B07204010 # % Population Elsewhere_Different_County_Same_State					         
-		,PCT_B07204009 # % Population Elsewhere_Different_County							        1
-		,PCT_B07204008 # % Population Elsewhere_Same_County								         
+		,PCT_B07204015   #   % Population Elsewhere_Different_County_Different_State_West					   
+		,PCT_B07204014   #   % Population Elsewhere_Different_County_Different_State_South			         
+		,PCT_B07204013   #   % Population Elsewhere_Different_County_Different_State_Midwest			         
+		,PCT_B07204012   #   % Population Elsewhere_Different_County_Different_State_Northeast			         
+		,PCT_B07204011   #   % Population Elsewhere_Different_County_Different_State				         
+		,PCT_B07204010   #   % Population Elsewhere_Different_County_Same_State					         
+		,PCT_B07204009   #   % Population Elsewhere_Different_County							        
+		,PCT_B07204008   #   % Population Elsewhere_Same_County								         
 		# ,PCT_B07204007 # % Population Different County and Town   							   
-		,PCT_B07204006 # % Population Same_City_Or_Town_Different_County_(Same_State)				         
+		,PCT_B07204006   # % Population Same_City_Or_Town_Different_County_(Same_State)				         
 		# ,PCT_B07204005 # % Population Same_city_or_town_same_County 							   
-		,PCT_B07204004 # % Population Same_city_or_town										.25
-		,PCT_B07204003 # % PCT_Different_House_1_Year_Ago     								   
+		,PCT_B07204004   # % Population Same_city_or_town									
+		,PCT_B07204003   # % PCT_Different_House_1_Year_Ago     								   
 		# ,PCT_B07009006 # % Population 25 Years and Over in the United States: Graduate or Professional De      
 		# ,PCT_B07009005 #           % Population 25 Years and Over in the United States: Bachelor's Degree      
 		# ,PCT_B07009004 # % Population 25 Years and Over in the United States: Some College or Associate's      
@@ -342,77 +344,77 @@ OZ_dat = subset(OZ_dat, select = -c( # Remove GEO Vars
 		,PCT_B02001007 #                                        % Total Population: Some Other Race Alone        
 		,PCT_B02001006 #             % Total Population: Native Hawaiian and Other Pacific Islander Alone        
 		# ,PCT_B02001005 #                                                  % Total Population: Asian Alone      
-		# ,PCT_B02001004 #                      % Total Population: American Indian and Alaska Native Alone      
-		# ,PCT_B02001003 #                              % Total Population: Black or African American Alone      
-		# ,PCT_B02001002 #                                                  % Total Population: White Alone      
-		# ,PCT_B01001049 #                                    % Total Population: Female: 85 Years and Over
-		# ,PCT_B01001048 #                                       % Total Population: Female: 80 to 84 Years
-		# ,PCT_B01001047 #                                       % Total Population: Female: 75 to 79 Years
-		# ,PCT_B01001046 #                                       % Total Population: Female: 70 to 74 Years
-		# ,PCT_B01001045 #                                       % Total Population: Female: 67 to 69 Years
-		# ,PCT_B01001044 #                                      % Total Population: Female: 65 and 66 Years
-		# ,PCT_B01001043 #                                       % Total Population: Female: 62 to 64 Years
-		# ,PCT_B01001042 #                                      % Total Population: Female: 60 and 61 Years
-		# ,PCT_B01001041 #                                       % Total Population: Female: 55 to 59 Years
-		# ,PCT_B01001040 #                                       % Total Population: Female: 50 to 54 Years
-		# ,PCT_B01001039 #                                       % Total Population: Female: 45 to 49 Years
-		# ,PCT_B01001038 #                                       % Total Population: Female: 40 to 44 Years
-		# ,PCT_B01001037 #                                       % Total Population: Female: 35 to 39 Years
-		# ,PCT_B01001036 #                                       % Total Population: Female: 30 to 34 Years
-		# ,PCT_B01001035 #                                       % Total Population: Female: 25 to 29 Years
-		# ,PCT_B01001034 #                                       % Total Population: Female: 22 to 24 Years
-		# ,PCT_B01001033 #                                             % Total Population: Female: 21 Years
-		# ,PCT_B01001032 #                                             % Total Population: Female: 20 Years
-		# ,PCT_B01001031 #                                      % Total Population: Female: 18 and 19 Years
-		# ,PCT_B01001030 #                                       % Total Population: Female: 15 to 17 Years
-		# ,PCT_B01001029 #                                       % Total Population: Female: 10 to 14 Years
-		# ,PCT_B01001028 #                                         % Total Population: Female: 5 to 9 Years
-		# ,PCT_B01001027 #                                        % Total Population: Female: Under 5 Years
-		# ,PCT_B01001025 #                                      % Total Population: Male: 85 Years and Over
-		# ,PCT_B01001024 #                                         % Total Population: Male: 80 to 84 Years
-		# ,PCT_B01001023 #                                         % Total Population: Male: 75 to 79 Years
-		# ,PCT_B01001022 #                                         % Total Population: Male: 70 to 74 Years
-		# ,PCT_B01001021 #                                         % Total Population: Male: 67 to 69 Years
-		# ,PCT_B01001020 #                                        % Total Population: Male: 65 and 66 Years
-		# ,PCT_B01001019 #                                         % Total Population: Male: 62 to 64 Years
-		# ,PCT_B01001018 #                                        % Total Population: Male: 60 and 61 Years
-		# ,PCT_B01001017 #                                         % Total Population: Male: 55 to 59 Years
-		# ,PCT_B01001016 #                                         % Total Population: Male: 50 to 54 Years
-		# ,PCT_B01001015 #                                         % Total Population: Male: 45 to 49 Years
-		# ,PCT_B01001014 #                                         % Total Population: Male: 40 to 44 Years
-		# ,PCT_B01001013 #                                         % Total Population: Male: 35 to 39 Years
-		# ,PCT_B01001012 #                                         % Total Population: Male: 30 to 34 Years
-		# ,PCT_B01001011 #                                         % Total Population: Male: 25 to 29 Years
-		# ,PCT_B01001010 #                                         % Total Population: Male: 22 to 24 Years
-		# ,PCT_B01001009 #                                               % Total Population: Male: 21 Years
-		# ,PCT_B01001008 #                                               % Total Population: Male: 20 Years
-		# ,PCT_B01001007 #                                        % Total Population: Male: 18 and 19 Years
-		# ,PCT_B01001006 #                                         % Total Population: Male: 15 to 17 Years
-		# ,PCT_B01001005 #                                         % Total Population: Male: 10 to 14 Years
-		# ,PCT_B01001004 #                                           % Total Population: Male: 5 to 9 Years
-		# ,PCT_B01001003 #                                          % Total Population: Male: Under 5 Years
-		# ,PCT_16_19_school #                                          % Population 16-19 enrolled in school  
-		# ,GroupQuarters #                                  Share of population living in group quarters    
+		# ,PCT_B02001004 #          % Total Population: American Indian and Alaska Native Alone      
+		# ,PCT_B02001003 #                  % Total Population: Black or African American Alone      
+		# ,PCT_B02001002 #                                      % Total Population: White Alone      
+		# ,PCT_B01001049 #                        % Total Population: Female: 85 Years and Over
+		# ,PCT_B01001048 #                           % Total Population: Female: 80 to 84 Years
+		# ,PCT_B01001047 #                           % Total Population: Female: 75 to 79 Years
+		# ,PCT_B01001046 #                           % Total Population: Female: 70 to 74 Years
+		# ,PCT_B01001045 #                           % Total Population: Female: 67 to 69 Years
+		# ,PCT_B01001044 #                          % Total Population: Female: 65 and 66 Years
+		# ,PCT_B01001043 #                           % Total Population: Female: 62 to 64 Years
+		# ,PCT_B01001042 #                          % Total Population: Female: 60 and 61 Years
+		# ,PCT_B01001041 #                           % Total Population: Female: 55 to 59 Years
+		# ,PCT_B01001040 #                           % Total Population: Female: 50 to 54 Years
+		# ,PCT_B01001039 #                           % Total Population: Female: 45 to 49 Years
+		# ,PCT_B01001038 #                           % Total Population: Female: 40 to 44 Years
+		# ,PCT_B01001037 #                           % Total Population: Female: 35 to 39 Years
+		# ,PCT_B01001036 #                           % Total Population: Female: 30 to 34 Years
+		# ,PCT_B01001035 #                           % Total Population: Female: 25 to 29 Years
+		# ,PCT_B01001034 #                           % Total Population: Female: 22 to 24 Years
+		# ,PCT_B01001033 #                                 % Total Population: Female: 21 Years
+		# ,PCT_B01001032 #                                 % Total Population: Female: 20 Years
+		# ,PCT_B01001031 #                          % Total Population: Female: 18 and 19 Years
+		# ,PCT_B01001030 #                           % Total Population: Female: 15 to 17 Years
+		# ,PCT_B01001029 #                           % Total Population: Female: 10 to 14 Years
+		# ,PCT_B01001028 #                             % Total Population: Female: 5 to 9 Years
+		# ,PCT_B01001027 #                            % Total Population: Female: Under 5 Years
+		# ,PCT_B01001025 #                          % Total Population: Male: 85 Years and Over
+		# ,PCT_B01001024 #                             % Total Population: Male: 80 to 84 Years
+		# ,PCT_B01001023 #                             % Total Population: Male: 75 to 79 Years
+		# ,PCT_B01001022 #                             % Total Population: Male: 70 to 74 Years
+		# ,PCT_B01001021 #                             % Total Population: Male: 67 to 69 Years
+		# ,PCT_B01001020 #                            % Total Population: Male: 65 and 66 Years
+		# ,PCT_B01001019 #                             % Total Population: Male: 62 to 64 Years
+		# ,PCT_B01001018 #                            % Total Population: Male: 60 and 61 Years
+		# ,PCT_B01001017 #                             % Total Population: Male: 55 to 59 Years
+		# ,PCT_B01001016 #                             % Total Population: Male: 50 to 54 Years
+		# ,PCT_B01001015 #                             % Total Population: Male: 45 to 49 Years
+		# ,PCT_B01001014 #                             % Total Population: Male: 40 to 44 Years
+		# ,PCT_B01001013 #                             % Total Population: Male: 35 to 39 Years
+		# ,PCT_B01001012 #                             % Total Population: Male: 30 to 34 Years
+		# ,PCT_B01001011 #                             % Total Population: Male: 25 to 29 Years
+		# ,PCT_B01001010 #                             % Total Population: Male: 22 to 24 Years
+		# ,PCT_B01001009 #                                   % Total Population: Male: 21 Years
+		# ,PCT_B01001008 #                                   % Total Population: Male: 20 Years
+		# ,PCT_B01001007 #                            % Total Population: Male: 18 and 19 Years
+		# ,PCT_B01001006 #                             % Total Population: Male: 15 to 17 Years
+		# ,PCT_B01001005 #                             % Total Population: Male: 10 to 14 Years
+		# ,PCT_B01001004 #                               % Total Population: Male: 5 to 9 Years
+		# ,PCT_B01001003 #                              % Total Population: Male: Under 5 Years
+		# ,PCT_16_19_school #                              % Population 16-19 enrolled in school  
+		# ,GroupQuarters #                      Share of population living in group quarters    
 		# ,Naturalized
 		# ,ForeignBorn #        Not a citizen or naturalized (doesn't include born abroad to Americans)
-		# ,NonHispanicWhite #                             Share of total population that is non-Hispanic white   
-		,CentralAmerican #                                  % of total populationof Central American origin      
-		,PuertoRican #                                      % of total populationof Puerto Rican origin          
-		,SouthAmerican #                                    % of total populationof South American origin        
-		,Mexican #                                           % of total populationof Mexican origin              
-		 #,German #                                                            Language  -  German          1582
-		,French #                                            Language  - French, Haitian, Cajun           58581.
-		,English #                                                            Language  - English        12939200
-		,Spanish #                                                   Language  - Spanish    			 14
-		,Slavic #                                                   Language  -Slavic languages           52581.
-		,IndoEuropean #                                          Language - Other Indo-European Language         
-		,Chinese #                                                          Language  - Chinese          116681.4
-		,Korean #                                                             Language  -  Korean           2199
-		,Arabic #                                                            Language  -     Arabic           458
-		,Tagalog #                                                            Language  - Tagalog 	         
-		,Vietnamese #                                            Language  -	Vietnamese			    36681
-		,OtherAsian #                                             Language - Other Asian languages           7989
-		,Unspecifiedlang #                                           Language  -	Unspecified language	5.8
+		# ,NonHispanicWhite #                  Share of total population that is non-Hispanic white   
+		,CentralAmerican #                       % of total populationof Central American origin      
+		,PuertoRican #                           % of total populationof Puerto Rican origin          
+		,SouthAmerican #                         % of total populationof South American origin        
+		,Mexican #                                % of total populationof Mexican origin              
+		 #,German #                          Language  -  German          
+		,French #                     Language  - French, Haitian, Cajun           
+		,English #                                     Language  - English        
+		,Spanish #                            Language  - Spanish    			 
+		,Slavic #                            Language  -Slavic languages           
+		,IndoEuropean #                   Language - Other Indo-European Language         
+		,Chinese #                                   Language  - Chinese          
+		,Korean #                                      Language  -  Korean           
+		,Arabic #                                     Language  -     Arabic           
+		,Tagalog #                                     Language  - Tagalog 	         
+		,Vietnamese #                     Language  -	Vietnamese			    
+		,OtherAsian #                      Language - Other Asian languages           
+		,Unspecifiedlang #                    Language  -	Unspecified language	
 		#,DisabilityRate #       Share of civilian noninstitutionalized population classified as disabled   
 		,B25109001 #                              Owner-Occupied Housing Units: Median Value -- Total            
 		,B25105001 #  Occupied Housing Units with Monthly Housing Costs: Median Monthly Housing Costs            
@@ -440,7 +442,7 @@ OZ_dat = subset(OZ_dat, select = -c( # Remove GEO Vars
 		,decline_manufacturing_absolute #         decline in the number of manufacturing workers 
 		,decline_population #                     Percent decline in population (2013-2017 vs 2009-2013)
 		,decline_employment_rate #                Percentage point decline in employment rate
-		,decline_manufacturing_rel_ind #         Percentage point decline in manufacturing's share of employed 
+		,decline_manufacturing_rel_ind #    Percentage point decline in manufacturing's share of employed 
 		,decline_manufacturing_rel_pop #   	Percentage point decline in manufacturing workers' share of the population
 		,bus_pct_change  #				business address change 2016-2017
 		,res_pct_change #					residential address change 2016-2017
@@ -448,8 +450,8 @@ OZ_dat = subset(OZ_dat, select = -c( # Remove GEO Vars
 		#,res_prop
 		#,bus_prop
 		#,MedHHInc2017
-		,ChangeIncome #                                     Percent change in Median Household Income              
-		,ChangeMedHomePrice #                           Percent change in median owner-occupied house price   
+		,ChangeIncome #                    Percent change in Median Household Income              
+		,ChangeMedHomePrice #              Percent change in median owner-occupied house price   
 		,lt_perc_pop
 		,mt_perc_pop
 		,lt_perc_inc
@@ -461,16 +463,16 @@ OZ_dat = subset(OZ_dat, select = -c( # Remove GEO Vars
 		# ,PCT_A01001_006 #		 "Total Population: 18 to 24 Years"
 		# ,PCT_A01001_007 #		 "Total Population: 25 to 34 Years"
 		# ,PCT_A01001_008 #		 "Total Population: 35 to 44 Years"
-		,PCT_Age45to64  #		 "Total Population: 45 to 64 Years"
-		# ,PCT_Age45to54   # Split Middle-Age # 1
-		# ,PCT_Age55to64   # Split Middle-Age # 2
+		,PCT_Age45to64  #		 	"Total Population: 45 to 64 Years"
+		# ,PCT_Age45to54   	 	"Split Middle-Age #1: 45 to 54"
+		# ,PCT_Age55to64   # 	 	"Split Middle-Age #2: 55 to 64"
 		# ,PCT_A01001_011 #		 "Total Population: 65 to 74 Years"
 		# ,PCT_A01001_012 #		 "Total Population: 75 to 84 Years"
 		# ,PCT_A01001_013 #		 "Total Population: 85 Years and Over"
-		,PCT_65over #                	% Pop 65 and over
-		,PCT_25to64 #                 % Pop 25 to 64
-		,PCT_18to24 #                	% Pop 18 to 24
-		,PCT_Under18 #            	% Pop under 18
+		,PCT_65over #                	"% Pop 65 and over"
+		,PCT_25to64 #                 "% Pop 25 to 64"
+		,PCT_18to24 #                	"% Pop 18 to 24"
+		,PCT_Under18 #            	"% Pop under 18"
 		,changeepop00_17
 		,changeepop13_17
 		,changeunempl00_17
@@ -483,6 +485,7 @@ OZ_dat = subset(OZ_dat, select = -c( # Remove GEO Vars
 		,changeMedHHinc13_17
 		,changeMedHomeValue00_17
 		,changeMedHomeValue13_17
+		#,non_familyHH
 		# ,LFPR2554
 		# ,EPOP2554
 		# ,pov_200
@@ -515,13 +518,11 @@ gc()
 df1_imp = parlmice(df1, m=1
 	,meth='pmm'
 	#, cluster.seed=3
-	,pred = quickpred(df1, method = "spearman", mincor=0.2875, minpuc=0.4
-	,exc=c(
-	 'B01001001'     #	Total Population
-       ,'German' #
-	,'B25078001'
-	,'B25076001'
-	,'B19081006'
+	,pred = quickpred(df1, method = "spearman", mincor=0.2875, minpuc=0.4 ,exc=c(
+	'B01001001'     # Total Population
+      ,'German' #
+	,'B25078001' # Owner-Occupied Housing Units: Upper Value Quartile (Dollars)
+	,'B25076001' # Owner-Occupied Housing Units: Lower Value Quartile (Dollars)
 	,'NonHispanicWhite'
 	,'B19081006'  # Households: Quintile Means: Top 5 Percent
 	,'B19081005'  # Households: Quintile Means: Highest Quintile
@@ -574,6 +575,7 @@ ACS_dat %>% summarise_all(funs(sum(is.na(.))))
 openxlsx::write.xlsx(ACS_dat, "~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/ACS_dat_clean_alt.xlsx")
 ACS_dat=openxlsx::read.xlsx("~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/ACS_dat_clean_alt.xlsx")
 
+gc()
 ACS_dat=subset(ACS_dat, select = -c(B01001001 # Remove population count and other vars from cluster algorithm
 	,MedHHInc2017
 	# ,PCT_B13010002 # % Poverty - Had a Child in last 12
@@ -588,6 +590,7 @@ ACS_dat=subset(ACS_dat, select = -c(B01001001 # Remove population count and othe
 	,pov_200 # Near Poverty
 	,PCT_C17002002 # Deep Poverty
 	# ,PerCapitaIncome
+	,non_familyHH
 	,PerWorkerWageIncome
 	,LFPR2554
 	,EPOP2554
@@ -676,54 +679,48 @@ plot(cumsum(prop_varex), xlab = "Principal Component",
 cumsum(prop_varex)
 
 # Smaller Age Components
-comp1 = data.frame(pc$x[,1:85])
-comp2 = data.frame(pc$x[,1:88])
-comp3 = data.frame(pc$x[,1:92])
-gc()
+comp1 = data.frame(pc$x[,1:87])
+comp2 = data.frame(pc$x[,1:94])
+# comp3 = data.frame(pc$x[,1:92])
 
 # Larger Age Components
 # comp1 = data.frame(pc$x[,1:119])
 # comp2 = data.frame(pc$x[,1:122])
 # comp3 = data.frame(pc$x[,1:127])
-# gc()
 
 #### K-Means Implimentation #### 
+gc()
 
-# k_pca_11_1= kmeans(comp1, centers = 11, nstart=31, iter.max=5500);gc()
 # k_pca_12_1= kmeans(comp1, centers = 12, nstart=31, iter.max=5500);gc()
 # k_pca_13_1= kmeans(comp1, centers = 13, nstart=45, iter.max=5000);gc()
-k_pca_14_1= kmeans(comp1, centers = 14, nstart=45, iter.max=5000);gc()
-k_pca_15_1= kmeans(comp1, centers = 15, nstart=45, iter.max=5000);gc()
-k_pca_16_1= kmeans(comp1, centers = 16, nstart=50, iter.max=5000);gc()
-# k_pca_17_1= kmeans(comp1, centers = 17, nstart=45, iter.max=5000);gc()
-# k_pca_18_1= kmeans(comp1, centers = 18, nstart=45, iter.max=30500);gc()
-# k_pca_19_1= kmeans(comp1, centers = 19, nstart=31, iter.max=30500);gc()
-# k_pca_20_1= kmeans(comp1, centers = 20, nstart=31, iter.max=9500);gc()
+k_pca_14_1= kmeans(comp1, centers = 14, nstart=200, iter.max=50000);gc()
+k_pca_15_1= kmeans(comp1, centers = 15, nstart=200, iter.max=50000);gc()
+k_pca_16_1= kmeans(comp1, centers = 16, nstart=200, iter.max=50000);gc()
+# k_pca_17_1= kmeans(comp1, centers = 17, nstart=50, iter.max=5000);gc()
+# k_pca_18_1= kmeans(comp1, centers = 18, nstart=50, iter.max=30500);gc()
+# k_pca_19_1= kmeans(comp1, centers = 19, nstart=50, iter.max=30500);gc()
+# k_pca_20_1= kmeans(comp1, centers = 20, nstart=50, iter.max=9500);gc()
 
-# k_pca_11_2= kmeans(comp2, centers = 11, nstart=45, iter.max=5500);gc()
-# k_pca_12_2= kmeans(comp2, centers = 12, nstart=45, iter.max=5500);gc()
-# k_pca_13_2= kmeans(comp2, centers = 13,  nstart=45, iter.max=5000);gc()
-k_pca_14_2= kmeans(comp2, centers = 14, nstart=50, iter.max=5000);gc()
-k_pca_15_2= kmeans(comp2, centers = 15, nstart=50, iter.max=5000);gc()
-k_pca_16_2= kmeans(comp2, centers = 16, nstart=50, iter.max=5000);gc()
-# k_pca_17_2= kmeans(comp2, centers = 17, nstart=45, iter.max=5000);gc()
-# k_pca_18_2= kmeans(comp2, centers = 18, nstart=45, iter.max=9500);gc()
-# k_pca_19_2= kmeans(comp2, centers = 19, nstart=45, iter.max=9500);gc()
-# k_pca_20_2= kmeans(comp2, centers = 20, nstart=45, iter.max=9500);gc()
+# k_pca_12_2= kmeans(comp2, centers = 12, nstart=50, iter.max=5500);gc()
+# k_pca_13_2= kmeans(comp2, centers = 13,  nstart=50, iter.max=5000);gc()
+k_pca_14_2= kmeans(comp2, centers = 14, nstart=200, iter.max=50000);gc()
+k_pca_15_2= kmeans(comp2, centers = 15, nstart=200, iter.max=50000);gc()
+k_pca_16_2= kmeans(comp2, centers = 16, nstart=200, iter.max=50000);gc()
+# k_pca_17_2= kmeans(comp2, centers = 17, nstart=50, iter.max=5000);gc()
+# k_pca_18_2= kmeans(comp2, centers = 18, nstart=50, iter.max=9500);gc()
+# k_pca_19_2= kmeans(comp2, centers = 19, nstart=50, iter.max=9500);gc()
+# k_pca_20_2= kmeans(comp2, centers = 20, nstart=50, iter.max=9500);gc()
 
-# k_pca_11_3= kmeans(comp3, centers = 11, nstart=25, iter.max=5000);gc()
-# k_pca_12_3= kmeans(comp3, centers = 12, nstart=25, iter.max=5000);gc()
-# k_pca_13_3= kmeans(comp3, centers = 13, nstart=45, iter.max=5000);gc()
-k_pca_14_3= kmeans(comp3, centers = 14, nstart=50, iter.max=5000);gc()
-k_pca_15_3= kmeans(comp3, centers = 15, nstart=50, iter.max=5000);gc()
-k_pca_16_3= kmeans(comp3, centers = 16, nstart=50, iter.max=5000);gc()
-# k_pca_17_3= kmeans(comp3, centers = 17, nstart=31, iter.max=9500);gc()
-# k_pca_18_3= kmeans(comp3, centers = 18, nstart=25, iter.max=9500);gc()
-# k_pca_19_3= kmeans(comp3, centers = 19, nstart=25, iter.max=5000);gc()
-# k_pca_20_3= kmeans(comp3, centers = 20, nstart=25, iter.max=5000);gc()
+# k_pca_12_3= kmeans(comp3, centers = 12, nstart=50, iter.max=5000);gc()
+# k_pca_13_3= kmeans(comp3, centers = 13, nstart=50, iter.max=5000);gc()
+k_pca_14_3= kmeans(ACS_matrix, centers = 14, nstart=200, iter.max=50000);gc()
+k_pca_15_3= kmeans(ACS_matrix, centers = 15, nstart=200, iter.max=50000);gc()
+k_pca_16_3= kmeans(ACS_matrix, centers = 16, nstart=200, iter.max=50000);gc()
+# k_pca_17_3= kmeans(comp3, centers = 17, nstart=50, iter.max=9500);gc()
+# k_pca_18_3= kmeans(comp3, centers = 18, nstart=50, iter.max=9500);gc()
+# k_pca_19_3= kmeans(comp3, centers = 19, nstart=50, iter.max=5000);gc()
 
 #### Generate groups ####
-
 # ACS_test=cbind(ACS_dat_OZs,k_pca_12_1=k_pca_12_1$cluster)
 # ACS_test=cbind(ACS_dat_OZs,k_pca_13_1=k_pca_13_1$cluster)
 ACS_test=cbind(ACS_dat_OZs,k_pca_14_1=k_pca_14_1$cluster)
@@ -858,5 +855,6 @@ openxlsx::write.xlsx(ACS_test, "~/Desktop/Welfare_Policy/Struggling Regions/Clus
 # openxlsx::write.xlsx(ACS_test, "~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/Cluster_Final.xlsx")
   
 # names(ACS_test)
-# rm(list=ls());gc()
+# rm(list=ls())
+gc()
 
