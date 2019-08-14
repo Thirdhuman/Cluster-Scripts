@@ -292,28 +292,28 @@ OZ_dat = subset(OZ_dat, select = -c( # Remove GEO Vars
 		,PCT_B11011004 #        % Households: Family Households: Married-Couple Family: 1-Unit Structures
 		,PCT_B11009005 # % Households: Unmarried-Partner Households: Female Householder and Female Partne        
 		,PCT_B11009003 #    % Households: Unmarried-Partner Households: Male Householder and Male Partner        
-		# ,PCT_B11001003 #                           % Households: Family Households: Married-Couple Family      
-		# ,PCT_B09005005 #		 % Percent Children In Single Female HH	         
-		# ,PCT_B08303013 #         % Workers 16 Years and Over Who Did Not Work At Home: 90 or More Minutes      
-		# ,PCT_B08303012 #           % Workers 16 Years and Over Who Did Not Work At Home: 60 to 89 Minutes      
-		# ,PCT_B08303011 #           % Workers 16 Years and Over Who Did Not Work At Home: 45 to 59 Minutes      
-		# ,PCT_B08303010 #           % Workers 16 Years and Over Who Did Not Work At Home: 40 to 44 Minutes      
-		# ,PCT_B08303009 #           % Workers 16 Years and Over Who Did Not Work At Home: 35 to 39 Minutes      
-		# ,PCT_B08303008 #           % Workers 16 Years and Over Who Did Not Work At Home: 30 to 34 Minutes      
-		# ,PCT_B08303007 #           % Workers 16 Years and Over Who Did Not Work At Home: 25 to 29 Minutes      
-		# ,PCT_B08303006 #           % Workers 16 Years and Over Who Did Not Work At Home: 20 to 24 Minutes      
-		# ,PCT_B08303005 #           % Workers 16 Years and Over Who Did Not Work At Home: 15 to 19 Minutes      
-		# ,PCT_B08303004 #           % Workers 16 Years and Over Who Did Not Work At Home: 10 to 14 Minutes      
-		# ,PCT_B08303003 #             % Workers 16 Years and Over Who Did Not Work At Home: 5 to 9 Minutes      
-		# ,PCT_B08301010 #           % Workers 16 Years and Over: Public Transportation (Excluding Taxicab)      
-		# ,vehicles_2plus #		 2 or more vehicles
-		,PCT_B08301002 #           % Workers 16 Years and Over: Car, Truck, or Van               
+		#,PCT_B11001003 #                           % Households: Family Households: Married-Couple Family      
+		#,PCT_B09005005 #		% Percent Children In Single Female HH	         
+		#,PCT_B08303013 #         % Workers 16 Years and Over Who Did Not Work At Home: 90 or More Minutes      
+		#,PCT_B08303012 #         % Workers 16 Years and Over Who Did Not Work At Home: 60 to 89 Minutes      
+		#,PCT_B08303011 #         % Workers 16 Years and Over Who Did Not Work At Home: 45 to 59 Minutes      
+		#,PCT_B08303010 #         % Workers 16 Years and Over Who Did Not Work At Home: 40 to 44 Minutes      
+		#,PCT_B08303009 #         % Workers 16 Years and Over Who Did Not Work At Home: 35 to 39 Minutes      
+		#,PCT_B08303008 #         % Workers 16 Years and Over Who Did Not Work At Home: 30 to 34 Minutes      
+		#,PCT_B08303007 #         % Workers 16 Years and Over Who Did Not Work At Home: 25 to 29 Minutes      
+		#,PCT_B08303006 #         % Workers 16 Years and Over Who Did Not Work At Home: 20 to 24 Minutes      
+		#,PCT_B08303005 #         % Workers 16 Years and Over Who Did Not Work At Home: 15 to 19 Minutes      
+		#,PCT_B08303004 #         % Workers 16 Years and Over Who Did Not Work At Home: 10 to 14 Minutes      
+		#,PCT_B08303003 #        % Workers 16 Years and Over Who Did Not Work At Home: 5 to 9 Minutes      
+		#,PCT_B08301010 #        % Workers 16 Years and Over: Public Transportation (Excluding Taxicab)      
+		#,vehicles_2plus #	  % Workers 16 Years and Over:  2 or more vehicles
+		,PCT_B08301002 #          % Workers 16 Years and Over: Car, Truck, or Van               
 		,PCT_B08014007 #          % Workers 16 Years and Over in Households: 5 or More Vehicles Available        
-		,PCT_B08014006 #                  % Workers 16 Years and Over in Households: 4 Vehicles Available        
-		,PCT_B08014005 #                  % Workers 16 Years and Over in Households: 3 Vehicles Available        
-		,PCT_B08014004 #                  % Workers 16 Years and Over in Households: 2 Vehicles Available        
-		,PCT_B08014003 #                   % Workers 16 Years and Over in Households: 1 Vehicle Available        
-		# ,PCT_B08014002 #                  % Workers 16 Years and Over in Households: No Vehicle Available      
+		,PCT_B08014006 #          % Workers 16 Years and Over in Households: 4 Vehicles Available        
+		,PCT_B08014005 #          % Workers 16 Years and Over in Households: 3 Vehicles Available        
+		,PCT_B08014004 #          % Workers 16 Years and Over in Households: 2 Vehicles Available        
+		,PCT_B08014003 #          % Workers 16 Years and Over in Households: 1 Vehicle Available        
+		# ,PCT_B08014002 #        % Workers 16 Years and Over in Households: No Vehicle Available      
 		,PCT_B07204015   #   % Population Elsewhere_Different_County_Different_State_West					   
 		,PCT_B07204014   #   % Population Elsewhere_Different_County_Different_State_South			         
 		,PCT_B07204013   #   % Population Elsewhere_Different_County_Different_State_Midwest			         
@@ -394,24 +394,24 @@ OZ_dat = subset(OZ_dat, select = -c( # Remove GEO Vars
 		# ,GroupQuarters #                      Share of population living in group quarters    
 		# ,Naturalized
 		,ForeignBorn #        Not a citizen or naturalized (doesn't include born abroad to Americans)
-		# ,NonHispanicWhite #                  Share of total population that is non-Hispanic white   
+		# ,NonHispanicWhite #                    % Share of total population that is non-Hispanic white   
 		,CentralAmerican #                       % of total populationof Central American origin      
 		,PuertoRican #                           % of total populationof Puerto Rican origin          
 		,SouthAmerican #                         % of total populationof South American origin        
-		,Mexican #                                % of total populationof Mexican origin              
-		 ,German #                          Language  -  German
+		,Mexican #                               % of total populationof Mexican origin              
+		 ,German #                    Language  -  German
 		,French #                     Language  - French, Haitian, Cajun           
-		,English #                                     Language  - English        
-		,Spanish #                            Language  - Spanish    			 
-		,Slavic #                            Language  -Slavic languages           
-		,IndoEuropean #                   Language - Other Indo-European Language         
-		,Chinese #                                   Language  - Chinese          
-		,Korean #                                      Language  -  Korean           
-		,Arabic #                                     Language  -     Arabic           
-		,Tagalog #                                     Language  - Tagalog 	         
-		,Vietnamese #                     Language  -	Vietnamese			    
-		,OtherAsian #                      Language - Other Asian languages           
-		,Unspecifiedlang #                    Language  -	Unspecified language	
+		,English #                    Language  - English        
+		,Spanish #                    Language  - Spanish    			 
+		,Slavic #                     Language  -Slavic languages           
+		,IndoEuropean #               Language - Other Indo-European Language         
+		,Chinese #                    Language  - Chinese          
+		,Korean #                     Language  -  Korean           
+		,Arabic #                     Language  -     Arabic           
+		,Tagalog #                    Language  - Tagalog 	         
+		,Vietnamese #                 Language  -	Vietnamese			    
+		,OtherAsian #                 Language - Other Asian languages           
+		,Unspecifiedlang #            Language  -	Unspecified language	
 		#,DisabilityRate #       Share of civilian noninstitutionalized population classified as disabled   
 		,B25109001 #                              Owner-Occupied Housing Units: Median Value -- Total            
 		,B25105001 #  Occupied Housing Units with Monthly Housing Costs: Median Monthly Housing Costs            
@@ -522,6 +522,7 @@ df1_imp = parlmice(df1, m=1
 	,'B25076001' # Owner-Occupied Housing Units: Lower Value Quartile (Dollars)
 	,'NonHispanicWhite'
 	,'ForeignBorn'
+	,"German"
 	,'B19081006'  # Households: Quintile Means: Top 5 Percent
 	,'B19081005'  # Households: Quintile Means: Highest Quintile
 	,'B19081004'  # Households: Quintile Means: Fourth Quintile
@@ -596,10 +597,11 @@ ACS_dat=subset(ACS_dat, select = -c(B01001001 # Remove population count and othe
 	,PerWorkerWageIncome
 	,LFPR2554
 	,EPOP2554
-	,ForeignBorn
+	# ,German
+	# ,ForeignBorn
 	,changepop00_17
 	,changepop13_17
-	# ,NonHispanicWhite
+	,NonHispanicWhite
 	,changepop00_17
 	,vehicles_2plus
 	# ,PercentFemale
@@ -609,6 +611,8 @@ ACS_dat=subset(ACS_dat, select = -c(B01001001 # Remove population count and othe
 	# ,PCT_A01001_007 #		 "Total Population: 25 to 34 Years"
 	# ,PCT_A01001_008 #		 "Total Population: 35 to 44 Years"
 	# ,PCT_Age45to64  #		 "Total Population: 45 to 64 Years"
+	# ,PCT_Age45to54   	 		"Split Middle-Age #1: 45 to 54"
+	# ,PCT_Age55to64   # 	 		"Split Middle-Age #2: 55 to 64"
 	# ,PCT_A01001_011 #		 "Total Population: 65 to 74 Years"
 	# ,PCT_A01001_012 #		 "Total Population: 75 to 84 Years"
 	# ,PCT_A01001_013 #		 "Total Population: 85 Years and Over"
@@ -683,8 +687,8 @@ plot(cumsum(prop_varex), xlab = "Principal Component",
 cumsum(prop_varex)
 
 # Primary Components
-# comp1 = data.frame(pc$x[,1:87])
-# comp2 = data.frame(pc$x[,1:94])
+comp1 = data.frame(pc$x[,1:87])
+comp2 = data.frame(pc$x[,1:94])
 
 # Alt Components
 # alt_comp1 = data.frame(pc$x[,1:98])
@@ -695,8 +699,8 @@ gc()
 
 # k_pca_12_1= kmeans(comp1, centers = 12, nstart=31, iter.max=5500);gc()
 # k_pca_13_1= kmeans(comp1, centers = 13, nstart=45, iter.max=5000);gc()
-k_pca_14_1= kmeans(comp1, centers = 14, nstart=75, iter.max=5000);gc()
-k_pca_15_1= kmeans(comp1, centers = 15, nstart=75, iter.max=5000);gc()
+k_pca_14_1= kmeans(comp1, centers = 14, nstart=50, iter.max=5000);gc()
+k_pca_15_1= kmeans(comp1, centers = 15, nstart=50, iter.max=5000);gc()
 k_pca_16_1= kmeans(comp1, centers = 16, nstart=75, iter.max=5000);gc()
 k_pca_17_1= kmeans(comp1, centers = 17, nstart=75, iter.max=5000);gc()
 # k_pca_18_1= kmeans(comp1, centers = 18, nstart=50, iter.max=30500);gc()
@@ -704,25 +708,26 @@ k_pca_17_1= kmeans(comp1, centers = 17, nstart=75, iter.max=5000);gc()
 # k_pca_20_1= kmeans(comp1, centers = 20, nstart=50, iter.max=9500);gc()
 
 # k_pca_12_2= kmeans(comp2, centers = 12, nstart=50, iter.max=5500);gc()
-# k_pca_13_2= kmeans(comp2, centers = 13,  nstart=50, iter.max=5000);gc()
-k_pca_14_2= kmeans(comp2, centers = 14, nstart=75, iter.max=50000);gc()
-k_pca_15_2= kmeans(comp2, centers = 15, nstart=75, iter.max=50000);gc()
-k_pca_16_2= kmeans(comp2, centers = 16, nstart=75, iter.max=50000);gc()
-k_pca_17_2= kmeans(comp2, centers = 17, nstart=75, iter.max=5000);gc()
+k_pca_13_2= kmeans(comp2, centers = 13,  nstart=50, iter.max=5000);gc()
+k_pca_14_2= kmeans(comp2, centers = 14, nstart=75, iter.max=5000);gc()
+k_pca_15_2= kmeans(comp2, centers = 15, nstart=75, iter.max=5000);gc()
+k_pca_16_2= kmeans(comp2, centers = 16, nstart=75, iter.max=5000);gc()
+# k_pca_17_2= kmeans(comp2, centers = 17, nstart=75, iter.max=5000);gc()
 # k_pca_18_2= kmeans(comp2, centers = 18, nstart=50, iter.max=9500);gc()
 # k_pca_19_2= kmeans(comp2, centers = 19, nstart=50, iter.max=9500);gc()
 # k_pca_20_2= kmeans(comp2, centers = 20, nstart=50, iter.max=9500);gc()
 
 # k_pca_12_3= kmeans(comp3, centers = 12, nstart=50, iter.max=5000);gc()
 # k_pca_13_3= kmeans(comp3, centers = 13, nstart=50, iter.max=5000);gc()
-k_pca_14_3= kmeans(ACS_matrix, centers = 14, nstart=75, iter.max=50000);gc()
-k_pca_15_3= kmeans(ACS_matrix, centers = 15, nstart=75, iter.max=50000);gc()
-k_pca_16_3= kmeans(ACS_matrix, centers = 16, nstart=75, iter.max=50000);gc()
+# k_pca_14_3= kmeans(ACS_matrix, centers = 14, nstart=75, iter.max=5000);gc()
+# k_pca_15_3= kmeans(ACS_matrix, centers = 15, nstart=75, iter.max=5000);gc()
+# k_pca_16_3= kmeans(ACS_matrix, centers = 16, nstart=75, iter.max=5000);gc()
 # k_pca_17_3= kmeans(comp3, centers = 17, nstart=50, iter.max=9500);gc()
 # k_pca_18_3= kmeans(comp3, centers = 18, nstart=50, iter.max=9500);gc()
 # k_pca_19_3= kmeans(comp3, centers = 19, nstart=50, iter.max=5000);gc()
 
 #### Generate groups ####
+
 # ACS_test=cbind(ACS_dat_OZs,k_pca_12_1=k_pca_12_1$cluster)
 # ACS_test=cbind(ACS_dat_OZs,k_pca_13_1=k_pca_13_1$cluster)
 ACS_test=cbind(ACS_dat_OZs,k_pca_14_1=k_pca_14_1$cluster)
