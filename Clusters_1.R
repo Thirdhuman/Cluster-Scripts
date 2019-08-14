@@ -138,7 +138,6 @@ OZ_dat$bus_pct_change=squish(OZ_dat$bus_pct_change,quantile(OZ_dat$bus_pct_chang
 OZ_dat$res_pct_change=squish(OZ_dat$res_pct_change,quantile(OZ_dat$res_pct_change,c(.005,.995),na.rm=T))
 OZ_dat$ams_pct_change=squish(OZ_dat$ams_pct_change,quantile(OZ_dat$ams_pct_change,c(.005,.995),na.rm=T))
 OZ_dat$lt_perc_pop=squish(OZ_dat$lt_perc_pop,quantile(OZ_dat$lt_perc_pop,c(.005,.995),na.rm=T))
-OZ_dat$mt_perc_pop=squish(OZ_dat$mt_perc_pop,quantile(OZ_dat$mt_perc_pop,c(.005,.995),na.rm=T))
 OZ_dat$lt_perc_inc=squish(OZ_dat$lt_perc_inc,quantile(OZ_dat$lt_perc_inc,c(.005,.995),na.rm=T))
 OZ_dat$ChangeMedHomePrice=squish(OZ_dat$ChangeMedHomePrice,quantile(OZ_dat$ChangeMedHomePrice,c(.005,.995),na.rm=T))
 OZ_dat$ChangeIncome=squish(OZ_dat$ChangeIncome,quantile(OZ_dat$ChangeIncome,c(.005,.995),na.rm=T))
@@ -152,8 +151,8 @@ OZ_dat$changeMedHHinc13_17=squish(OZ_dat$changeMedHHinc13_17,quantile(OZ_dat$cha
 OZ_dat$changePoverty00_17=squish(OZ_dat$changePoverty00_17,quantile(OZ_dat$changePoverty00_17,c(.005,.995),na.rm=T))
 OZ_dat$changePoverty13_17=squish(OZ_dat$changePoverty13_17,quantile(OZ_dat$changePoverty13_17,c(.005,.995),na.rm=T))
 OZ_dat$changeHomeValue13_17=squish(OZ_dat$changeHomeValue13_17,quantile(OZ_dat$changeHomeValue13_17,c(.005,.995),na.rm=T))
-OZ_dat$Naturalized = OZ_dat$ForeignBorn - OZ_dat$PCT_B05001006 
 
+OZ_dat$Naturalized = OZ_dat$ForeignBorn - OZ_dat$PCT_B05001006 
 OZ_dat$PCT_Age45to54 = OZ_dat$PCT_B01001016 + OZ_dat$PCT_B01001015 + OZ_dat$PCT_B01001040 + OZ_dat$PCT_B01001039
 OZ_dat$PCT_Age55to64 = OZ_dat$PCT_B01001019 + OZ_dat$PCT_B01001018 + OZ_dat$PCT_B01001017 + OZ_dat$PCT_B01001043 + OZ_dat$PCT_B01001042+ OZ_dat$PCT_B01001041
 OZ_dat$non_familyHH =OZ_dat$PCT_B11011018+OZ_dat$PCT_B11011017+OZ_dat$PCT_B11011019 # % Households: Nonfamily Households   
@@ -453,7 +452,7 @@ OZ_dat = subset(OZ_dat, select = -c( # Remove GEO Vars
 		,ChangeIncome #                    Percent change in Median Household Income              
 		,ChangeMedHomePrice #              Percent change in median owner-occupied house price   
 		,lt_perc_pop
-		,mt_perc_pop
+		# ,mt_perc_pop
 		,lt_perc_inc
 		# ,EnrolledColleg
 		,ShareMasters
@@ -477,7 +476,7 @@ OZ_dat = subset(OZ_dat, select = -c( # Remove GEO Vars
 		,changeepop13_17
 		,changeunempl00_17
 		,changeunempl13_17
-		# ,changepop00_17
+		,changepop00_17
 		# ,changepop13_17
 		,changemanufacturing00_17
 		,changemanufacturing13_17
@@ -524,6 +523,7 @@ df1_imp = parlmice(df1, m=1
 	,'B25078001' # Owner-Occupied Housing Units: Upper Value Quartile (Dollars)
 	,'B25076001' # Owner-Occupied Housing Units: Lower Value Quartile (Dollars)
 	,'NonHispanicWhite'
+	,'ForeignBorn'
 	,'B19081006'  # Households: Quintile Means: Top 5 Percent
 	,'B19081005'  # Households: Quintile Means: Highest Quintile
 	,'B19081004'  # Households: Quintile Means: Fourth Quintile
@@ -537,6 +537,7 @@ df1_imp = parlmice(df1, m=1
 	,'LFPR2554'
 	,'EPOP2554'
 	,'vehicles_2plus'
+	,'mt_perc_pop'
 		)
 		),
 	cl.type = "FORK")
@@ -678,24 +679,22 @@ plot(cumsum(prop_varex), xlab = "Principal Component",
 
 cumsum(prop_varex)
 
-# Smaller Age Components
-comp1 = data.frame(pc$x[,1:87])
-comp2 = data.frame(pc$x[,1:94])
-# comp3 = data.frame(pc$x[,1:92])
+# Primary Components
+# comp1 = data.frame(pc$x[,1:87])
+# comp2 = data.frame(pc$x[,1:94])
 
-# Larger Age Components
-# comp1 = data.frame(pc$x[,1:119])
-# comp2 = data.frame(pc$x[,1:122])
-# comp3 = data.frame(pc$x[,1:127])
+# Alt Components
+# alt_comp1 = data.frame(pc$x[,1:98])
+# alt_comp2 = data.frame(pc$x[,1:87])
 
 #### K-Means Implimentation #### 
 gc()
 
 # k_pca_12_1= kmeans(comp1, centers = 12, nstart=31, iter.max=5500);gc()
 # k_pca_13_1= kmeans(comp1, centers = 13, nstart=45, iter.max=5000);gc()
-k_pca_14_1= kmeans(comp1, centers = 14, nstart=200, iter.max=50000);gc()
-k_pca_15_1= kmeans(comp1, centers = 15, nstart=200, iter.max=50000);gc()
-k_pca_16_1= kmeans(comp1, centers = 16, nstart=200, iter.max=50000);gc()
+k_pca_14_1= kmeans(comp1, centers = 14, nstart=200, iter.max=5000);gc()
+k_pca_15_1= kmeans(comp1, centers = 15, nstart=200, iter.max=5000);gc()
+k_pca_16_1= kmeans(comp1, centers = 16, nstart=200, iter.max=5000);gc()
 k_pca_17_1= kmeans(comp1, centers = 17, nstart=200, iter.max=5000);gc()
 # k_pca_18_1= kmeans(comp1, centers = 18, nstart=50, iter.max=30500);gc()
 # k_pca_19_1= kmeans(comp1, centers = 19, nstart=50, iter.max=30500);gc()
