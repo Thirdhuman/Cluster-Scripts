@@ -148,14 +148,12 @@ OZ_dat$decline_manufacturing_rel_ind=squish(OZ_dat$decline_manufacturing_rel_ind
 OZ_dat$decline_manufacturing_rel_pop=squish(OZ_dat$decline_manufacturing_rel_pop,quantile(OZ_dat$decline_manufacturing_rel_pop,c(.005,.995),na.rm=T))
 OZ_dat$changeMedHHinc00_17=squish(OZ_dat$changeMedHHinc00_17,quantile(OZ_dat$changeMedHHinc00_17,c(.005,.995),na.rm=T))
 OZ_dat$changeMedHHinc13_17=squish(OZ_dat$changeMedHHinc13_17,quantile(OZ_dat$changeMedHHinc13_17,c(.005,.995),na.rm=T))
-OZ_dat$changePoverty00_17=squish(OZ_dat$changePoverty00_17,quantile(OZ_dat$changePoverty00_17,c(.005,.995),na.rm=T))
-OZ_dat$changePoverty13_17=squish(OZ_dat$changePoverty13_17,quantile(OZ_dat$changePoverty13_17,c(.005,.995),na.rm=T))
-OZ_dat$changeHomeValue13_17=squish(OZ_dat$changeHomeValue13_17,quantile(OZ_dat$changeHomeValue13_17,c(.005,.995),na.rm=T))
 
 OZ_dat$Naturalized = OZ_dat$ForeignBorn - OZ_dat$PCT_B05001006 
 OZ_dat$PCT_Age45to54 = OZ_dat$PCT_B01001016 + OZ_dat$PCT_B01001015 + OZ_dat$PCT_B01001040 + OZ_dat$PCT_B01001039
 OZ_dat$PCT_Age55to64 = OZ_dat$PCT_B01001019 + OZ_dat$PCT_B01001018 + OZ_dat$PCT_B01001017 + OZ_dat$PCT_B01001043 + OZ_dat$PCT_B01001042+ OZ_dat$PCT_B01001041
 OZ_dat$non_familyHH =OZ_dat$PCT_B11011018+OZ_dat$PCT_B11011017+OZ_dat$PCT_B11011019 # % Households: Nonfamily Households   
+OZ_dat$EnglishOrGerman = pmin(OZ_dat$PCT_B16001002 + OZ_dat$German, 100)
 
 OZ_dat = subset(OZ_dat, select = -c( # Remove GEO Vars
 #              var.name                                                                        var.label             
@@ -197,7 +195,7 @@ OZ_dat = subset(OZ_dat, select = -c( # Remove GEO Vars
 		,housebuilt_after2010 #
 		# ,PCT_B25034002        #                                      Housing Units: Built 2014 or Later
 		# ,PCT_B25034003        #                                       Housing Units: Built 2010 to 2013
-		# ,PCT_B25034004        #                                       Housing Units: Built 2000 to 2009
+		,PCT_B25034004        #                                       Housing Units: Built 2000 to 2009
 		,PCT_B25034005        #                                       Housing Units: Built 1990 to 1999
 		,PCT_B25034006        #                                       Housing Units: Built 1980 to 1989
 		,PCT_B25034007        #                                       Housing Units: Built 1970 to 1979
@@ -237,7 +235,7 @@ OZ_dat = subset(OZ_dat, select = -c( # Remove GEO Vars
 		# ,PCT_B19001003 #                                                 % Households: $10,000 to $14,999      
 		# ,PCT_B19001002 #                                                  % Households: Less than $10,000      
 		# ,PCT_B16001003 #                                        Share who speak spanish, 5 years or older      
-		# ,PCT_B16001002 #                                   Share who only speak english, 5 years or older      
+		,PCT_B16001002 #                                   Share who only speak english, 5 years or older
 		# ,PCT_B15003025 #                                 % Population 25 Years and Over: Doctorate Degree      
 		,PCT_B15003024 #                       % Population 25 Years and Over: Professional School Degree        
 		,PCT_B15002035 #                         % Population 25 Years and Over: Female: Doctorate Degree        
@@ -395,13 +393,13 @@ OZ_dat = subset(OZ_dat, select = -c( # Remove GEO Vars
 		# ,PCT_16_19_school #                              % Population 16-19 enrolled in school  
 		# ,GroupQuarters #                      Share of population living in group quarters    
 		# ,Naturalized
-		# ,ForeignBorn #        Not a citizen or naturalized (doesn't include born abroad to Americans)
+		,ForeignBorn #        Not a citizen or naturalized (doesn't include born abroad to Americans)
 		# ,NonHispanicWhite #                  Share of total population that is non-Hispanic white   
 		,CentralAmerican #                       % of total populationof Central American origin      
 		,PuertoRican #                           % of total populationof Puerto Rican origin          
 		,SouthAmerican #                         % of total populationof South American origin        
 		,Mexican #                                % of total populationof Mexican origin              
-		 #,German #                          Language  -  German          
+		 ,German #                          Language  -  German
 		,French #                     Language  - French, Haitian, Cajun           
 		,English #                                     Language  - English        
 		,Spanish #                            Language  - Spanish    			 
@@ -476,7 +474,7 @@ OZ_dat = subset(OZ_dat, select = -c( # Remove GEO Vars
 		,changeepop13_17
 		,changeunempl00_17
 		,changeunempl13_17
-		,changepop00_17
+		# ,changepop00_17
 		# ,changepop13_17
 		,changemanufacturing00_17
 		,changemanufacturing13_17
@@ -492,6 +490,7 @@ OZ_dat = subset(OZ_dat, select = -c( # Remove GEO Vars
 		# ,PerCapitaIncome
 		# ,armed_forces_perc
 		# ,PerWorkerWageIncome
+		# ,EnglishOrGerman
 	))
 
 df1 = OZ_dat[,-c(1:2)]
@@ -518,8 +517,7 @@ df1_imp = parlmice(df1, m=1
 	,meth='pmm'
 	#, cluster.seed=3
 	,pred = quickpred(df1, method = "spearman", mincor=0.2875, minpuc=0.4 ,exc=c(
-	'B01001001'     # Total Population
-      ,'German' #
+	 'B01001001'     # Total Population
 	,'B25078001' # Owner-Occupied Housing Units: Upper Value Quartile (Dollars)
 	,'B25076001' # Owner-Occupied Housing Units: Lower Value Quartile (Dollars)
 	,'NonHispanicWhite'
@@ -530,6 +528,8 @@ df1_imp = parlmice(df1, m=1
 	,'B19081003'  # Households: Quintile Means: Third Quintile
 	,'B19081002'  # Households: Quintile Means: Second Quintile
 	,'B19081001'  # Households: Quintile Means: Lowest Quintile
+	,'changepop00_17'
+	,'changepop13_17'
 	,'pov_200' # Near Poverty
 	,'PCT_C17002002' # Deep Poverty
 	,'PerCapitaIncome'
@@ -543,10 +543,10 @@ df1_imp = parlmice(df1, m=1
 	cl.type = "FORK")
 df1_completed = (complete(df1_imp))
 
-# openxlsx::write.xlsx(df1_completed, "~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/df_imputed.xlsx")
-# df1_completed=openxlsx::read.xlsx( "~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/df_imputed.xlsx")
-openxlsx::write.xlsx(df1_completed, "~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/df_imputed_alt.xlsx")
-df1_completed=openxlsx::read.xlsx( "~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/df_imputed_alt.xlsx")
+openxlsx::write.xlsx(df1_completed, "~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/df_imputed.xlsx")
+df1_completed=openxlsx::read.xlsx( "~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/df_imputed.xlsx")
+# openxlsx::write.xlsx(df1_completed, "~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/df_imputed_alt.xlsx")
+# df1_completed=openxlsx::read.xlsx( "~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/df_imputed_alt.xlsx")
 
 df1_completed %>% summarise_all(funs(sum(.<0 )))
 ACS_labels=as.data.frame(colnames(df1_completed));names(ACS_labels)[names(ACS_labels) == 'colnames(df1_completed)'] = 'var.name'
@@ -570,11 +570,12 @@ ACS_dat %>% summarise_all(funs(sum(is.na(.))))
 
 #### finishing up data prep 
 
-# openxlsx::write.xlsx(ACS_dat, "~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/ACS_dat_clean.xlsx")
-# ACS_dat=openxlsx::read.xlsx("~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/ACS_dat_clean.xlsx")
+openxlsx::write.xlsx(ACS_dat, "~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/ACS_dat_clean.xlsx")
+ACS_dat=openxlsx::read.xlsx("~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/ACS_dat_clean.xlsx")
 
-openxlsx::write.xlsx(ACS_dat, "~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/ACS_dat_clean_alt.xlsx")
-ACS_dat=openxlsx::read.xlsx("~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/ACS_dat_clean_alt.xlsx")
+# openxlsx::write.xlsx(ACS_dat, "~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/ACS_dat_clean_alt.xlsx")
+# ACS_dat=openxlsx::read.xlsx("~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/ACS_dat_clean_alt.xlsx")
+
 
 gc()
 ACS_dat=subset(ACS_dat, select = -c(B01001001 # Remove population count and other vars from cluster algorithm
@@ -596,6 +597,8 @@ ACS_dat=subset(ACS_dat, select = -c(B01001001 # Remove population count and othe
 	,LFPR2554
 	,EPOP2554
 	,ForeignBorn
+	,changepop00_17
+	,changepop13_17
 	# ,NonHispanicWhite
 	,changepop00_17
 	,vehicles_2plus
@@ -692,29 +695,29 @@ gc()
 
 # k_pca_12_1= kmeans(comp1, centers = 12, nstart=31, iter.max=5500);gc()
 # k_pca_13_1= kmeans(comp1, centers = 13, nstart=45, iter.max=5000);gc()
-k_pca_14_1= kmeans(comp1, centers = 14, nstart=200, iter.max=5000);gc()
-k_pca_15_1= kmeans(comp1, centers = 15, nstart=200, iter.max=5000);gc()
-k_pca_16_1= kmeans(comp1, centers = 16, nstart=200, iter.max=5000);gc()
-k_pca_17_1= kmeans(comp1, centers = 17, nstart=200, iter.max=5000);gc()
+k_pca_14_1= kmeans(comp1, centers = 14, nstart=75, iter.max=5000);gc()
+k_pca_15_1= kmeans(comp1, centers = 15, nstart=75, iter.max=5000);gc()
+k_pca_16_1= kmeans(comp1, centers = 16, nstart=75, iter.max=5000);gc()
+k_pca_17_1= kmeans(comp1, centers = 17, nstart=75, iter.max=5000);gc()
 # k_pca_18_1= kmeans(comp1, centers = 18, nstart=50, iter.max=30500);gc()
 # k_pca_19_1= kmeans(comp1, centers = 19, nstart=50, iter.max=30500);gc()
 # k_pca_20_1= kmeans(comp1, centers = 20, nstart=50, iter.max=9500);gc()
 
 # k_pca_12_2= kmeans(comp2, centers = 12, nstart=50, iter.max=5500);gc()
-k_pca_13_2= kmeans(comp2, centers = 13,  nstart=50, iter.max=5000);gc()
-k_pca_14_2= kmeans(comp2, centers = 14, nstart=200, iter.max=50000);gc()
-k_pca_15_2= kmeans(comp2, centers = 15, nstart=200, iter.max=50000);gc()
-k_pca_16_2= kmeans(comp2, centers = 16, nstart=200, iter.max=50000);gc()
-k_pca_17_2= kmeans(comp2, centers = 17, nstart=200, iter.max=5000);gc()
+# k_pca_13_2= kmeans(comp2, centers = 13,  nstart=50, iter.max=5000);gc()
+k_pca_14_2= kmeans(comp2, centers = 14, nstart=75, iter.max=50000);gc()
+k_pca_15_2= kmeans(comp2, centers = 15, nstart=75, iter.max=50000);gc()
+k_pca_16_2= kmeans(comp2, centers = 16, nstart=75, iter.max=50000);gc()
+k_pca_17_2= kmeans(comp2, centers = 17, nstart=75, iter.max=5000);gc()
 # k_pca_18_2= kmeans(comp2, centers = 18, nstart=50, iter.max=9500);gc()
 # k_pca_19_2= kmeans(comp2, centers = 19, nstart=50, iter.max=9500);gc()
 # k_pca_20_2= kmeans(comp2, centers = 20, nstart=50, iter.max=9500);gc()
 
 # k_pca_12_3= kmeans(comp3, centers = 12, nstart=50, iter.max=5000);gc()
 # k_pca_13_3= kmeans(comp3, centers = 13, nstart=50, iter.max=5000);gc()
-k_pca_14_3= kmeans(ACS_matrix, centers = 14, nstart=200, iter.max=50000);gc()
-k_pca_15_3= kmeans(ACS_matrix, centers = 15, nstart=200, iter.max=50000);gc()
-k_pca_16_3= kmeans(ACS_matrix, centers = 16, nstart=200, iter.max=50000);gc()
+k_pca_14_3= kmeans(ACS_matrix, centers = 14, nstart=75, iter.max=50000);gc()
+k_pca_15_3= kmeans(ACS_matrix, centers = 15, nstart=75, iter.max=50000);gc()
+k_pca_16_3= kmeans(ACS_matrix, centers = 16, nstart=75, iter.max=50000);gc()
 # k_pca_17_3= kmeans(comp3, centers = 17, nstart=50, iter.max=9500);gc()
 # k_pca_18_3= kmeans(comp3, centers = 18, nstart=50, iter.max=9500);gc()
 # k_pca_19_3= kmeans(comp3, centers = 19, nstart=50, iter.max=5000);gc()
