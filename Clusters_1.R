@@ -138,7 +138,7 @@ OZ_dat$bus_pct_change=squish(OZ_dat$bus_pct_change,quantile(OZ_dat$bus_pct_chang
 OZ_dat$res_pct_change=squish(OZ_dat$res_pct_change,quantile(OZ_dat$res_pct_change,c(.005,.995),na.rm=T))
 OZ_dat$ams_pct_change=squish(OZ_dat$ams_pct_change,quantile(OZ_dat$ams_pct_change,c(.005,.995),na.rm=T))
 OZ_dat$lt_perc_pop=squish(OZ_dat$lt_perc_pop,quantile(OZ_dat$lt_perc_pop,c(.005,.995),na.rm=T))
-OZ_dat$mt_perc_pop=squish(OZ_dat$mt_perc_pop,quantile(OZ_dat$mt_perc_pop,c(.005,.995),na.rm=T))
+# OZ_dat$mt_perc_pop=squish(OZ_dat$mt_perc_pop,quantile(OZ_dat$mt_perc_pop,c(.005,.995),na.rm=T))
 OZ_dat$lt_perc_inc=squish(OZ_dat$lt_perc_inc,quantile(OZ_dat$lt_perc_inc,c(.005,.995),na.rm=T))
 OZ_dat$ChangeMedHomePrice=squish(OZ_dat$ChangeMedHomePrice,quantile(OZ_dat$ChangeMedHomePrice,c(.005,.995),na.rm=T))
 OZ_dat$ChangeIncome=squish(OZ_dat$ChangeIncome,quantile(OZ_dat$ChangeIncome,c(.005,.995),na.rm=T))
@@ -149,13 +149,9 @@ OZ_dat$decline_manufacturing_rel_ind=squish(OZ_dat$decline_manufacturing_rel_ind
 OZ_dat$decline_manufacturing_rel_pop=squish(OZ_dat$decline_manufacturing_rel_pop,quantile(OZ_dat$decline_manufacturing_rel_pop,c(.005,.995),na.rm=T))
 OZ_dat$changeMedHHinc00_17=squish(OZ_dat$changeMedHHinc00_17,quantile(OZ_dat$changeMedHHinc00_17,c(.005,.995),na.rm=T))
 OZ_dat$changeMedHHinc13_17=squish(OZ_dat$changeMedHHinc13_17,quantile(OZ_dat$changeMedHHinc13_17,c(.005,.995),na.rm=T))
-<<<<<<< HEAD
-
-=======
 OZ_dat$changePoverty00_17=squish(OZ_dat$changePoverty00_17,quantile(OZ_dat$changePoverty00_17,c(.005,.995),na.rm=T))
 OZ_dat$changePoverty13_17=squish(OZ_dat$changePoverty13_17,quantile(OZ_dat$changePoverty13_17,c(.005,.995),na.rm=T))
 OZ_dat$changeHomeValue13_17=squish(OZ_dat$changeHomeValue13_17,quantile(OZ_dat$changeHomeValue13_17,c(.005,.995),na.rm=T))
->>>>>>> parent of 462f2be... Pre-Population Change Update
 OZ_dat$Naturalized = OZ_dat$ForeignBorn - OZ_dat$PCT_B05001006 
 
 OZ_dat$PCT_Age45to54 = OZ_dat$PCT_B01001016 + OZ_dat$PCT_B01001015 + OZ_dat$PCT_B01001040 + OZ_dat$PCT_B01001039
@@ -203,7 +199,7 @@ OZ_dat = subset(OZ_dat, select = -c( # Remove GEO Vars
 		,housebuilt_after2010 #
 		# ,PCT_B25034002        #                                      Housing Units: Built 2014 or Later
 		# ,PCT_B25034003        #                                       Housing Units: Built 2010 to 2013
-		,PCT_B25034004        #                                       Housing Units: Built 2000 to 2009
+		# ,PCT_B25034004        #                                       Housing Units: Built 2000 to 2009
 		,PCT_B25034005        #                                       Housing Units: Built 1990 to 1999
 		,PCT_B25034006        #                                       Housing Units: Built 1980 to 1989
 		,PCT_B25034007        #                                       Housing Units: Built 1970 to 1979
@@ -243,7 +239,7 @@ OZ_dat = subset(OZ_dat, select = -c( # Remove GEO Vars
 		# ,PCT_B19001003 #                                                 % Households: $10,000 to $14,999      
 		# ,PCT_B19001002 #                                                  % Households: Less than $10,000      
 		# ,PCT_B16001003 #                                        Share who speak spanish, 5 years or older      
-		,PCT_B16001002 #                                   Share who only speak english, 5 years or older
+		# ,PCT_B16001002 #                                   Share who only speak english, 5 years or older
 		# ,PCT_B15003025 #                                 % Population 25 Years and Over: Doctorate Degree      
 		,PCT_B15003024 #                       % Population 25 Years and Over: Professional School Degree        
 		,PCT_B15002035 #                         % Population 25 Years and Over: Female: Doctorate Degree        
@@ -401,13 +397,13 @@ OZ_dat = subset(OZ_dat, select = -c( # Remove GEO Vars
 		# ,PCT_16_19_school #                              % Population 16-19 enrolled in school  
 		# ,GroupQuarters #                      Share of population living in group quarters    
 		# ,Naturalized
-		,ForeignBorn #        Not a citizen or naturalized (doesn't include born abroad to Americans)
+		# ,ForeignBorn #        Not a citizen or naturalized (doesn't include born abroad to Americans)
 		# ,NonHispanicWhite #                    % Share of total population that is non-Hispanic white   
 		,CentralAmerican #                       % of total populationof Central American origin      
 		,PuertoRican #                           % of total populationof Puerto Rican origin          
 		,SouthAmerican #                         % of total populationof South American origin        
 		,Mexican #                               % of total populationof Mexican origin              
-		 ,German #                    Language  -  German
+		 # ,German #                    Language  -  German
 		,French #                     Language  - French, Haitian, Cajun           
 		,English #                    Language  - English        
 		,Spanish #                    Language  - Spanish    			 
@@ -458,7 +454,7 @@ OZ_dat = subset(OZ_dat, select = -c( # Remove GEO Vars
 		,ChangeIncome #                    Percent change in Median Household Income              
 		,ChangeMedHomePrice #              Percent change in median owner-occupied house price   
 		,lt_perc_pop
-		,mt_perc_pop
+		# ,mt_perc_pop
 		,lt_perc_inc
 		# ,EnrolledColleg
 		,ShareMasters
@@ -529,11 +525,8 @@ df1_imp = parlmice(df1, m=1
 	,'B25078001' # Owner-Occupied Housing Units: Upper Value Quartile (Dollars)
 	,'B25076001' # Owner-Occupied Housing Units: Lower Value Quartile (Dollars)
 	,'NonHispanicWhite'
-<<<<<<< HEAD
 	,'ForeignBorn'
 	,"German"
-=======
->>>>>>> parent of 462f2be... Pre-Population Change Update
 	,'B19081006'  # Households: Quintile Means: Top 5 Percent
 	,'B19081005'  # Households: Quintile Means: Highest Quintile
 	,'B19081004'  # Households: Quintile Means: Fourth Quintile
@@ -579,18 +572,23 @@ df1_completed = scale(as.matrix(df1_completed))
 ACS_dat = cbind(df1_names, df1_completed)
 ACS_dat %>% summarise_all(funs(sum(is.na(.))))
 
-#### finishing up data prep 
 
 openxlsx::write.xlsx(ACS_dat, "~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/ACS_dat_clean.xlsx")
-ACS_dat=openxlsx::read.xlsx("~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/ACS_dat_clean.xlsx")
 
 # openxlsx::write.xlsx(ACS_dat, "~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/ACS_dat_clean_alt.xlsx")
+
+#### finishing up data prep 
+
+ACS_dat=openxlsx::read.xlsx("~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/ACS_dat_clean.xlsx")
+
 # ACS_dat=openxlsx::read.xlsx("~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/ACS_dat_clean_alt.xlsx")
 
+ACS_unscale=openxlsx::read.xlsx("~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/ACS_imp_unscaled.xlsx")
 
 gc()
 ACS_dat=subset(ACS_dat, select = -c(B01001001 # Remove population count and other vars from cluster algorithm
-	,MedHHInc2017
+	# ,MedHHInc2017
+	,PCT_B16001002 # English
 	# ,PCT_B13010002 # % Poverty - Had a Child in last 12
 	,B19081006  # Households: Quintile Means: Top 5 Percent
 	,B19081005  # Households: Quintile Means: Highest Quintile
@@ -598,80 +596,81 @@ ACS_dat=subset(ACS_dat, select = -c(B01001001 # Remove population count and othe
 	,B19081003  # Households: Quintile Means: Third Quintile
 	,B19081002  # Households: Quintile Means: Second Quintile
 	,B19081001  # Households: Quintile Means: Lowest Quintile
-	,B25078001  # Home Price - High
-	,B25076001  # Home Price - Low
+	# ,B25078001  # Home Price - High
+	# ,B25076001  # Home Price - Low
 	,pov_200 # Near Poverty
-	,PCT_C17002002 # Deep Poverty
+	# ,PCT_C17002002 # Deep Poverty
 	# ,PerCapitaIncome
 	,non_familyHH
 	,PerWorkerWageIncome
 	,LFPR2554
 	,EPOP2554
-	# ,German
+	# ,EnglishOrGerman
+	,German
 	# ,ForeignBorn
 	,changepop00_17
 	,changepop13_17
-	,NonHispanicWhite
+	# ,NonHispanicWhite
 	,changepop00_17
 	,vehicles_2plus
 	# ,PercentFemale
-	# ,PCT_A01001_002 #		 "Total Population: Under 5 Years"
-	# ,PCT_Age5to17   #		 "Total Population: 5 to 17 Years"
-	# ,PCT_A01001_006 #		 "Total Population: 18 to 24 Years"
-	# ,PCT_A01001_007 #		 "Total Population: 25 to 34 Years"
-	# ,PCT_A01001_008 #		 "Total Population: 35 to 44 Years"
-	# ,PCT_Age45to64  #		 "Total Population: 45 to 64 Years"
-	# ,PCT_Age45to54   	 		"Split Middle-Age #1: 45 to 54"
-	# ,PCT_Age55to64   # 	 		"Split Middle-Age #2: 55 to 64"
-	# ,PCT_A01001_011 #		 "Total Population: 65 to 74 Years"
-	# ,PCT_A01001_012 #		 "Total Population: 75 to 84 Years"
-	# ,PCT_A01001_013 #		 "Total Population: 85 Years and Over"
-	,PCT_B01001049 #             % Total Population: Female: 85 Years and Over
-	,PCT_B01001048 #                % Total Population: Female: 80 to 84 Years
-	,PCT_B01001047 #                % Total Population: Female: 75 to 79 Years
-	,PCT_B01001046 #                % Total Population: Female: 70 to 74 Years
-	,PCT_B01001045 #                % Total Population: Female: 67 to 69 Years
-	,PCT_B01001044 #               % Total Population: Female: 65 and 66 Years
-	,PCT_B01001043 #                % Total Population: Female: 62 to 64 Years
-	,PCT_B01001042 #               % Total Population: Female: 60 and 61 Years
-	,PCT_B01001041 #                % Total Population: Female: 55 to 59 Years
-	,PCT_B01001040 #                % Total Population: Female: 50 to 54 Years
-	,PCT_B01001039 #                % Total Population: Female: 45 to 49 Years
-	,PCT_B01001038 #                % Total Population: Female: 40 to 44 Years
-	,PCT_B01001037 #                % Total Population: Female: 35 to 39 Years
-	,PCT_B01001036 #                % Total Population: Female: 30 to 34 Years
-	,PCT_B01001035 #                % Total Population: Female: 25 to 29 Years
-	,PCT_B01001034 #                % Total Population: Female: 22 to 24 Years
-	,PCT_B01001033 #                      % Total Population: Female: 21 Years
-	,PCT_B01001032 #                      % Total Population: Female: 20 Years
-	,PCT_B01001031 #               % Total Population: Female: 18 and 19 Years
-	,PCT_B01001030 #                % Total Population: Female: 15 to 17 Years
-	,PCT_B01001029 #                % Total Population: Female: 10 to 14 Years
-	,PCT_B01001028 #                  % Total Population: Female: 5 to 9 Years
-	,PCT_B01001027 #                 % Total Population: Female: Under 5 Years
-	,PCT_B01001025 #               % Total Population: Male: 85 Years and Over
-	,PCT_B01001024 #                  % Total Population: Male: 80 to 84 Years
-	,PCT_B01001023 #                  % Total Population: Male: 75 to 79 Years
-	,PCT_B01001022 #                  % Total Population: Male: 70 to 74 Years
-	,PCT_B01001021 #                  % Total Population: Male: 67 to 69 Years
-	,PCT_B01001020 #                 % Total Population: Male: 65 and 66 Years
-	,PCT_B01001019 #                  % Total Population: Male: 62 to 64 Years
-	,PCT_B01001018 #                 % Total Population: Male: 60 and 61 Years
-	,PCT_B01001017 #                  % Total Population: Male: 55 to 59 Years
-	,PCT_B01001016 #                  % Total Population: Male: 50 to 54 Years
-	,PCT_B01001015 #                  % Total Population: Male: 45 to 49 Years
-	,PCT_B01001014 #                  % Total Population: Male: 40 to 44 Years
-	,PCT_B01001013 #                  % Total Population: Male: 35 to 39 Years
-	,PCT_B01001012 #                  % Total Population: Male: 30 to 34 Years
-	,PCT_B01001011 #                  % Total Population: Male: 25 to 29 Years
-	,PCT_B01001010 #                  % Total Population: Male: 22 to 24 Years
-	,PCT_B01001009 #                        % Total Population: Male: 21 Years
-	,PCT_B01001008 #                        % Total Population: Male: 20 Years
-	,PCT_B01001007 #                 % Total Population: Male: 18 and 19 Years
-	,PCT_B01001006 #                  % Total Population: Male: 15 to 17 Years
-	,PCT_B01001005 #                  % Total Population: Male: 10 to 14 Years
-	,PCT_B01001004 #                    % Total Population: Male: 5 to 9 Years
-	,PCT_B01001003 #                   % Total Population: Male: Under 5 Years
+	,PCT_A01001_002 #		 "Total Population: Under 5 Years"
+	,PCT_Age5to17   #		 "Total Population: 5 to 17 Years"
+	,PCT_A01001_006 #		 "Total Population: 18 to 24 Years"
+	,PCT_A01001_007 #		 "Total Population: 25 to 34 Years"
+	,PCT_A01001_008 #		 "Total Population: 35 to 44 Years"
+	,PCT_Age45to64  #		 "Total Population: 45 to 64 Years"
+	,PCT_Age45to54   #		"Split Middle-Age #1: 45 to 54"
+	,PCT_Age55to64   # 	 	"Split Middle-Age #2: 55 to 64"
+	,PCT_A01001_011 #		 "Total Population: 65 to 74 Years"
+	,PCT_A01001_012 #		 "Total Population: 75 to 84 Years"
+	,PCT_A01001_013 #		 "Total Population: 85 Years and Over"
+	# ,PCT_B01001049 #             % Total Population: Female: 85 Years and Over
+	# ,PCT_B01001048 #                % Total Population: Female: 80 to 84 Years
+	# ,PCT_B01001047 #                % Total Population: Female: 75 to 79 Years
+	# ,PCT_B01001046 #                % Total Population: Female: 70 to 74 Years
+	# ,PCT_B01001045 #                % Total Population: Female: 67 to 69 Years
+	# ,PCT_B01001044 #               % Total Population: Female: 65 and 66 Years
+	# ,PCT_B01001043 #                % Total Population: Female: 62 to 64 Years
+	# ,PCT_B01001042 #               % Total Population: Female: 60 and 61 Years
+	# ,PCT_B01001041 #                % Total Population: Female: 55 to 59 Years
+	# ,PCT_B01001040 #                % Total Population: Female: 50 to 54 Years
+	# ,PCT_B01001039 #                % Total Population: Female: 45 to 49 Years
+	# ,PCT_B01001038 #                % Total Population: Female: 40 to 44 Years
+	# ,PCT_B01001037 #                % Total Population: Female: 35 to 39 Years
+	# ,PCT_B01001036 #                % Total Population: Female: 30 to 34 Years
+	# ,PCT_B01001035 #                % Total Population: Female: 25 to 29 Years
+	# ,PCT_B01001034 #                % Total Population: Female: 22 to 24 Years
+	# ,PCT_B01001033 #                      % Total Population: Female: 21 Years
+	# ,PCT_B01001032 #                      % Total Population: Female: 20 Years
+	# ,PCT_B01001031 #               % Total Population: Female: 18 and 19 Years
+	# ,PCT_B01001030 #                % Total Population: Female: 15 to 17 Years
+	# ,PCT_B01001029 #                % Total Population: Female: 10 to 14 Years
+	# ,PCT_B01001028 #                  % Total Population: Female: 5 to 9 Years
+	# ,PCT_B01001027 #                 % Total Population: Female: Under 5 Years
+	# ,PCT_B01001025 #               % Total Population: Male: 85 Years and Over
+	# ,PCT_B01001024 #                  % Total Population: Male: 80 to 84 Years
+	# ,PCT_B01001023 #                  % Total Population: Male: 75 to 79 Years
+	# ,PCT_B01001022 #                  % Total Population: Male: 70 to 74 Years
+	# ,PCT_B01001021 #                  % Total Population: Male: 67 to 69 Years
+	# ,PCT_B01001020 #                 % Total Population: Male: 65 and 66 Years
+	# ,PCT_B01001019 #                  % Total Population: Male: 62 to 64 Years
+	# ,PCT_B01001018 #                 % Total Population: Male: 60 and 61 Years
+	# ,PCT_B01001017 #                  % Total Population: Male: 55 to 59 Years
+	# ,PCT_B01001016 #                  % Total Population: Male: 50 to 54 Years
+	# ,PCT_B01001015 #                  % Total Population: Male: 45 to 49 Years
+	# ,PCT_B01001014 #                  % Total Population: Male: 40 to 44 Years
+	# ,PCT_B01001013 #                  % Total Population: Male: 35 to 39 Years
+	# ,PCT_B01001012 #                  % Total Population: Male: 30 to 34 Years
+	# ,PCT_B01001011 #                  % Total Population: Male: 25 to 29 Years
+	# ,PCT_B01001010 #                  % Total Population: Male: 22 to 24 Years
+	# ,PCT_B01001009 #                        % Total Population: Male: 21 Years
+	# ,PCT_B01001008 #                        % Total Population: Male: 20 Years
+	# ,PCT_B01001007 #                 % Total Population: Male: 18 and 19 Years
+	# ,PCT_B01001006 #                  % Total Population: Male: 15 to 17 Years
+	# ,PCT_B01001005 #                  % Total Population: Male: 10 to 14 Years
+	# ,PCT_B01001004 #                    % Total Population: Male: 5 to 9 Years
+	# ,PCT_B01001003 #                   % Total Population: Male: Under 5 Years
 ))
 
 ACS_dat %>% summarise_all(funs(sum(is.na(.) )))
@@ -696,60 +695,47 @@ plot(cumsum(prop_varex), xlab = "Principal Component",
 
 cumsum(prop_varex)
 
-<<<<<<< HEAD
 # Primary Components
-comp1 = data.frame(pc$x[,1:87])
-comp2 = data.frame(pc$x[,1:94])
-=======
+comp1 = data.frame(pc$x[,1:125])
+comp2 = data.frame(pc$x[,1:135])
+comp3 = data.frame(pc$x[,1:140])
 # Smaller Age Components
-comp1 = data.frame(pc$x[,1:87])
-comp2 = data.frame(pc$x[,1:94])
+# comp1 = data.frame(pc$x[,1:87])
+# comp2 = data.frame(pc$x[,1:94])
 # comp3 = data.frame(pc$x[,1:92])
->>>>>>> parent of 462f2be... Pre-Population Change Update
-
-# Larger Age Components
-# comp1 = data.frame(pc$x[,1:119])
-# comp2 = data.frame(pc$x[,1:122])
-# comp3 = data.frame(pc$x[,1:127])
 
 #### K-Means Implimentation #### 
 gc()
 
 # k_pca_12_1= kmeans(comp1, centers = 12, nstart=31, iter.max=5500);gc()
 # k_pca_13_1= kmeans(comp1, centers = 13, nstart=45, iter.max=5000);gc()
-<<<<<<< HEAD
 k_pca_14_1= kmeans(comp1, centers = 14, nstart=50, iter.max=5000);gc()
 k_pca_15_1= kmeans(comp1, centers = 15, nstart=50, iter.max=5000);gc()
-k_pca_16_1= kmeans(comp1, centers = 16, nstart=75, iter.max=5000);gc()
-k_pca_17_1= kmeans(comp1, centers = 17, nstart=75, iter.max=5000);gc()
-=======
-k_pca_14_1= kmeans(comp1, centers = 14, nstart=200, iter.max=50000);gc()
-k_pca_15_1= kmeans(comp1, centers = 15, nstart=200, iter.max=50000);gc()
-k_pca_16_1= kmeans(comp1, centers = 16, nstart=200, iter.max=50000);gc()
-k_pca_17_1= kmeans(comp1, centers = 17, nstart=200, iter.max=5000);gc()
->>>>>>> parent of 462f2be... Pre-Population Change Update
-# k_pca_18_1= kmeans(comp1, centers = 18, nstart=50, iter.max=30500);gc()
-# k_pca_19_1= kmeans(comp1, centers = 19, nstart=50, iter.max=30500);gc()
-# k_pca_20_1= kmeans(comp1, centers = 20, nstart=50, iter.max=9500);gc()
+k_pca_16_1= kmeans(comp1, centers = 16, nstart=50, iter.max=5000);gc()
+k_pca_17_1= kmeans(comp1, centers = 17, nstart=50, iter.max=5000);gc()
+k_pca_18_1= kmeans(comp1, centers = 18, nstart=50, iter.max=5000);gc()
+k_pca_19_1= kmeans(comp1, centers = 19, nstart=50, iter.max=5000);gc()
+k_pca_20_1= kmeans(comp1, centers = 20, nstart=50, iter.max=5000);gc()
 
 # k_pca_12_2= kmeans(comp2, centers = 12, nstart=50, iter.max=5500);gc()
 k_pca_13_2= kmeans(comp2, centers = 13,  nstart=50, iter.max=5000);gc()
-k_pca_14_2= kmeans(comp2, centers = 14, nstart=75, iter.max=5000);gc()
-k_pca_15_2= kmeans(comp2, centers = 15, nstart=75, iter.max=5000);gc()
-k_pca_16_2= kmeans(comp2, centers = 16, nstart=75, iter.max=5000);gc()
-# k_pca_17_2= kmeans(comp2, centers = 17, nstart=75, iter.max=5000);gc()
-# k_pca_18_2= kmeans(comp2, centers = 18, nstart=50, iter.max=9500);gc()
-# k_pca_19_2= kmeans(comp2, centers = 19, nstart=50, iter.max=9500);gc()
-# k_pca_20_2= kmeans(comp2, centers = 20, nstart=50, iter.max=9500);gc()
+k_pca_14_2= kmeans(comp2, centers = 14, nstart=50, iter.max=5000);gc()
+k_pca_15_2= kmeans(comp2, centers = 15, nstart=50, iter.max=5000);gc()
+k_pca_16_2= kmeans(comp2, centers = 16, nstart=50, iter.max=5000);gc()
+k_pca_17_2= kmeans(comp2, centers = 17, nstart=50, iter.max=5000);gc()
+k_pca_18_2= kmeans(comp2, centers = 18, nstart=50, iter.max=5000);gc()
+k_pca_19_2= kmeans(comp2, centers = 19, nstart=50, iter.max=5000);gc()
+k_pca_20_2= kmeans(comp2, centers = 20, nstart=50, iter.max=5000);gc()
 
 # k_pca_12_3= kmeans(comp3, centers = 12, nstart=50, iter.max=5000);gc()
 # k_pca_13_3= kmeans(comp3, centers = 13, nstart=50, iter.max=5000);gc()
-# k_pca_14_3= kmeans(ACS_matrix, centers = 14, nstart=75, iter.max=5000);gc()
-# k_pca_15_3= kmeans(ACS_matrix, centers = 15, nstart=75, iter.max=5000);gc()
-# k_pca_16_3= kmeans(ACS_matrix, centers = 16, nstart=75, iter.max=5000);gc()
-# k_pca_17_3= kmeans(comp3, centers = 17, nstart=50, iter.max=9500);gc()
-# k_pca_18_3= kmeans(comp3, centers = 18, nstart=50, iter.max=9500);gc()
-# k_pca_19_3= kmeans(comp3, centers = 19, nstart=50, iter.max=5000);gc()
+k_pca_14_3= kmeans(comp3, centers = 14, nstart=50, iter.max=5000);gc()
+k_pca_15_3= kmeans(comp3, centers = 15, nstart=50, iter.max=5000);gc()
+k_pca_16_3= kmeans(comp3, centers = 16, nstart=50, iter.max=5000);gc()
+k_pca_17_3= kmeans(comp3, centers = 17, nstart=50, iter.max=5000);gc()
+k_pca_18_3= kmeans(comp3, centers = 18, nstart=50, iter.max=5000);gc()
+k_pca_19_3= kmeans(comp3, centers = 19, nstart=50, iter.max=5000);gc()
+k_pca_20_3= kmeans(comp3, centers = 20, nstart=50, iter.max=5000);gc()
 
 #### Generate groups ####
 
@@ -759,9 +745,9 @@ ACS_test=cbind(ACS_dat_OZs,k_pca_14_1=k_pca_14_1$cluster)
 ACS_test=cbind(ACS_test,k_pca_15_1=k_pca_15_1$cluster)
 ACS_test=cbind(ACS_test,k_pca_16_1=k_pca_16_1$cluster)
 ACS_test=cbind(ACS_test,k_pca_17_1=k_pca_17_1$cluster)
-# ACS_test=cbind(ACS_test,k_pca_18_1=k_pca_18_1$cluster)
-# ACS_test=cbind(ACS_test,k_pca_19_1=k_pca_19_1$cluster)
-# ACS_test=cbind(ACS_test,k_pca_20_1=k_pca_20_1$cluster)
+ACS_test=cbind(ACS_test,k_pca_18_1=k_pca_18_1$cluster)
+ACS_test=cbind(ACS_test,k_pca_19_1=k_pca_19_1$cluster)
+ACS_test=cbind(ACS_test,k_pca_20_1=k_pca_20_1$cluster)
 
 # ACS_test=cbind(ACS_test,k_pca_12_2=k_pca_12_2$cluster)
 ACS_test=cbind(ACS_test,k_pca_13_2=k_pca_13_2$cluster)
@@ -769,19 +755,19 @@ ACS_test=cbind(ACS_test,k_pca_14_2=k_pca_14_2$cluster)
 ACS_test=cbind(ACS_test,k_pca_15_2=k_pca_15_2$cluster)
 ACS_test=cbind(ACS_test,k_pca_16_2=k_pca_16_2$cluster)
 ACS_test=cbind(ACS_test,k_pca_17_2=k_pca_17_2$cluster)
-# ACS_test=cbind(ACS_test,k_pca_18_2=k_pca_18_2$cluster)
-# ACS_test=cbind(ACS_test,k_pca_19_2=k_pca_19_2$cluster)
-# ACS_test=cbind(ACS_test,k_pca_20_2=k_pca_20_2$cluster)
+ACS_test=cbind(ACS_test,k_pca_18_2=k_pca_18_2$cluster)
+ACS_test=cbind(ACS_test,k_pca_19_2=k_pca_19_2$cluster)
+ACS_test=cbind(ACS_test,k_pca_20_2=k_pca_20_2$cluster)
 
 # ACS_test=cbind(ACS_test,k_pca_12_3=k_pca_12_3$cluster)
 # ACS_test=cbind(ACS_test,k_pca_13_3=k_pca_13_3$cluster)
 ACS_test=cbind(ACS_test,k_pca_14_3=k_pca_14_3$cluster)
 ACS_test=cbind(ACS_test,k_pca_15_3=k_pca_15_3$cluster)
 ACS_test=cbind(ACS_test,k_pca_16_3=k_pca_16_3$cluster)
-# ACS_test=cbind(ACS_test,k_pca_17_3=k_pca_17_3$cluster)
-# ACS_test=cbind(ACS_test,k_pca_18_3=k_pca_18_3$cluster)
-# ACS_test=cbind(ACS_test,k_pca_19_3=k_pca_19_3$cluster)
-# ACS_test=cbind(ACS_test,k_pca_20_3=k_pca_20_3$cluster)
+ACS_test=cbind(ACS_test,k_pca_17_3=k_pca_17_3$cluster)
+ACS_test=cbind(ACS_test,k_pca_18_3=k_pca_18_3$cluster)
+ACS_test=cbind(ACS_test,k_pca_19_3=k_pca_19_3$cluster)
+ACS_test=cbind(ACS_test,k_pca_20_3=k_pca_20_3$cluster)
 
 # ACS_test=cbind(ACS_test,k_pca_12_4=k_pca_12_4$cluster)
 # ACS_test=cbind(ACS_test,k_pca_13_4=k_pca_13_4$cluster)
@@ -793,10 +779,6 @@ ACS_test=cbind(ACS_test,k_pca_16_3=k_pca_16_3$cluster)
 # ACS_test=cbind(ACS_test,pca_clara_13_1=pca_c13_1$clustering)
 # ACS_test=cbind(ACS_test,pca_clara_14_1=pca_c14_1$clustering)
 # 
-# ACS_test=cbind(ACS_test,pca_clara_12_2=pca_c12_2$clustering)
-# ACS_test=cbind(ACS_test,pca_clara_13_2=pca_c13_2$clustering)
-# ACS_test=cbind(ACS_test,pca_clara_14_2=pca_c14_2$clustering)
-# ACS_test=cbind(ACS_test,pca_clara_15_2=pca_c15_2$clustering)
 
 OZ_dat_lang = readstata13::read.dta13("~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/cluster_inputs/languagesupplement.dta")
 OZ_dat_lang$St_Code=stringi::stri_sub(OZ_dat_lang$FIPS, from=1, to=2)
@@ -812,9 +794,9 @@ ACS_test$k_pca_14_1[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
 ACS_test$k_pca_15_1[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
 ACS_test$k_pca_16_1[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
 ACS_test$k_pca_17_1[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-# ACS_test$k_pca_18_1[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-# ACS_test$k_pca_19_1[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-# ACS_test$k_pca_20_1[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+ACS_test$k_pca_18_1[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+ACS_test$k_pca_19_1[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+ACS_test$k_pca_20_1[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
 
 # ACS_test$k_pca_11_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
 # ACS_test$k_pca_12_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
@@ -823,9 +805,9 @@ ACS_test$k_pca_14_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
 ACS_test$k_pca_15_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
 ACS_test$k_pca_16_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
 ACS_test$k_pca_17_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-# ACS_test$k_pca_18_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-# ACS_test$k_pca_19_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-# ACS_test$k_pca_20_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+ACS_test$k_pca_18_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+ACS_test$k_pca_19_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+ACS_test$k_pca_20_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
 
 # ACS_test$k_pca_11_3[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
 # ACS_test$k_pca_12_3[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
@@ -833,9 +815,11 @@ ACS_test$k_pca_17_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
 ACS_test$k_pca_14_3[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
 ACS_test$k_pca_15_3[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
 ACS_test$k_pca_16_3[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-# ACS_test$k_pca_17_3[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-# ACS_test$k_pca_18_3[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
- 
+ACS_test$k_pca_17_3[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+ACS_test$k_pca_18_3[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+ACS_test$k_pca_19_3[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+ACS_test$k_pca_20_3[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+
 
 ###
 # ACS_test$k_pca_12_1[is.na(ACS_test$k_pca_12_1)] = "Sparsely Populated"
@@ -844,9 +828,9 @@ ACS_test$k_pca_14_1[is.na(ACS_test$k_pca_14_1)] = "Sparsely Populated"
 ACS_test$k_pca_15_1[is.na(ACS_test$k_pca_15_1)] = "Sparsely Populated"
 ACS_test$k_pca_16_1[is.na(ACS_test$k_pca_16_1)] = "Sparsely Populated"
 ACS_test$k_pca_17_1[is.na(ACS_test$k_pca_17_1)] = "Sparsely Populated"
-# ACS_test$k_pca_18_1[is.na(ACS_test$k_pca_18_1)] = "Sparsely Populated"
-# ACS_test$k_pca_19_1[is.na(ACS_test$k_pca_19_1)] = "Sparsely Populated"
-# ACS_test$k_pca_20_1[is.na(ACS_test$k_pca_20_1)] = "Sparsely Populated"
+ACS_test$k_pca_18_1[is.na(ACS_test$k_pca_18_1)] = "Sparsely Populated"
+ACS_test$k_pca_19_1[is.na(ACS_test$k_pca_19_1)] = "Sparsely Populated"
+ACS_test$k_pca_20_1[is.na(ACS_test$k_pca_20_1)] = "Sparsely Populated"
 
 # ACS_test$k_pca_12_2[is.na(ACS_test$k_pca_12_2)] = "Sparsely Populated"
 ACS_test$k_pca_13_2[is.na(ACS_test$k_pca_13_2)] = "Sparsely Populated"
@@ -854,22 +838,24 @@ ACS_test$k_pca_14_2[is.na(ACS_test$k_pca_14_2)] = "Sparsely Populated"
 ACS_test$k_pca_15_2[is.na(ACS_test$k_pca_15_2)] = "Sparsely Populated"
 ACS_test$k_pca_16_2[is.na(ACS_test$k_pca_16_2)] = "Sparsely Populated"
 ACS_test$k_pca_17_2[is.na(ACS_test$k_pca_17_2)] = "Sparsely Populated"
-# ACS_test$k_pca_18_2[is.na(ACS_test$k_pca_18_2)] = "Sparsely Populated"
-# ACS_test$k_pca_19_2[is.na(ACS_test$k_pca_19_2)] = "Sparsely Populated"
-# ACS_test$k_pca_20_2[is.na(ACS_test$k_pca_20_2)] = "Sparsely Populated"
+ACS_test$k_pca_18_2[is.na(ACS_test$k_pca_18_2)] = "Sparsely Populated"
+ACS_test$k_pca_19_2[is.na(ACS_test$k_pca_19_2)] = "Sparsely Populated"
+ACS_test$k_pca_20_2[is.na(ACS_test$k_pca_20_2)] = "Sparsely Populated"
 
 # ACS_test$k_pca_12_3[is.na(ACS_test$k_pca_12_3)] = "Sparsely Populated"
 # ACS_test$k_pca_13_3[is.na(ACS_test$k_pca_13_3)] = "Sparsely Populated"
 ACS_test$k_pca_14_3[is.na(ACS_test$k_pca_14_3)] = "Sparsely Populated"
 ACS_test$k_pca_15_3[is.na(ACS_test$k_pca_15_3)] = "Sparsely Populated"
 ACS_test$k_pca_16_3[is.na(ACS_test$k_pca_16_3)] = "Sparsely Populated"
-# ACS_test$k_pca_17_3[is.na(ACS_test$k_pca_17_3)] = "Sparsely Populated"
+ACS_test$k_pca_17_3[is.na(ACS_test$k_pca_17_3)] = "Sparsely Populated"
+ACS_test$k_pca_18_3[is.na(ACS_test$k_pca_18_3)] = "Sparsely Populated"
+ACS_test$k_pca_19_3[is.na(ACS_test$k_pca_19_3)] = "Sparsely Populated"
+ACS_test$k_pca_20_3[is.na(ACS_test$k_pca_20_3)] = "Sparsely Populated"
 
 ##### Save Output ####
 ACS_test=subset(ACS_test, select = -c(admin_type,St_Code))
 
 # Add back in raw data
-ACS_unscale=openxlsx::read.xlsx("~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/ACS_imp_unscaled.xlsx")
 ACS_test=merge(ACS_test, ACS_unscale , by = c("FIPS","OZ"), all = T , sort = F)
 names(ACS_test);names(ACS_unscale)
 

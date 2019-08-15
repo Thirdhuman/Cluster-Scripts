@@ -11,6 +11,8 @@ library(maptools)
 library(htmlwidgets)
 library(haven)
 library(rgeos)
+library(rmapshaper)
+library(geojsonio)
 options(tigris_use_cache = TRUE)
 
 Clusters_df=openxlsx::read.xlsx("~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/Cluster_Final.xlsx")
@@ -24,7 +26,8 @@ oz_info=oz_info[c('GEOID10', 'COUNTYNAME','TYPE')]
 oz_info$GEOID10=str_pad(oz_info$GEOID10, 11, pad = "0")
 
 tract_df=merge(tract_shapes,Clusters_df, by.x = "GEOID", by.y = "FIPS", all.x = T, sort = F )
-tract_df=merge(tract_df,oz_info, by.x = "GEOID", by.y = "GEOID10", all.x = T, sort = F )
+# tract_df=merge(tract_df,oz_info, by.x = "GEOID", by.y = "GEOID10", all.x = T, sort = F )
+tract_df <- tract_df %>% st_set_crs(4326)
 
 # names(tract_pop)[names(tract_pop) == 'FIPS'] <- 'tfips'
 # names(tract_pop)[names(tract_pop) == 'ChangePopulation'] <- 't_ChangePopulation'
@@ -48,9 +51,31 @@ tract_df=merge(tract_df,oz_info, by.x = "GEOID", by.y = "GEOID10", all.x = T, so
 # non.matched <- all[!all %in% matched]
 
 # oz_merge=merge(opp_z,oz_info, by=c("GEOID10"), all.x=T)
+# anyNA(tract_df)
+list_dfs = list()
+test=tract_df %>% group_split(k_pca_15_1,OZ)
 
-tract_df=st_as_sf(tract_df, 4269)%>% st_transform(4269)
+for (i in 1:length(test)) {
+	assign(paste0("Cluster_",i), (test[[i]]))
+	print(paste0("Cluster_",i))}
 
+list_dfs = list(Cluster_1,Cluster_2,Cluster_3,Cluster_4,Cluster_5,Cluster_6,Cluster_7,Cluster_8,Cluster_9,Cluster_10,Cluster_11,Cluster_12,Cluster_13,Cluster_14,Cluster_15,Cluster_16,Cluster_17,Cluster_18,Cluster_19,Cluster_20,Cluster_21,Cluster_22,Cluster_23,Cluster_24,Cluster_25,Cluster_26,Cluster_27,Cluster_28,Cluster_29,Cluster_30,Cluster_31,Cluster_32,Cluster_33,Cluster_34)
+
+list_dfs=pbmcapply::pbmclapply(list_dfs,geojson_json)
+
+# Cluster_1 <- geojson_json(Cluster_1)
+# 
+# test[[i]] <- geojson_json(test[[i]])
+# tract_df <- geojson_json(tract_df)
+
+for (i in 1:length(list_dfs)) {
+	geojson_write((list_dfs[[i]]),
+	file = paste0("~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/Web_Map/Cluster_GEOJSON/Native_Multi_JG/c",i,"_Cluster.geojson"))
+	# st_write(as.data.frame(test[[i]]) , paste0("~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/Web_Map/Multi-file/c",i,"_Cluster.shp"),
+	# 	update=TRUE, delete_layer = TRUE)
+	}
+
+tract_df.sp <- as(tract_df, "Spatial")
 
 st_write(tract_df, "~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/Web_Map/Cluster_OZ_file.shp", update=TRUE, delete_layer = TRUE)
 
