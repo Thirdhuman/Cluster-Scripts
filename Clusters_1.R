@@ -574,20 +574,17 @@ ACS_dat %>% summarise_all(funs(sum(is.na(.))))
 
 
 openxlsx::write.xlsx(ACS_dat, "~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/ACS_dat_clean.xlsx")
-
 # openxlsx::write.xlsx(ACS_dat, "~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/ACS_dat_clean_alt.xlsx")
 
 #### finishing up data prep 
-
-ACS_dat=openxlsx::read.xlsx("~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/ACS_dat_clean.xlsx")
+ACS_unscale=openxlsx::read.xlsx("~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/ACS_imp_unscaled.xlsx")
 
 # ACS_dat=openxlsx::read.xlsx("~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/ACS_dat_clean_alt.xlsx")
-
-ACS_unscale=openxlsx::read.xlsx("~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/ACS_imp_unscaled.xlsx")
+ACS_dat=openxlsx::read.xlsx("~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/ACS_dat_clean.xlsx")
 
 gc()
 ACS_dat=subset(ACS_dat, select = -c(B01001001 # Remove population count and other vars from cluster algorithm
-	# ,MedHHInc2017
+	,MedHHInc2017
 	,PCT_B16001002 # English
 	# ,PCT_B13010002 # % Poverty - Had a Child in last 12
 	,B19081006  # Households: Quintile Means: Top 5 Percent
@@ -596,12 +593,12 @@ ACS_dat=subset(ACS_dat, select = -c(B01001001 # Remove population count and othe
 	,B19081003  # Households: Quintile Means: Third Quintile
 	,B19081002  # Households: Quintile Means: Second Quintile
 	,B19081001  # Households: Quintile Means: Lowest Quintile
-	# ,B25078001  # Home Price - High
-	# ,B25076001  # Home Price - Low
+	,B25078001  # Home Price - High
+	,B25076001  # Home Price - Low
 	,pov_200 # Near Poverty
-	# ,PCT_C17002002 # Deep Poverty
+	,PCT_C17002002 # Deep Poverty
 	# ,PerCapitaIncome
-	,non_familyHH
+	# ,non_familyHH
 	,PerWorkerWageIncome
 	,LFPR2554
 	,EPOP2554
@@ -611,66 +608,65 @@ ACS_dat=subset(ACS_dat, select = -c(B01001001 # Remove population count and othe
 	,changepop00_17
 	,changepop13_17
 	# ,NonHispanicWhite
-	,changepop00_17
-	,vehicles_2plus
+	# ,vehicles_2plus
 	# ,PercentFemale
-	,PCT_A01001_002 #		 "Total Population: Under 5 Years"
-	,PCT_Age5to17   #		 "Total Population: 5 to 17 Years"
-	,PCT_A01001_006 #		 "Total Population: 18 to 24 Years"
-	,PCT_A01001_007 #		 "Total Population: 25 to 34 Years"
-	,PCT_A01001_008 #		 "Total Population: 35 to 44 Years"
-	,PCT_Age45to64  #		 "Total Population: 45 to 64 Years"
-	,PCT_Age45to54   #		"Split Middle-Age #1: 45 to 54"
-	,PCT_Age55to64   # 	 	"Split Middle-Age #2: 55 to 64"
-	,PCT_A01001_011 #		 "Total Population: 65 to 74 Years"
-	,PCT_A01001_012 #		 "Total Population: 75 to 84 Years"
-	,PCT_A01001_013 #		 "Total Population: 85 Years and Over"
-	# ,PCT_B01001049 #             % Total Population: Female: 85 Years and Over
-	# ,PCT_B01001048 #                % Total Population: Female: 80 to 84 Years
-	# ,PCT_B01001047 #                % Total Population: Female: 75 to 79 Years
-	# ,PCT_B01001046 #                % Total Population: Female: 70 to 74 Years
-	# ,PCT_B01001045 #                % Total Population: Female: 67 to 69 Years
-	# ,PCT_B01001044 #               % Total Population: Female: 65 and 66 Years
-	# ,PCT_B01001043 #                % Total Population: Female: 62 to 64 Years
-	# ,PCT_B01001042 #               % Total Population: Female: 60 and 61 Years
-	# ,PCT_B01001041 #                % Total Population: Female: 55 to 59 Years
-	# ,PCT_B01001040 #                % Total Population: Female: 50 to 54 Years
-	# ,PCT_B01001039 #                % Total Population: Female: 45 to 49 Years
-	# ,PCT_B01001038 #                % Total Population: Female: 40 to 44 Years
-	# ,PCT_B01001037 #                % Total Population: Female: 35 to 39 Years
-	# ,PCT_B01001036 #                % Total Population: Female: 30 to 34 Years
-	# ,PCT_B01001035 #                % Total Population: Female: 25 to 29 Years
-	# ,PCT_B01001034 #                % Total Population: Female: 22 to 24 Years
-	# ,PCT_B01001033 #                      % Total Population: Female: 21 Years
-	# ,PCT_B01001032 #                      % Total Population: Female: 20 Years
-	# ,PCT_B01001031 #               % Total Population: Female: 18 and 19 Years
-	# ,PCT_B01001030 #                % Total Population: Female: 15 to 17 Years
-	# ,PCT_B01001029 #                % Total Population: Female: 10 to 14 Years
-	# ,PCT_B01001028 #                  % Total Population: Female: 5 to 9 Years
-	# ,PCT_B01001027 #                 % Total Population: Female: Under 5 Years
-	# ,PCT_B01001025 #               % Total Population: Male: 85 Years and Over
-	# ,PCT_B01001024 #                  % Total Population: Male: 80 to 84 Years
-	# ,PCT_B01001023 #                  % Total Population: Male: 75 to 79 Years
-	# ,PCT_B01001022 #                  % Total Population: Male: 70 to 74 Years
-	# ,PCT_B01001021 #                  % Total Population: Male: 67 to 69 Years
-	# ,PCT_B01001020 #                 % Total Population: Male: 65 and 66 Years
-	# ,PCT_B01001019 #                  % Total Population: Male: 62 to 64 Years
-	# ,PCT_B01001018 #                 % Total Population: Male: 60 and 61 Years
-	# ,PCT_B01001017 #                  % Total Population: Male: 55 to 59 Years
-	# ,PCT_B01001016 #                  % Total Population: Male: 50 to 54 Years
-	# ,PCT_B01001015 #                  % Total Population: Male: 45 to 49 Years
-	# ,PCT_B01001014 #                  % Total Population: Male: 40 to 44 Years
-	# ,PCT_B01001013 #                  % Total Population: Male: 35 to 39 Years
-	# ,PCT_B01001012 #                  % Total Population: Male: 30 to 34 Years
-	# ,PCT_B01001011 #                  % Total Population: Male: 25 to 29 Years
-	# ,PCT_B01001010 #                  % Total Population: Male: 22 to 24 Years
-	# ,PCT_B01001009 #                        % Total Population: Male: 21 Years
-	# ,PCT_B01001008 #                        % Total Population: Male: 20 Years
-	# ,PCT_B01001007 #                 % Total Population: Male: 18 and 19 Years
-	# ,PCT_B01001006 #                  % Total Population: Male: 15 to 17 Years
-	# ,PCT_B01001005 #                  % Total Population: Male: 10 to 14 Years
-	# ,PCT_B01001004 #                    % Total Population: Male: 5 to 9 Years
-	# ,PCT_B01001003 #                   % Total Population: Male: Under 5 Years
+	,PCT_B25034004 # Built in 2000s
+	# ,PCT_A01001_002 #		 "Total Population: Under 5 Years"
+	# ,PCT_Age5to17   #		 "Total Population: 5 to 17 Years"
+	# ,PCT_A01001_006 #		 "Total Population: 18 to 24 Years"
+	# ,PCT_A01001_007 #		 "Total Population: 25 to 34 Years"
+	# ,PCT_A01001_008 #		 "Total Population: 35 to 44 Years"
+	# ,PCT_Age45to54   #		"Split Middle-Age #1: 45 to 54"
+	# ,PCT_Age55to64   # 	 	"Split Middle-Age #2: 55 to 64"
+	# ,PCT_A01001_011 #		 "Total Population: 65 to 74 Years"
+	# ,PCT_A01001_012 #		 "Total Population: 75 to 84 Years"
+	# ,PCT_A01001_013 #		 "Total Population: 85 Years and Over"
+	,PCT_B01001049 #             % Total Population: Female: 85 Years and Over
+	,PCT_B01001048 #                % Total Population: Female: 80 to 84 Years
+	,PCT_B01001047 #                % Total Population: Female: 75 to 79 Years
+	,PCT_B01001046 #                % Total Population: Female: 70 to 74 Years
+	,PCT_B01001045 #                % Total Population: Female: 67 to 69 Years
+	,PCT_B01001044 #               % Total Population: Female: 65 and 66 Years
+	,PCT_B01001043 #                % Total Population: Female: 62 to 64 Years
+	,PCT_B01001042 #               % Total Population: Female: 60 and 61 Years
+	,PCT_B01001041 #                % Total Population: Female: 55 to 59 Years
+	,PCT_B01001040 #                % Total Population: Female: 50 to 54 Years
+	,PCT_B01001039 #                % Total Population: Female: 45 to 49 Years
+	,PCT_B01001038 #                % Total Population: Female: 40 to 44 Years
+	,PCT_B01001037 #                % Total Population: Female: 35 to 39 Years
+	,PCT_B01001036 #                % Total Population: Female: 30 to 34 Years
+	,PCT_B01001035 #                % Total Population: Female: 25 to 29 Years
+	,PCT_B01001034 #                % Total Population: Female: 22 to 24 Years
+	,PCT_B01001033 #                      % Total Population: Female: 21 Years
+	,PCT_B01001032 #                      % Total Population: Female: 20 Years
+	,PCT_B01001031 #               % Total Population: Female: 18 and 19 Years
+	,PCT_B01001030 #                % Total Population: Female: 15 to 17 Years
+	,PCT_B01001029 #                % Total Population: Female: 10 to 14 Years
+	,PCT_B01001028 #                  % Total Population: Female: 5 to 9 Years
+	,PCT_B01001027 #                 % Total Population: Female: Under 5 Years
+	,PCT_B01001025 #               % Total Population: Male: 85 Years and Over
+	,PCT_B01001024 #                  % Total Population: Male: 80 to 84 Years
+	,PCT_B01001023 #                  % Total Population: Male: 75 to 79 Years
+	,PCT_B01001022 #                  % Total Population: Male: 70 to 74 Years
+	,PCT_B01001021 #                  % Total Population: Male: 67 to 69 Years
+	,PCT_B01001020 #                 % Total Population: Male: 65 and 66 Years
+	,PCT_B01001019 #                  % Total Population: Male: 62 to 64 Years
+	,PCT_B01001018 #                 % Total Population: Male: 60 and 61 Years
+	,PCT_B01001017 #                  % Total Population: Male: 55 to 59 Years
+	,PCT_B01001016 #                  % Total Population: Male: 50 to 54 Years
+	,PCT_B01001015 #                  % Total Population: Male: 45 to 49 Years
+	,PCT_B01001014 #                  % Total Population: Male: 40 to 44 Years
+	,PCT_B01001013 #                  % Total Population: Male: 35 to 39 Years
+	,PCT_B01001012 #                  % Total Population: Male: 30 to 34 Years
+	,PCT_B01001011 #                  % Total Population: Male: 25 to 29 Years
+	,PCT_B01001010 #                  % Total Population: Male: 22 to 24 Years
+	,PCT_B01001009 #                        % Total Population: Male: 21 Years
+	,PCT_B01001008 #                        % Total Population: Male: 20 Years
+	,PCT_B01001007 #                 % Total Population: Male: 18 and 19 Years
+	,PCT_B01001006 #                  % Total Population: Male: 15 to 17 Years
+	,PCT_B01001005 #                  % Total Population: Male: 10 to 14 Years
+	,PCT_B01001004 #                    % Total Population: Male: 5 to 9 Years
+	,PCT_B01001003 #                   % Total Population: Male: Under 5 Years
 ))
 
 ACS_dat %>% summarise_all(funs(sum(is.na(.) )))
@@ -695,47 +691,48 @@ plot(cumsum(prop_varex), xlab = "Principal Component",
 
 cumsum(prop_varex)
 
-# Primary Components
-comp1 = data.frame(pc$x[,1:125])
-comp2 = data.frame(pc$x[,1:135])
-comp3 = data.frame(pc$x[,1:140])
-# Smaller Age Components
-# comp1 = data.frame(pc$x[,1:87])
-# comp2 = data.frame(pc$x[,1:94])
-# comp3 = data.frame(pc$x[,1:92])
+### Primary Components
+# comp1 = data.frame(pc$x[,1:121])
+# comp2 = data.frame(pc$x[,1:125])
+# comp3 = data.frame(pc$x[,1:128])
+
+### Smaller Age Components
+comp1 = data.frame(pc$x[,1:85])
+comp2 = data.frame(pc$x[,1:88])
+comp3 = data.frame(pc$x[,1:91])
 
 #### K-Means Implimentation #### 
 gc()
 
 # k_pca_12_1= kmeans(comp1, centers = 12, nstart=31, iter.max=5500);gc()
 # k_pca_13_1= kmeans(comp1, centers = 13, nstart=45, iter.max=5000);gc()
-k_pca_14_1= kmeans(comp1, centers = 14, nstart=50, iter.max=5000);gc()
-k_pca_15_1= kmeans(comp1, centers = 15, nstart=50, iter.max=5000);gc()
-k_pca_16_1= kmeans(comp1, centers = 16, nstart=50, iter.max=5000);gc()
-k_pca_17_1= kmeans(comp1, centers = 17, nstart=50, iter.max=5000);gc()
-k_pca_18_1= kmeans(comp1, centers = 18, nstart=50, iter.max=5000);gc()
-k_pca_19_1= kmeans(comp1, centers = 19, nstart=50, iter.max=5000);gc()
-k_pca_20_1= kmeans(comp1, centers = 20, nstart=50, iter.max=5000);gc()
+k_pca_14_1= kmeans(comp1, centers = 14, nstart=27, iter.max=5000);gc()
+k_pca_15_1= kmeans(comp1, centers = 15, nstart=27, iter.max=5000);gc()
+k_pca_16_1= kmeans(comp1, centers = 16, nstart=27, iter.max=5000);gc()
+k_pca_17_1= kmeans(comp1, centers = 17, nstart=27, iter.max=5000);gc()
+k_pca_18_1= kmeans(comp1, centers = 18, nstart=25, iter.max=5000);gc()
+k_pca_19_1= kmeans(comp1, centers = 19, nstart=25, iter.max=5000);gc()
+k_pca_20_1= kmeans(comp1, centers = 20, nstart=27, iter.max=5000);gc()
 
-# k_pca_12_2= kmeans(comp2, centers = 12, nstart=50, iter.max=5500);gc()
-k_pca_13_2= kmeans(comp2, centers = 13,  nstart=50, iter.max=5000);gc()
-k_pca_14_2= kmeans(comp2, centers = 14, nstart=50, iter.max=5000);gc()
-k_pca_15_2= kmeans(comp2, centers = 15, nstart=50, iter.max=5000);gc()
-k_pca_16_2= kmeans(comp2, centers = 16, nstart=50, iter.max=5000);gc()
-k_pca_17_2= kmeans(comp2, centers = 17, nstart=50, iter.max=5000);gc()
-k_pca_18_2= kmeans(comp2, centers = 18, nstart=50, iter.max=5000);gc()
-k_pca_19_2= kmeans(comp2, centers = 19, nstart=50, iter.max=5000);gc()
-k_pca_20_2= kmeans(comp2, centers = 20, nstart=50, iter.max=5000);gc()
+# k_pca_12_2= kmeans(comp2, centers = 12, nstart=27, iter.max=5500);gc()
+k_pca_13_2= kmeans(comp2, centers = 13,  nstart=27, iter.max=5000);gc()
+k_pca_14_2= kmeans(comp2, centers = 14, nstart=27, iter.max=5000);gc()
+k_pca_15_2= kmeans(comp2, centers = 15, nstart=25, iter.max=5000);gc()
+k_pca_16_2= kmeans(comp2, centers = 16, nstart=25, iter.max=5000);gc()
+k_pca_17_2= kmeans(comp2, centers = 17, nstart=25, iter.max=5000);gc()
+k_pca_18_2= kmeans(comp2, centers = 18, nstart=25, iter.max=5000);gc()
+k_pca_19_2= kmeans(comp2, centers = 19, nstart=25, iter.max=5000);gc()
+k_pca_20_2= kmeans(comp2, centers = 20, nstart=25, iter.max=5000);gc()
 
-# k_pca_12_3= kmeans(comp3, centers = 12, nstart=50, iter.max=5000);gc()
-# k_pca_13_3= kmeans(comp3, centers = 13, nstart=50, iter.max=5000);gc()
-k_pca_14_3= kmeans(comp3, centers = 14, nstart=50, iter.max=5000);gc()
-k_pca_15_3= kmeans(comp3, centers = 15, nstart=50, iter.max=5000);gc()
-k_pca_16_3= kmeans(comp3, centers = 16, nstart=50, iter.max=5000);gc()
-k_pca_17_3= kmeans(comp3, centers = 17, nstart=50, iter.max=5000);gc()
-k_pca_18_3= kmeans(comp3, centers = 18, nstart=50, iter.max=5000);gc()
-k_pca_19_3= kmeans(comp3, centers = 19, nstart=50, iter.max=5000);gc()
-k_pca_20_3= kmeans(comp3, centers = 20, nstart=50, iter.max=5000);gc()
+# k_pca_12_3= kmeans(comp3, centers = 12, nstart=27, iter.max=5000);gc()
+# k_pca_13_3= kmeans(comp3, centers = 13, nstart=27, iter.max=5000);gc()
+k_pca_14_3= kmeans(comp3, centers = 14, nstart=27, iter.max=5000);gc()
+k_pca_15_3= kmeans(comp3, centers = 15, nstart=25, iter.max=5000);gc()
+k_pca_16_3= kmeans(comp3, centers = 16, nstart=25, iter.max=5000);gc()
+k_pca_17_3= kmeans(comp3, centers = 17, nstart=25, iter.max=5000);gc()
+k_pca_18_3= kmeans(comp3, centers = 18, nstart=27, iter.max=5000);gc()
+k_pca_19_3= kmeans(comp3, centers = 19, nstart=25, iter.max=5000);gc()
+# k_pca_20_3= kmeans(comp3, centers = 20, nstart=25, iter.max=5000);gc()
 
 #### Generate groups ####
 

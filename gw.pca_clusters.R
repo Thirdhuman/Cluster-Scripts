@@ -13,6 +13,7 @@ library(tmap)
 library(raster)
 library(RColorBrewer)
 library(usmap)
+library(geosphere)
 options(scipen = 999)
 
 ACS_dat=openxlsx::read.xlsx("~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/ACS_dat_clean_alt.xlsx")
@@ -22,6 +23,7 @@ tract_coord$lat=as.numeric(tract_coord$Intptlat);tract_coord$Intptlat=NULL
 tract_coord$long=as.numeric(tract_coord$Intptlon);tract_coord$Intptlon=NULL
 ACS_dat=merge(tract_coord,ACS_dat, by.x = "Geoid", by.y ="FIPS", sort = F, all.y = T)
 
+mdist <- distm(ACS_dat)
 
 ACS_dat_OZs <- ACS_dat[,1:4]
 Coords1 = as.matrix(cbind(ACS_dat$lat, ACS_dat$long))
