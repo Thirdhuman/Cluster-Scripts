@@ -16,8 +16,10 @@ library(geojsonio)
 library(rmapshaper)
 options(tigris_use_cache = TRUE)
 
+# Best Cluster: k_pca_15_2
+
 Clusters_df=openxlsx::read.xlsx("~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/Cluster_Final.xlsx")
-Clusters_df=Clusters_df[c('FIPS', 'OZ','k_pca_15_1')]
+Clusters_df=Clusters_df[c('FIPS', 'OZ','k_pca_15_2')]
 
 tract_shapes=sf::st_read("~/Desktop/Welfare_Policy/Struggling Regions/Cluster Analyses/Shapefiles/tract_files.shp")
 tract_shapes=subset(tract_shapes, ALAND > 0)
@@ -29,6 +31,9 @@ oz_info$GEOID10=str_pad(oz_info$GEOID10, 11, pad = "0")
 tract_df=merge(tract_shapes,Clusters_df, by.x = "GEOID", by.y = "FIPS", all.x = T, sort = F )
 # tract_df=merge(tract_df,oz_info, by.x = "GEOID", by.y = "GEOID10", all.x = T, sort = F )
 # tract_df <- tract_df %>% st_set_crs(4326)
+
+tract_df$cluster_abbvr <- abbreviate( tract_df$k_pca_15_2 )
+
 
 # names(tract_pop)[names(tract_pop) == 'FIPS'] <- 'tfips'
 # names(tract_pop)[names(tract_pop) == 'ChangePopulation'] <- 't_ChangePopulation'
@@ -43,9 +48,9 @@ tract_df=merge(tract_shapes,Clusters_df, by.x = "GEOID", by.y = "FIPS", all.x = 
 #        ifelse(IDX.dat$FIPS == "46113940500", "46102940500",
 #        ifelse(IDX.dat$FIPS == "46113940800", "46102940800",
 #        ifelse(IDX.dat$FIPS == "46113940900", "46102940900",IDX.dat$FIPS)))))
-tract_df$k_pca_15_1[tract_df$k_pca_15_1 == "Puerto Rico & US Territories"] = "56"
-tract_df$k_pca_15_1[tract_df$k_pca_15_1 == "Sparsely Populated"] = "0"
-tract_df=subset(tract_df, k_pca_15_1 != "56")
+tract_df$k_pca_15_2[tract_df$k_pca_15_2 == "Puerto Rico & US Territories"] = "56"
+tract_df$k_pca_15_2[tract_df$k_pca_15_2 == "Sparsely Populated"] = "0"
+tract_df=subset(tract_df, k_pca_15_2 != "56")
 tract_df <- ms_simplify(tract_df)
 
 # 
@@ -58,7 +63,7 @@ tract_df <- ms_simplify(tract_df)
 # oz_merge=merge(opp_z,oz_info, by=c("GEOID10"), all.x=T)
 # anyNA(tract_df)
 # proj4string(tract_df)=CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")
-test=tract_df %>% group_split(k_pca_15_1,OZ)
+test=tract_df %>% group_split(k_pca_15_2,OZ)
 tract_df.sp <- as(tract_df, "Spatial")
 proj4string(tract_df.sp)=CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")
 
@@ -77,7 +82,7 @@ list_dfs = list(Cluster_1,Cluster_2,Cluster_3,Cluster_4,Cluster_5,Cluster_6,Clus
 rm(Cluster_1,Cluster_2,Cluster_3,Cluster_4,Cluster_5,Cluster_6,Cluster_7,Cluster_8,Cluster_9,Cluster_10,Cluster_11,Cluster_12,Cluster_13,Cluster_14,Cluster_15,Cluster_16,Cluster_17,Cluster_18,Cluster_19,Cluster_20,Cluster_21,Cluster_22,Cluster_23,Cluster_24,Cluster_25,Cluster_26,Cluster_27,Cluster_28,Cluster_29,Cluster_30,Cluster_31,Cluster_32,Cluster_33,Cluster_34)
 
 for (i in 1:length(list_dfs)) {
-	c=list_dfs[[i]]$k_pca_15_1[1]
+	c=list_dfs[[i]]$k_pca_15_2[1]
 	z=list_dfs[[i]]$OZ[1]
 	assign(paste0("Cluster_",c,"_OZ_",z), (test[[i]]))
 	print(paste0("Cluster_",c,"_OZ_",z))}
