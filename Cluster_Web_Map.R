@@ -1,4 +1,4 @@
-gc;
+gc();
 
 library(tidyverse)
 library(viridis)
@@ -106,16 +106,21 @@ names(tract_df)
 st_crs(tract_df) ="+proj=longlat +init=epsg:4326"
 glimpse(tract_df)
 
-tract_geodf=geojson_json(tract_df)
-tract_geodf$features$id <- 1:nrow(tract_geodf)
+# tract_df.sp.samp=as_Spatial(tract_df[1:20,], cast = TRUE, IDs = paste0("ID", 1:length(tract_df)))
 
-inspect(tract_geodf)
-tract_df
-geojson_write(input = tract_df, file = "/Users/rorr/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/Web_Map/Final_Shapefile/Cluster_Final.geojson", overwrite = TRUE)
+geojson_write(input = tract_df.sp, file = "/Users/rorr/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/Web_Map/Final_Shapefile/Cluster_Final.geojson", overwrite = TRUE)
+# geojson_write(input = tract_df.sp.samp, file = "/Users/rorr/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/Web_Map/Final_Shapefile/Cluster_Final_samp.geojson", overwrite = TRUE)
+
 
 # States
 state_shapes=sf::st_read("~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/Web_Map/Resources/states_shapfiles/states.shp")
-state_shapes
+centr=read.csv('/Users/rorr/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/Web_Map/Resources/states_shapfiles/ST_cent.csv')
+state_shapes <- merge(state_shapes, centr, all.x = T)
+# st_is_valid(state_shapes)
+# df_union_cast <- st_cast(state_shapes, "POLYGON")
+state_shapes=as_Spatial(state_shapes, cast = TRUE, IDs = paste0("ID", 1:length(state_shapes)))
+# state_shapes_simple <- gSimplify(state_shapes, topologyPreserve = TRUE, tol = 0.025)
+
 geojson_write(input = state_shapes, file = "/Users/rorr/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/Web_Map/Final_Shapefile/state_shapes.geojson", overwrite = TRUE)
 
 
