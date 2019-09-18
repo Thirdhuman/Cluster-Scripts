@@ -1,4 +1,4 @@
-gc();
+rm(list=ls());gc()
 
 library(tidyverse)
 library(viridis)
@@ -21,7 +21,11 @@ library(geojsonsf)
 Clusters_df=openxlsx::read.xlsx("~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/Final_Clusters/Cluster_14-15_f2.xlsx")
 
 names(Clusters_df)
-names(Clusters_names)
+
+Clusters_df$Final_Cluster = ifelse(Clusters_df$Final_Cluster == 'African American Adversity','Concentrated Poverty',
+	Clusters_df$Final_Cluster)
+
+# African American Adversity
 
 # Clusters_df=Clusters_df[c('FIPS', 'OZ')]
 Clusters_df=Clusters_df[c('FIPS', 'Final_Cluster','OZ')]
@@ -48,26 +52,23 @@ unique(tract_df$LIC)
 
 tract_df$LIC = ifelse(tract_df$OZ_type == 'Low-Income Community','Low-Income Community',
 			ifelse(tract_df$OZ_type == 'Undesignated Low-Income Community', 'Low-Income Community',
-					"No"))
+					"Non-LIC"))
 
 # tract_df=subset(tract_df, STATEFP != "02" & STATEFP != "15" & STATEFP != "72")
 # tract_df=subset(tract_df, STATEFP == "48")
 tract_df=subset(tract_df, STATEFP != "72")
 
+# tract_df$clusterAbbvr=str_replace_all(tract_df$Final_Cluster, "[[:punct:]]", "")
+# tract_df$clusterAbbvr <- abbreviate( tract_df$clusterAbbvr, minlength = 12 )
+# tract_df$ind1 <- sample(100, size = nrow(tract_df), replace = TRUE) 
+# tract_df$ind2 <- sample(100, size = nrow(tract_df), replace = TRUE) 
+# tract_df$ind3 <- sample(100, size = nrow(tract_df), replace = TRUE) 
+# tract_df$ind4 <- sample(100, size = nrow(tract_df), replace = TRUE) 
+# tract_df$ind5 <- sample(100, size = nrow(tract_df), replace = TRUE) 
 
-# tract_df=merge(tract_df,oz_info, by.x = "GEOID", by.y = "GEOID10", all.x = T, sort = F )
-# tract_df <- tract_df %>% st_set_crs(4326)
-# names(tract_df)[names(tract_df) == 'INTPTLAT'] = 'lat'
-# names(tract_df)[names(tract_df) == 'INTPTLON'] = 'lng'
+IDX.dat=openxlsx::read.xlsx("~/Desktop/Welfare_Policy/Struggling_Regions/Index/final_index.xlsx")
+tract_df=merge(tract_df,IDX.dat, by.x = "GEOID", by.y = "FIPS", all.x = T, sort = F )
 
-tract_df$clusterAbbvr=str_replace_all(tract_df$Cluster_Final, "[[:punct:]]", "")
-
-tract_df$clusterAbbvr <- abbreviate( tract_df$clusterAbbvr, minlength = 12 )
-tract_df$ind1 <- sample(100, size = nrow(tract_df), replace = TRUE) 
-tract_df$ind2 <- sample(100, size = nrow(tract_df), replace = TRUE) 
-tract_df$ind3 <- sample(100, size = nrow(tract_df), replace = TRUE) 
-tract_df$ind4 <- sample(100, size = nrow(tract_df), replace = TRUE) 
-tract_df$ind5 <- sample(100, size = nrow(tract_df), replace = TRUE) 
 
 names(tract_df)
 tract_df=within(tract_df,rm(STATEFP,COUNTYFP,TRACTCE,NAME,NAMELSAD,MTFCC,FUNCSTAT,ALAND,AWATER))
@@ -92,7 +93,7 @@ tract_df[is.na(tract_df)] <- "N/A"
 
 cluster_dat=tract_df 
 glimpse(cluster_dat)
-cluster_dat=within(cluster_dat,rm(INTPTLAT,INTPTLON,ind1,ind2,ind3,ind4,ind5,STATENAME,COUNTYNAME,OZ_type,Final_Cluster))
+cluster_dat=within(cluster_dat,rm(INTPTLAT,INTPTLON,STATENAME,COUNTYNAME,OZ_type,Final_Cluster))
 cluster_dat[is.na(cluster_dat)] <- "N/A"
 
 cluster_dat=as.data.frame(cluster_dat)
@@ -106,7 +107,7 @@ names(tract_df)
 st_crs(tract_df) ="+proj=longlat +init=epsg:4326"
 glimpse(tract_df)
 
-# tract_df.sp.samp=as_Spatial(tract_df[1:20,], cast = TRUE, IDs = paste0("ID", 1:length(tract_df)))
+tract_df.sp=as_Spatial(tract_df, cast = TRUE, IDs = paste0("ID", 1:length(tract_df)))
 
 geojson_write(input = tract_df.sp, file = "/Users/rorr/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/Web_Map/Final_Shapefile/Cluster_Final.geojson", overwrite = TRUE)
 # geojson_write(input = tract_df.sp.samp, file = "/Users/rorr/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/Web_Map/Final_Shapefile/Cluster_Final_samp.geojson", overwrite = TRUE)
