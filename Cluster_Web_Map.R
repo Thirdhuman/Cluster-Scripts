@@ -51,51 +51,107 @@ Clusters_df=Clusters_df[c('FIPS', 'Final_Cluster','OZ')]
 native_tracts=sf::st_read('~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/Shapefiles/Native American Tracts', crs = 4269)
 native_tracts$Native_Tract = "Yes"
 
-# Read Tract Shapes
+
+### Read Tract Shapes ### 
 tract_shapes=sf::st_read("~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/Shapefiles/", crs = 4269)
 tract_shapes=subset(tract_shapes, as.numeric(ALAND) > 0.1)
+tract_shapes$country_fips <- paste0(tract_shapes$STATEFP,tract_shapes$COUNTYFP)
 tract_shapes$GEOID=as.character(tract_shapes$GEOID)
 
-# Read Metro Shapes
-metro_shapes=sf::st_read("~/Desktop/Welfare_Policy/Struggling_Regions/Opportunity Zones - Shapefiles/Metro Areas/tl_2017_us_cbsa/", crs = 4269)
-metro_shapes=metro_shapes[c("NAME", 'geometry')]
-names(metro_shapes)[names(metro_shapes) == 'NAME'] = 'METRO_NAME'
+# Tract 15
+tract_15=read.csv('~/Desktop/Welfare_Policy/Struggling_Regions/Eligibility Criteria/2015_Poverty&FamilyInc.csv', stringsAsFactors = F)
+tract_15$Geo_FIPS=str_pad(tract_15$Geo_FIPS, 11, pad = "0")
+names(tract_15)[names(tract_15) == 'SE_A00001_001'] = 'TPop_15'
+names(tract_15)[names(tract_15) == 'SE_A14010_001'] = 'tract_MFI_15'
+names(tract_15)[names(tract_15) == 'PCT_SE_B13004_002'] = 'perc_fpl'
+tract_15$cond_pov15=ifelse(tract_15$perc_fpl >= 20, T, F)
+tract_15=tract_15[c("Geo_FIPS", 'TPop_15', 'tract_MFI_15', 'cond_pov15')]
 
-# Read State Shapes
+# Tract 16
+tract_16=read.csv('~/Desktop/Welfare_Policy/Struggling_Regions/Eligibility Criteria/2016_Poverty&FamilyInc.csv', stringsAsFactors = F)
+tract_16$Geo_FIPS=str_pad(tract_16$Geo_FIPS, 11, pad = "0")
+names(tract_16)[names(tract_16) == 'SE_A00001_001'] = 'TPop_16'
+names(tract_16)[names(tract_16) == 'SE_A14010_001'] = 'tract_MFI_16'
+names(tract_16)[names(tract_16) == 'PCT_SE_B13004_002'] = 'perc_fpl'
+tract_16$cond_pov16=ifelse(tract_16$perc_fpl >= 20, T, F)
+tract_16=tract_16[c("Geo_FIPS", 'TPop_16', 'tract_MFI_16', 'cond_pov16')]
+state_cond=merge(tract_15,tract_16)
+tract_shapes=merge(tract_shapes,state_cond,by.x='GEOID',by.y='Geo_FIPS')
+
+### Read State Shapes ### 
 state_shapes=sf::st_read("~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/Web_Map/Resources/states_shapfiles/", crs = 4269)
 state_shapes=state_shapes[c("STATE_NAME", 'STATE_FIPS')]
 
-# Read County Shapes
+# State 2015
+state_15=read.csv('~/Desktop/Welfare_Policy/Struggling_Regions/Eligibility Criteria/2015_StateFamilyInc.csv', stringsAsFactors = F)
+state_15$Geo_FIPS=str_pad(state_15$Geo_FIPS, 2, pad = "0")
+names(state_15)[names(state_15) == 'SE_A14010_001'] = 'state_MFI_15'
+state_15=state_15[c("Geo_FIPS", 'state_MFI_15')]
+
+# State 2016
+state_16=read.csv('~/Desktop/Welfare_Policy/Struggling_Regions/Eligibility Criteria/2016_StateFamilyInc.csv', stringsAsFactors = F)
+state_16$Geo_FIPS=str_pad(state_16$Geo_FIPS, 2, pad = "0")
+names(state_16)[names(state_16) == 'SE_A14010_001'] = 'state_MFI_16'
+state_16=state_16[c("Geo_FIPS", 'state_MFI_16')]
+
+state_cond=merge(state_15,state_16)
+state_shapes=merge(state_shapes,state_cond,by.x='STATE_FIPS',by.y='Geo_FIPS')
+st_geometry(state_shapes) <- NULL
+state_shapes=as.data.frame(state_shapes)
+
+### Read Metro Shapes ### 
+metro_shapes=sf::st_read("~/Desktop/Welfare_Policy/Struggling_Regions/Opportunity Zones - Shapefiles/Metro Areas/tl_2017_us_cbsa/", crs = 4269)
+metro_shapes=metro_shapes[c("NAME", 'geometry', 'CBSAFP')]
+names(metro_shapes)[names(metro_shapes) == 'NAME'] = 'METRO_NAME'
+head(metro_15);head(metro_shapes)
+
+# Metro 2015
+metro_15=read.csv('~/Desktop/Welfare_Policy/Struggling_Regions/Eligibility Criteria/2015_MetroFamilyInc.csv', stringsAsFactors = F)
+metro_15$Geo_CBSA=str_pad(metro_15$Geo_CBSA, 5, pad = "0")
+names(metro_15)[names(metro_15) == 'SE_A00001_001'] = 'MPop_15'
+names(metro_15)[names(metro_15) == 'SE_A14010_001'] = 'metro_MFI_15'
+names(metro_15)[names(metro_15) == 'PCT_SE_B13004_002'] = 'perc_fpl'
+# metro_15$cond_metro_MFI_15=ifelse(metro_15$metro_MFI_15 >= 80, T, F)
+metro_15=metro_15[c("Geo_CBSA", 'metro_MFI_15')]
+
+# Metro 2016
+metro_16=read.csv('~/Desktop/Welfare_Policy/Struggling_Regions/Eligibility Criteria/2016_MetroFamilyInc.csv', stringsAsFactors = F)
+metro_16$Geo_CBSA=str_pad(metro_16$Geo_CBSA, 5, pad = "0")
+names(metro_16)[names(metro_16) == 'SE_A00001_001'] = 'MPop_16'
+names(metro_16)[names(metro_16) == 'SE_A14010_001'] = 'metro_MFI_16'
+names(metro_16)[names(metro_16) == 'PCT_SE_B13004_002'] = 'perc_fpl'
+# metro_16$cond_metro_MFI_16=ifelse(metro_16$metro_MFI_16 >= 80, T, F)
+metro_16=metro_16[c("Geo_CBSA", 'metro_MFI_16')]
+metro_cond=merge(metro_15,metro_16)
+metro_shapes=merge(metro_shapes,metro_cond,by.x='CBSAFP',by.y='Geo_CBSA')
+
+### Read County Shapes ###
 county_shapes=sf::st_read("~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/Web_Map/Resources/county_shapefiles/", crs = 4269)
 HMRC=openxlsx::read.xlsx('~/Desktop/Welfare_Policy/Struggling_Regions/Eligibility Criteria/High-Migration-Rural-Counties/CDFI-Fund-High-Migration-Rural-Counties.xlsx')
 HMRC=HMRC[c("FIPS", 'HMRC')]
 county_shapes=merge(county_shapes,HMRC,by.x="GEOID", by.y="FIPS", all = T)
-county_shapes=county_shapes[c("NAMELSAD","HMRC", 'geometry')]
+county_shapes=county_shapes[c("GEOID","NAMELSAD","HMRC", 'geometry')]
 names(county_shapes)[names(county_shapes) == 'NAMELSAD'] = 'COUNTY_NAME'
+st_geometry(county_shapes) <- NULL
+county_shapes=as.data.frame(county_shapes)
 
-
-# Read Empowerment Zone Shapes
+### Read Empowerment Zone Shapes ### 
 emp_zone=sf::st_read('~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/Shapefiles/Empowerment_Zones_and_Enterprise_Communities')
 emp_zone=subset(emp_zone, TYPE == "Empowerment Zone")
-names(emp_zone)[names(emp_zone) == 'TYPE'] = 'Empowerment Zone'
-emp_zone=emp_zone[c("Empowerment Zone", 'geometry')]
+names(emp_zone)[names(emp_zone) == 'TYPE'] = 'Empowerment_Zone'
+emp_zone=emp_zone[c("Empowerment_Zone", 'geometry')]
 
+# Merge files
 metro_shapes=st_transform(metro_shapes, 4269)
 tract_shapes=st_transform(tract_shapes, 4269)
-state_shapes=st_transform(state_shapes, 4269)
-county_shapes=st_transform(county_shapes, 4269)
 emp_zone=st_transform(emp_zone, 4269)
 
 st_crs(tract_shapes) <- 4269
-st_crs(state_shapes) <- 4269
-st_crs(county_shapes) <- 4269
 st_crs(metro_shapes) <- 4269
 st_crs(emp_zone) <- 4269
 
-st_geometry(state_shapes) <- NULL
-state_shapes=as.data.frame(state_shapes)
 tract_shapes=merge(tract_shapes, state_shapes, by.x="STATEFP", by.y ="STATE_FIPS", all.x = T)
-tract_shapes=st_join(tract_shapes, county_shapes, left = T, largest = T)
+tract_shapes=merge(tract_shapes, county_shapes, by.x="country_fips", by.y ="GEOID", all.x = T)
 tract_shapes=st_join(tract_shapes,  metro_shapes, left = T, largest = T)
 tract_shapes=st_join(tract_shapes,  emp_zone, left = T, largest = T)
 
