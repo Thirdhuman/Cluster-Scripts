@@ -127,9 +127,9 @@ metro_shapes=merge(metro_shapes,metro_cond,by.x='CBSAFP',by.y='Geo_CBSA')
 
 ### Read County Shapes ###
 county_shapes=sf::st_read("~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/Web_Map/Resources/county_shapefiles/", crs = 4269)
-HMRC=openxlsx::read.xlsx('~/Desktop/Welfare_Policy/Struggling_Regions/Eligibility Criteria/High-Migration-Rural-Counties/CDFI-Fund-High-Migration-Rural-Counties.xlsx')
-HMRC=HMRC[c("FIPS", 'HMRC')]
-county_shapes=merge(county_shapes,HMRC,by.x="GEOID", by.y="FIPS", all = T)
+HMRC_dat=openxlsx::read.xlsx('~/Desktop/Welfare_Policy/Struggling_Regions/Eligibility Criteria/High-Migration-Rural-Counties/CDFI-Fund-High-Migration-Rural-Counties.xlsx')
+HMRC_dat=HMRC[c("FIPS", 'HMRC')]
+county_shapes=merge(county_shapes,HMRC_dat,by.x="GEOID", by.y="FIPS", all = T)
 county_shapes=county_shapes[c("GEOID","NAMELSAD","HMRC", 'geometry')]
 names(county_shapes)[names(county_shapes) == 'NAMELSAD'] = 'COUNTY_NAME'
 st_geometry(county_shapes) <- NULL
@@ -149,15 +149,95 @@ emp_zone=st_transform(emp_zone, 4269)
 st_crs(tract_shapes) <- 4269
 st_crs(metro_shapes) <- 4269
 st_crs(emp_zone) <- 4269
+emp_zone=emp_zone%>% lwgeom::st_make_valid()
 
 tract_shapes=merge(tract_shapes, state_shapes, by.x="STATEFP", by.y ="STATE_FIPS", all.x = T)
 tract_shapes=merge(tract_shapes, county_shapes, by.x="country_fips", by.y ="GEOID", all.x = T)
 tract_shapes=st_join(tract_shapes,  metro_shapes, left = T, largest = T)
 tract_shapes=st_join(tract_shapes,  emp_zone, left = T, largest = T)
 
-tract_15=read.csv('~/Desktop/Welfare_Policy/Struggling_Regions/Eligibility Criteria/2015_Poverty&FamilyInc.csv', stringsAsFactors = F)
-tract_16=read.csv('~/Desktop/Welfare_Policy/Struggling_Regions/Eligibility Criteria/2016_Poverty&FamilyInc.csv', stringsAsFactors = F)
-tract_17=read.csv("~/Desktop/Welfare_Policy/Struggling_Regions/Eligibility Criteria/2017_Poverty&FamilyInc.csv", stringsAsFactors = F)
+tract_shapes$metro = T
+tract_shapes$metro[is.na(tract_shapes$METRO_NAME)] <- F
+names(tract_shapes)
+
+tract_shapes$empzone_tf=ifelse( as.character(tract_shapes$Empowerment_Zone)=="Empowerment Zone", T ,F)
+tract_shapes$empzone_tf[is.na(tract_shapes$Empowerment_Zone)] <- F
+unique(tract_shapes$Empowerment_Zone)
+unique(tract_shapes$empzone_tf)
+
+# save(tract_shapes, file = '~/Desktop/Welfare_Policy/Struggling_Regions/Eligibility Criteria/tract_shapes.Rdata')
+load(file = '~/Desktop/Welfare_Policy/Struggling_Regions/Eligibility Criteria/tract_shapes.Rdata')
+
+#### Conditions set for 2015 ####
+tract_shapes$LIC_2015=F
+# Condition #1: Is this tract poverty rate >= 20%
+tract_shapes$LIC_2015=ifelse(tract_shapes$cond_pov15 == T, T, tract_shapes$LIC_2015)
+# Condition #2: Is this tract in a metropolitan area AND MFI <= 80% of state OR metropolitan MFI?
+tract_shapes$LIC_2015=ifelse(tract_shapes$cond_pov15 == F & tract_shapes$metro == T & (tract_shapes$tract_MFI_15 <= (tract_shapes$metro_MFI_15 * .80)) | (tract_shapes$tract_MFI_15 <= (tract_shapes$state_MFI_15 * .80)) , T, tract_shapes$LIC_2015)
+# Condition #3: Is this tract, non-metro AND statewide MFI <= 80% of the statewide MFI?
+tract_shapes$LIC_2015=ifelse(tract_shapes$cond_pov15 == F & tract_shapes$metro == F & tract_shapes$tract_MFI_15 <= (tract_shapes$state_MFI_15 * .80), T, tract_shapes$LIC_2015)
+# Condition #4: Is this tract, non-metro AND statewide MFI >= 80% AND a HMRC AND has statewide MFI <= 85% ?
+tract_shapes$LIC_2015=ifelse(tract_shapes$cond_pov15 == F & tract_shapes$metro == F & tract_shapes$tract_MFI_15 <= (tract_shapes$state_MFI_15 * .80), T, tract_shapes$LIC_2015)
+
+### Is Contiguous to LIC 2015? ###
+
+LIC_contig_15 = subset(tract_shapes, LIC_2015 == T)
+non_contig_15=subset(tract_shapes,LIC_2015 == F)
+non_contig_15=non_contig_15[c("GEOID",'geometry')]
+intersect_ts_15 <- st_intersects(non_contig_15, LIC_contig_15)
+inter_15 = as.character(intersect_ts_15)
+C_int_15=cbind(inter_15,non_contig_15)
+C_int_15$inter_15=ifelse(C_int_15$inter_15=='integer(0)',F,T)
+st_geometry(C_int_15) <- NULL
+C_int_15=as.data.frame(C_int_15)
+tract_shapes=merge(tract_shapes,C_int_15,all.x =T)
+tract_shapes$inter_15[is.na(tract_shapes$inter_15)] <- F
+
+
+
+# Condition #5: Is this tract in a metropolitan area AND MFI >= 80% of state OR metropolitan MFI AND population < 2000 AND in an empowerment zone AND is contiguous with LIC tracts?
+
+# Condition #6: Is this tract, non-metro AND statewide MFI >= 80% AND a HMRC AND population < 2000 AND in an empowerment zone AND is contiguous with LIC tracts?
+
+
+#### Conditions set for 2016 ####
+tract_shapes$LIC_2016=F
+# Condition #1: Is this tract poverty rate >= 20%
+tract_shapes$LIC_2016=ifelse(tract_shapes$cond_pov16 == T, T, tract_shapes$LIC_2016)
+# Condition #2: Is this tract in a metropolitan area AND MFI <= 80% of state OR metropolitan MFI?
+tract_shapes$LIC_2016=ifelse(tract_shapes$cond_pov16 == F & tract_shapes$metro == T & (tract_shapes$tract_MFI_16 <= (tract_shapes$metro_MFI_16 * .80)) | (tract_shapes$tract_MFI_16 <= (tract_shapes$state_MFI_16 * .80)) , T, tract_shapes$LIC_2016)
+# Condition #3: Is this tract, non-metro AND statewide MFI <= 80% of the statewide MFI?
+tract_shapes$LIC_2016=ifelse(tract_shapes$cond_pov16 == F & tract_shapes$metro == F & tract_shapes$tract_MFI_16 <= (tract_shapes$state_MFI_16 * .80), T, tract_shapes$LIC_2016)
+# Condition #4: Is this tract, non-metro AND statewide MFI >= 80% AND a HMRC AND has statewide MFI <= 85% ?
+tract_shapes$LIC_2016=ifelse(tract_shapes$cond_pov16 == F & tract_shapes$metro == F & tract_shapes$tract_MFI_16 <= (tract_shapes$state_MFI_16 * .80), T, tract_shapes$LIC_2016)
+
+
+## Is Contiguous to LIC 2016? ## 
+
+LIC_contig_16 = subset(tract_shapes, LIC_2016 == T)
+LIC_contig_16=st_cast(st_union(LIC_contig_16),"MULTIPOLYGON")
+
+intesect_ts_16 <- st_intersects(subset(tract_shapes,LIC_2016 == F), LIC_contig_16)
+# intesect_ts2 <- st_intersects(LIC_contig_16,subset(tract_shapes,LIC_2016 == F))
+# intesect_ts3 <- st_intersection(subset(tract_shapes,LIC_2016 = F), LIC_contig_16)
+
+intesect_16_list = as.list(intesect_ts_16)
+intesect_16_char = as.character(intesect_ts_16)
+tract_shapes$intesect_16 = intesect_16_char
+save(intesect_ts_16,'~/Desktop/Welfare_Policy/Struggling_Regions/Eligibility Criteria/intersections/intesect_ts_16.Rdata')
+
+unique(intesect_16_char)
+
+
+# metro_15$cond_metro_MFI_15=ifelse(metro_15$state_MFI_80_15 >= 80, T, F)
+# metro_15$cond_metro_MFI_15=ifelse(metro_15$state_MFI_85_15 >= 85, T, F)
+# metro_16$cond_metro_MFI_16=ifelse(metro_16$state_MFI_80_16 >= 80, T, F)
+# metro_16$cond_metro_MFI_16=ifelse(metro_16$state_MFI_85_16 >= 85, T, F)
+
+
+# tract_15=read.csv('~/Desktop/Welfare_Policy/Struggling_Regions/Eligibility Criteria/2015_Poverty&FamilyInc.csv', stringsAsFactors = F)
+# tract_16=read.csv('~/Desktop/Welfare_Policy/Struggling_Regions/Eligibility Criteria/2016_Poverty&FamilyInc.csv', stringsAsFactors = F)
+# tract_17=read.csv("~/Desktop/Welfare_Policy/Struggling_Regions/Eligibility Criteria/2017_Poverty&FamilyInc.csv", stringsAsFactors = F)
 
 LIC_tracts=read.csv('~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/Web_Map/Resources/Extra_Shapefiles/LIC Tracts/tabula-Tract-Table.csv', stringsAsFactors = F)
 LIC_tracts$Tract_ID=str_pad(LIC_tracts$Tract_ID, 11, pad = "0")
