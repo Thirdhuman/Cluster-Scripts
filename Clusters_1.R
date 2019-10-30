@@ -26,6 +26,61 @@ OZ_dat_sup11 = readstata13::read.dta13('/Users/rorr/Desktop/Welfare_Policy/Strug
 HUD_vac=readxl::read_excel("~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/cluster_inputs/hud_addresses.xlsx")
 change_lt=readxl::read_excel("~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/cluster_inputs/tract_longterm.xlsx")
 ruca=readxl::read_excel("~/Desktop/Welfare_Policy/Struggling_Regions/Colleges & Growth/Raw/ruca2010revised.xlsx")
+
+ruca$FIPS= ifelse(
+	       ruca$FIPS == "51515050100", "51019050100",
+	ifelse(ruca$FIPS ==  "04019002701", "04019002704",
+	ifelse(ruca$FIPS ==  "04019002903", "04019002906",
+	ifelse(ruca$FIPS ==  "04019410501", "04019004118",
+	ifelse(ruca$FIPS ==  "04019410502", "04019004121",
+	ifelse(ruca$FIPS ==  "04019410503", "04019004125",
+	ifelse(ruca$FIPS ==  "04019470400", "04019005200",
+	ifelse(ruca$FIPS ==  "04019470500", "04019005300",
+	ifelse(ruca$FIPS ==  "06037930401", "06037137000",
+	ifelse(ruca$FIPS ==  "02270000100", "02158000100",
+	ifelse(ruca$FIPS ==  "46113940500", "46102940500",
+	ifelse(ruca$FIPS ==  "46113940800", "46102940800",
+	ifelse(ruca$FIPS ==  "46113940900", "46102940900",
+	ifelse(ruca$FIPS ==  "36053940101", "36053030101",
+	ifelse(ruca$FIPS ==  "36053940102", "36053030102",
+	ifelse(ruca$FIPS ==  "36053940103", "36053030103",
+	ifelse(ruca$FIPS ==  "36053940200", "36053030200",
+	ifelse(ruca$FIPS ==  "36053940300", "36053030300",
+	ifelse(ruca$FIPS ==  "36053940401", "36053030401",
+	ifelse(ruca$FIPS ==  "36053940403", "36053030403",
+	ifelse(ruca$FIPS ==  "36053940600", "36053030600",
+	ifelse(ruca$FIPS ==  "36053940700", "36053030402",
+	ifelse(ruca$FIPS ==  "36065940000", "36065024800",
+	ifelse(ruca$FIPS ==  "36065940100", "36065024700",
+	ifelse(ruca$FIPS ==  "36065940200", "36065024900", ruca$FIPS)))))))))))))))))))))))))
+
+change_lt$FIPS= ifelse(
+	       change_lt$FIPS == "51515050100", "51019050100",
+	ifelse(change_lt$FIPS ==  "04019002701", "04019002704",
+	ifelse(change_lt$FIPS ==  "04019002903", "04019002906",
+	ifelse(change_lt$FIPS ==  "04019410501", "04019004118",
+	ifelse(change_lt$FIPS ==  "04019410502", "04019004121",
+	ifelse(change_lt$FIPS ==  "04019410503", "04019004125",
+	ifelse(change_lt$FIPS ==  "04019470400", "04019005200",
+	ifelse(change_lt$FIPS ==  "04019470500", "04019005300",
+	ifelse(change_lt$FIPS ==  "06037930401", "06037137000",
+	ifelse(change_lt$FIPS ==  "02270000100", "02158000100",
+	ifelse(change_lt$FIPS ==  "46113940500", "46102940500",
+	ifelse(change_lt$FIPS ==  "46113940800", "46102940800",
+	ifelse(change_lt$FIPS ==  "46113940900", "46102940900",
+	ifelse(change_lt$FIPS ==  "36053940101", "36053030101",
+	ifelse(change_lt$FIPS ==  "36053940102", "36053030102",
+	ifelse(change_lt$FIPS ==  "36053940103", "36053030103",
+	ifelse(change_lt$FIPS ==  "36053940200", "36053030200",
+	ifelse(change_lt$FIPS ==  "36053940300", "36053030300",
+	ifelse(change_lt$FIPS ==  "36053940401", "36053030401",
+	ifelse(change_lt$FIPS ==  "36053940403", "36053030403",
+	ifelse(change_lt$FIPS ==  "36053940600", "36053030600",
+	ifelse(change_lt$FIPS ==  "36053940700", "36053030402",
+	ifelse(change_lt$FIPS ==  "36065940000", "36065024800",
+	ifelse(change_lt$FIPS ==  "36065940100", "36065024700",
+	ifelse(change_lt$FIPS ==  "36065940200", "36065024900", change_lt$FIPS)))))))))))))))))))))))))
+
 rucc=readxl::read_excel("~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/cluster_inputs/ruralurbancodes2013.xlsx")
 rucc=rucc[c('fips','RUCC_2013')]
 
@@ -33,7 +88,7 @@ glimpse(ruca)
 glimpse(rucc)
 
 unique(ruca$Primary_RUCA)
-unique(ruca$RUCC_2013)
+unique(rucc$RUCC_2013)
 
 ruca$Primary_RUCA = ifelse( ruca$Primary_RUCA == 99, NA, ruca$Primary_RUCA)
 ruca$Secondary_RUCA = ifelse( ruca$Secondary_RUCA == 99, NA, ruca$Secondary_RUCA)
@@ -94,6 +149,8 @@ OZ_dat_1=subset(OZ_dat_1,select=-c(PCT_B25034010,PCT_B25034003,PCT_B25034002))
 OZ_dat=list(OZ_dat_lang,OZ_dat_1,OZ_dat_extra,OZ_dat_sup3[-c(2)],OZ_dat_sup4[-c(2)],
 	HUD_vac, OZ_dat_sup5,OZ_dat_sup6[-c(2)],change_lt,OZ_dat_sup7,OZ_dat_sup8,
 	OZ_dat_sup9,OZ_dat_sup10,OZ_dat_sup11,ruca) %>% reduce(full_join, by = "FIPS")
+
+
 
 rm(var.labels_1,var.labels_2,var.labels_sup3,var.labels_sup4,var.labels_sup5,
 		var.labels_sup6,var.labels_sup7,var.labels_sup8,var.labels_extra,var.labels_sup9,var.labels_sup10,var.labels_sup11,
@@ -578,9 +635,11 @@ df1_imp = parlmice(df1, m=1
 df1_completed = (complete(df1_imp))
 
 # openxlsx::write.xlsx(df1_completed, "~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/df_imputed.xlsx")
+openxlsx::write.xlsx(df1_completed, "~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/df_imputed_fix.xlsx")
 # df1_completed=openxlsx::read.xlsx( "~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/df_imputed.xlsx")
 # openxlsx::write.xlsx(df1_completed, "~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/df_imputed_alt.xlsx")
-df1_completed=openxlsx::read.xlsx( "~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/df_imputed_alt.xlsx")
+# df1_completed=openxlsx::read.xlsx( "~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/df_imputed_alt.xlsx")
+df1_completed=openxlsx::read.xlsx( "~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/df_imputed_fix.xlsx")
 
 df1_completed %>% summarise_all(funs(sum(.<0 )))
 ACS_labels=as.data.frame(colnames(df1_completed));names(ACS_labels)[names(ACS_labels) == 'colnames(df1_completed)'] = 'var.name'
@@ -603,13 +662,16 @@ ACS_dat = cbind(df1_names, df1_completed)
 ACS_dat %>% summarise_all(funs(sum(is.na(.))))
 
 
-openxlsx::write.xlsx(ACS_dat, "~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/ACS_dat_clean_alt.xlsx")
+# openxlsx::write.xlsx(ACS_dat, "~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/ACS_dat_clean_alt.xlsx")
+openxlsx::write.xlsx(ACS_dat, "~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/ACS_dat_clean_fix.xlsx")
+
 # openxlsx::write.xlsx(ACS_dat, "~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/ACS_dat_clean.xlsx")
 
 #### finishing up data prep 
 ACS_unscale=openxlsx::read.xlsx("~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/ACS_imp_unscaled.xlsx")
 
-ACS_dat=openxlsx::read.xlsx("~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/ACS_dat_clean_alt.xlsx")
+# ACS_dat=openxlsx::read.xlsx("~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/ACS_dat_clean_alt.xlsx")
+ACS_dat=openxlsx::read.xlsx("~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/ACS_dat_clean_fix.xlsx")
 # ACS_dat=openxlsx::read.xlsx("~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/ACS_dat_clean.xlsx")
 
 gc()
@@ -736,16 +798,16 @@ cumsum(prop_varex)
 # comp3 = data.frame(pc$x[,1:128])
 
 ### Smaller Age Components
-# comp1 = data.frame(pc$x[,1:87])
-# comp2 = data.frame(pc$x[,1:92])
-comp3 = data.frame(pc$x[,1:87])
+comp1 = data.frame(pc$x[,1:83])
+comp2 = data.frame(pc$x[,1:87])
+comp3 = data.frame(pc$x[,1:90])
 
 #### K-Means Implimentation #### 
 gc()
 
 # k_pca_12_1= kmeans(comp1, centers = 12, nstart=40, iter.max=5500);gc()
-k_pca_13_1= kmeans(comp1, centers = 13, nstart=100, iter.max=5000);gc()
-k_pca_14_1= kmeans(comp1, centers = 14, nstart=175, iter.max=5000);gc()
+# k_pca_13_1= kmeans(comp1, centers = 13, nstart=100, iter.max=5000);gc()
+k_pca_14_1= kmeans(comp1, centers = 14, nstart=150, iter.max=5000);gc()
 k_pca_15_1= kmeans(comp1, centers = 15, nstart=100, iter.max=5000);gc()
 k_pca_16_1= kmeans(comp1, centers = 16, nstart=100, iter.max=5000);gc()
 # k_pca_17_1= kmeans(comp1, centers = 17, nstart=155, iter.max=5000);gc()
@@ -755,8 +817,8 @@ k_pca_16_1= kmeans(comp1, centers = 16, nstart=100, iter.max=5000);gc()
 # k_pca_21_1= kmeans(comp1, centers = 20, nstart=155, iter.max=5000);gc()
 
 # k_pca_12_2= kmeans(comp2, centers = 12, nstart=33, iter.max=5000);gc()
-k_pca_13_2= kmeans(comp2, centers = 13, nstart=100, iter.max=5000);gc()
-k_pca_14_2= kmeans(comp2, centers = 14, nstart=200, iter.max=5000);gc()
+# k_pca_13_2= kmeans(comp2, centers = 13, nstart=100, iter.max=5000);gc()
+k_pca_14_2= kmeans(comp2, centers = 14, nstart=151, iter.max=5000);gc()
 k_pca_15_2= kmeans(comp2, centers = 15, nstart=150, iter.max=5000);gc()
 k_pca_16_2= kmeans(comp2, centers = 16, nstart=100, iter.max=5000);gc()
 # k_pca_17_2= kmeans(comp2, centers = 17, nstart=155, iter.max=5000);gc()
@@ -784,8 +846,8 @@ k_pca_15_5= kmeans(comp3, centers = 15, nstart=100, iter.max=5000);gc()
 #### Generate groups ####
 
 # ACS_test=cbind(ACS_dat_OZs,k_pca_12_1=k_pca_12_1$cluster)
-ACS_test=cbind(ACS_dat_OZs,k_pca_13_1=k_pca_13_1$cluster)
-ACS_test=cbind(ACS_test,k_pca_14_1=k_pca_14_1$cluster)
+# ACS_test=cbind(ACS_dat_OZs,k_pca_13_1=k_pca_13_1$cluster)
+ACS_test=cbind(ACS_dat_OZs,k_pca_14_1=k_pca_14_1$cluster)
 ACS_test=cbind(ACS_test,k_pca_15_1=k_pca_15_1$cluster)
 ACS_test=cbind(ACS_test,k_pca_16_1=k_pca_16_1$cluster)
 # ACS_test=cbind(ACS_test,k_pca_17_1=k_pca_17_1$cluster)
@@ -826,6 +888,7 @@ ACS_test=cbind(ACS_test,k_pca_15_5=k_pca_15_5$cluster)
 OZ_dat_lang = readstata13::read.dta13("~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/cluster_inputs/languagesupplement.dta")
 OZ_dat_lang$St_Code=stringi::stri_sub(OZ_dat_lang$FIPS, from=1, to=2)
 OZ_dat_lang$admin_type=ifelse(as.numeric(OZ_dat_lang$St_Code) <= 56, "1", "0") 
+OZ_dat_lang=subset(OZ_dat_lang,admin_type=="1") # Remove Puerto Rico
 ACS_test=merge(ACS_test, OZ_dat_lang[,c(1,5:7)], by = c("FIPS", "OZ"), all.y = T)
 rm(OZ_dat_lang)
 
@@ -868,7 +931,7 @@ ACS_test$k_pca_15_5[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
 
 ###
 # ACS_test$k_pca_12_1[is.na(ACS_test$k_pca_12_1)] = "Sparsely Populated"
-ACS_test$k_pca_13_1[is.na(ACS_test$k_pca_13_1)] = "Sparsely Populated"
+# ACS_test$k_pca_13_1[is.na(ACS_test$k_pca_13_1)] = "Sparsely Populated"
 ACS_test$k_pca_14_1[is.na(ACS_test$k_pca_14_1)] = "Sparsely Populated"
 ACS_test$k_pca_15_1[is.na(ACS_test$k_pca_15_1)] = "Sparsely Populated"
 ACS_test$k_pca_16_1[is.na(ACS_test$k_pca_16_1)] = "Sparsely Populated"
@@ -908,16 +971,11 @@ ACS_test=subset(ACS_test, select = -c(admin_type,St_Code))
 
 # Save tables
 # openxlsx::write.xlsx(ACS_test, "~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/ACS_test_kmeans_3.xlsx")
-openxlsx::write.xlsx(ACS_test, "~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/ACS_test_kmeans_2.xlsx")
+openxlsx::write.xlsx(ACS_test, "~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/ACS_test_kmeans_fix.xlsx")
 # openxlsx::write.xlsx(ACS_test, "~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/ACS_test_kmeans.xlsx")
 
 # openxlsx::write.xlsx(ACS_test, "~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/Cluster_Final.xlsx")
 # names(ACS_test)
-
-# names(ACS_test)[names(ACS_test) == 'k_pca_14_1'] = 'FinalClusterNumb'
-# 
-# Final_ACS_test=ACS_test[c('FIPS','OZ','FinalClusterNumb')]
-# openxlsx::write.xlsx(Final_ACS_test, "~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/Cluster_Final_2.xlsx")
 
 
 # names(ACS_test)
