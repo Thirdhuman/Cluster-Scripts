@@ -27,6 +27,62 @@ HUD_vac=readxl::read_excel("~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_
 change_lt=readxl::read_excel("~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/cluster_inputs/tract_longterm.xlsx")
 ruca=readxl::read_excel("~/Desktop/Welfare_Policy/Struggling_Regions/Colleges & Growth/Raw/ruca2010revised.xlsx")
 
+gq_shp=sf::st_read("~//Desktop/Welfare_Policy/Struggling_Regions/Eligibility Criteria/Prison/Prison - Census Block/", crs = 4269)
+gq_shp$tract_id <- substr( as.character(gq_shp$GEOID), 0, 11)
+st_geometry(gq_shp) <- NULL
+gq_shp=as.data.frame(gq_shp)
+names(gq_shp)
+
+gq_shp$tract_id= ifelse(
+	       gq_shp$tract_id == "51515050100", "51019050100",
+	ifelse(gq_shp$tract_id ==  "04019002701", "04019002704",
+	ifelse(gq_shp$tract_id ==  "04019002903", "04019002906",
+	ifelse(gq_shp$tract_id ==  "04019410501", "04019004118",
+	ifelse(gq_shp$tract_id ==  "04019410502", "04019004121",
+	ifelse(gq_shp$tract_id ==  "04019410503", "04019004125",
+	ifelse(gq_shp$tract_id ==  "04019470400", "04019005200",
+	ifelse(gq_shp$tract_id ==  "04019470500", "04019005300",
+	ifelse(gq_shp$tract_id ==  "06037930401", "06037137000",
+	ifelse(gq_shp$tract_id ==  "02270000100", "02158000100",
+	ifelse(gq_shp$tract_id ==  "46113940500", "46102940500",
+	ifelse(gq_shp$tract_id ==  "46113940800", "46102940800",
+	ifelse(gq_shp$tract_id ==  "46113940900", "46102940900",
+	ifelse(gq_shp$tract_id ==  "36053940101", "36053030101",
+	ifelse(gq_shp$tract_id ==  "36053940102", "36053030102",
+	ifelse(gq_shp$tract_id ==  "36053940103", "36053030103",
+	ifelse(gq_shp$tract_id ==  "36053940200", "36053030200",
+	ifelse(gq_shp$tract_id ==  "36053940300", "36053030300",
+	ifelse(gq_shp$tract_id ==  "36053940401", "36053030401",
+	ifelse(gq_shp$tract_id ==  "36053940403", "36053030403",
+	ifelse(gq_shp$tract_id ==  "36053940600", "36053030600",
+	ifelse(gq_shp$tract_id ==  "36053940700", "36053030402",
+	ifelse(gq_shp$tract_id ==  "36065940000", "36065024800",
+	ifelse(gq_shp$tract_id ==  "36065940100", "36065024700",
+	ifelse(gq_shp$tract_id ==  "36065940200", "36065024900", gq_shp$tract_id)))))))))))))))))))))))))
+
+gq_sum<-aggregate(gq_shp[,14:27],by=list(gq_shp$tract_id),FUN=sum, na.rm=TRUE)
+names(gq_sum)[names(gq_sum) == 'Group.1'] = 'FIPS'
+names(gq_sum)[names(gq_sum) == 'GQNICD'] = 'college_gq'
+names(gq_sum)[names(gq_sum) == 'GQNIMQ'] = 'military_gq'
+names(gq_sum)[names(gq_sum) == 'QGINH'] = 'nursing_gq'
+names(gq_sum)[names(gq_sum) == 'QGIC'] = 'correctional_gq'
+names(gq_sum)[names(gq_sum) == 'QGIJ'] = 'juvenile_gq'
+names(gq_sum)[names(gq_sum) == 'GQNIO'] = 'NI_other_gq'
+
+gq_sum$detention_gq=gq_sum$correctional_gq+gq_sum$juvenile_gq
+gq_sum=gq_sum[c('FIPS','college_gq','military_gq','nursing_gq','juvenile_gq','correctional_gq','NI_other_gq','detention_gq','GQ')]
+
+gq_sum$college_gq_perc=gq_sum$college_gq/gq_sum$GQ
+gq_sum$military_gq_perc=gq_sum$military_gq/gq_sum$GQ
+gq_sum$nursing_gq_perc=gq_sum$nursing_gq/gq_sum$GQ
+gq_sum$juvenile_gq_perc=gq_sum$juvenile_gq/gq_sum$GQ
+gq_sum$correctional_gq_perc=gq_sum$correctional_gq/gq_sum$GQ
+gq_sum$NI_other_gq_perc=gq_sum$NI_other_gq/gq_sum$GQ
+gq_sum$detention_gq_perc=gq_sum$detention_gq/gq_sum$GQ
+
+gq_sum=gq_sum[c('FIPS','college_gq_perc','military_gq_perc','nursing_gq_perc','juvenile_gq_perc','correctional_gq_perc','detention_gq_perc','NI_other_gq_perc')]
+
+
 ruca$FIPS= ifelse(
 	       ruca$FIPS == "51515050100", "51019050100",
 	ifelse(ruca$FIPS ==  "04019002701", "04019002704",
@@ -148,9 +204,7 @@ OZ_dat_1=subset(OZ_dat_1,select=-c(PCT_B25034010,PCT_B25034003,PCT_B25034002))
 
 OZ_dat=list(OZ_dat_lang,OZ_dat_1,OZ_dat_extra,OZ_dat_sup3[-c(2)],OZ_dat_sup4[-c(2)],
 	HUD_vac, OZ_dat_sup5,OZ_dat_sup6[-c(2)],change_lt,OZ_dat_sup7,OZ_dat_sup8,
-	OZ_dat_sup9,OZ_dat_sup10,OZ_dat_sup11,ruca) %>% reduce(full_join, by = "FIPS")
-
-
+	OZ_dat_sup9,OZ_dat_sup10,OZ_dat_sup11,ruca,gq_sum) %>% reduce(full_join, by = "FIPS")
 
 rm(var.labels_1,var.labels_2,var.labels_sup3,var.labels_sup4,var.labels_sup5,
 		var.labels_sup6,var.labels_sup7,var.labels_sup8,var.labels_extra,var.labels_sup9,var.labels_sup10,var.labels_sup11,
@@ -162,6 +216,8 @@ gc()
 data.key.c=unique(data.key.c)
 OZ_dat = subset(OZ_dat, select = -c( `_merge`, merge1, B12007001, B12007002)) # Remove Merge labels
 # openxlsx::write.xlsx(OZ_dat[,c("FIPS",'A00002_002','B01001001')],"~/Desktop/Welfare_Policy/Struggling_Regions/Vacancies/all_tracts.xlsx")
+
+# Edit Variables
 
 data.key.c[grep('PCT_B190010',data.key.c$var.name),]
 OZ_dat$PCT_B190010_IncQ1 = (OZ_dat$PCT_B19001002+OZ_dat$PCT_B19001003+OZ_dat$PCT_B19001004+OZ_dat$PCT_B19001005+OZ_dat$PCT_B19001006)
@@ -194,8 +250,49 @@ OZ_dat=subset(OZ_dat ,as.numeric(OZ_dat$St_Code) <= 56)
 OZ_dat = OZ_dat %>%  dplyr::select(GEOID, FIPS, OZ, everything())
 OZ_dat$OZ = as.character(OZ_dat$OZ)
 
+# Group Quarters Populations
+
+OZ_dat$numb_gq = OZ_dat$GroupQuarters * OZ_dat$B01001001
+
+OZ_dat$B01001001[is.na(OZ_dat$B01001001)] <- 0
+OZ_dat$numb_gq[is.na(OZ_dat$numb_gq)] <- 0
+OZ_dat$college_gq_perc[is.na(OZ_dat$college_gq_perc)] <- 0
+OZ_dat$military_gq_perc[is.na(OZ_dat$military_gq_perc)] <- 0
+OZ_dat$juvenile_gq_perc[is.na(OZ_dat$juvenile_gq_perc)] <- 0
+OZ_dat$nursing_gq_perc[is.na(OZ_dat$nursing_gq_perc)] <- 0
+OZ_dat$correctional_gq_perc[is.na(OZ_dat$correctional_gq_perc)] <- 0
+OZ_dat$detention_gq_perc[is.na(OZ_dat$detention_gq_perc)] <- 0
+OZ_dat$NI_other_gq_perc[is.na(OZ_dat$NI_other_gq_perc)] <- 0
+
+OZ_dat$college_gq = (OZ_dat$college_gq_perc * OZ_dat$numb_gq) / OZ_dat$B01001001
+OZ_dat$military_gq = (OZ_dat$military_gq_perc * OZ_dat$numb_gq) / OZ_dat$B01001001
+OZ_dat$nursing_gq = (OZ_dat$nursing_gq_perc * OZ_dat$numb_gq) / OZ_dat$B01001001
+OZ_dat$juvenile_gq = (OZ_dat$juvenile_gq_perc * OZ_dat$numb_gq) / OZ_dat$B01001001
+OZ_dat$correctional_gq = (OZ_dat$correctional_gq_perc * OZ_dat$numb_gq) / OZ_dat$B01001001
+OZ_dat$detention_gq = (OZ_dat$detention_gq_perc * OZ_dat$numb_gq) / OZ_dat$B01001001
+OZ_dat$NI_other_gq = (OZ_dat$NI_other_gq_perc * OZ_dat$numb_gq) / OZ_dat$B01001001
+
+OZ_dat$college_gq[is.na(OZ_dat$college_gq)] <- 0
+OZ_dat$military_gq[is.na(OZ_dat$military_gq)] <- 0
+OZ_dat$nursing_gq[is.na(OZ_dat$nursing_gq)] <- 0
+OZ_dat$juvenile_gq[is.na(OZ_dat$juvenile_gq)] <- 0
+OZ_dat$correctional_gq[is.na(OZ_dat$correctional_gq)] <- 0
+OZ_dat$detention_gq[is.na(OZ_dat$detention_gq)] <- 0
+OZ_dat$NI_other_gq[is.na(OZ_dat$NI_other_gq)] <- 0
+
+OZ_dat$college_gq_perc = NULL
+OZ_dat$military_gq_perc = NULL
+OZ_dat$nursing_gq_perc = NULL
+OZ_dat$juvenile_gq_perc = NULL
+OZ_dat$correctional_gq_perc = NULL
+OZ_dat$detention_gq_perc = NULL
+OZ_dat$NI_other_gq_perc = NULL
+OZ_dat$numb_gq = NULL
+
+# Subset out low-population tracts and begin variable selection
+
 OZ_dat = subset(OZ_dat, is.na(B01001001) == F)
-OZ_dat = subset(OZ_dat, (B01001001) > 150 )
+OZ_dat = subset(OZ_dat, (B01001001) >= 150 )
 OZ_dat = subset(OZ_dat, select = -c(GEOID, St_Code)) # Remove GEO Vars
 
 # menon=subset(OZ_dat, German >= 50 | Spanish >= 50)
@@ -570,6 +667,13 @@ OZ_dat = subset(OZ_dat, select = -c( # Remove GEO Vars
 		,changeMedHHinc13_17
 		,changeMedHomeValue00_17
 		,changeMedHomeValue13_17
+		# ,college_gq
+		# ,military_gq
+		# ,nursing_gq
+		# ,juvenile_gq
+		# ,correctional_gq
+		# ,detention_gq
+		# ,NI_other_gq
 		#, non_familyHH
 		# ,LFPR2554
 		# ,EPOP2554
@@ -767,6 +871,14 @@ ACS_dat=subset(ACS_dat, select = -c( # Remove vars from cluster algorithm
 	,PCT_B01001005 #                  % Total Population: Male: 10 to 14 Years
 	,PCT_B01001004 #                    % Total Population: Male: 5 to 9 Years
 	,PCT_B01001003 #                   % Total Population: Male: Under 5 Years
+	# ,college_gq
+	# ,military_gq
+	# ,nursing_gq
+	,juvenile_gq
+	,correctional_gq
+	,detention_gq
+	,NI_other_gq
+	# ,GroupQuarters
 ))
 
 ACS_dat %>% summarise_all(funs(sum(is.na(.) )))
@@ -775,7 +887,6 @@ ACS_dat_names = ACS_dat[,1]
 ACS_dat_OZs = ACS_dat[,1:2]
 ACS_matrix = ACS_dat[,-c(1:2)]
 rownames(ACS_matrix) = ACS_dat_names
-
 pc=prcomp(ACS_matrix)
 
 ##compute variance
@@ -798,18 +909,18 @@ cumsum(prop_varex)
 # comp3 = data.frame(pc$x[,1:128])
 
 ### Smaller Age Components
-comp1 = data.frame(pc$x[,1:83])
-comp2 = data.frame(pc$x[,1:87])
-comp3 = data.frame(pc$x[,1:90])
+comp1 = data.frame(pc$x[,1:88])
+comp2 = data.frame(pc$x[,1:91])
+comp3 = data.frame(pc$x[,1:94])
 
 #### K-Means Implimentation #### 
 gc()
 
 # k_pca_12_1= kmeans(comp1, centers = 12, nstart=40, iter.max=5500);gc()
 # k_pca_13_1= kmeans(comp1, centers = 13, nstart=100, iter.max=5000);gc()
-k_pca_14_1= kmeans(comp1, centers = 14, nstart=150, iter.max=5000);gc()
-k_pca_15_1= kmeans(comp1, centers = 15, nstart=100, iter.max=5000);gc()
-k_pca_16_1= kmeans(comp1, centers = 16, nstart=100, iter.max=5000);gc()
+k_pca_14_1= kmeans(comp1, centers = 14, nstart=41, iter.max=5000);gc()
+k_pca_15_1= kmeans(comp1, centers = 15, nstart=52, iter.max=5000);gc()
+# k_pca_16_1= kmeans(comp1, centers = 16, nstart=53, iter.max=5000);gc()
 # k_pca_17_1= kmeans(comp1, centers = 17, nstart=155, iter.max=5000);gc()
 # k_pca_18_1= kmeans(comp1, centers = 18, nstart=155, iter.max=5000);gc()
 # k_pca_19_1= kmeans(comp1, centers = 19, nstart=155, iter.max=5000);gc()
@@ -818,9 +929,9 @@ k_pca_16_1= kmeans(comp1, centers = 16, nstart=100, iter.max=5000);gc()
 
 # k_pca_12_2= kmeans(comp2, centers = 12, nstart=33, iter.max=5000);gc()
 # k_pca_13_2= kmeans(comp2, centers = 13, nstart=100, iter.max=5000);gc()
-k_pca_14_2= kmeans(comp2, centers = 14, nstart=151, iter.max=5000);gc()
-k_pca_15_2= kmeans(comp2, centers = 15, nstart=150, iter.max=5000);gc()
-k_pca_16_2= kmeans(comp2, centers = 16, nstart=100, iter.max=5000);gc()
+k_pca_14_2= kmeans(comp2, centers = 14, nstart=50, iter.max=5000);gc()
+k_pca_15_2= kmeans(comp2, centers = 15, nstart=51, iter.max=5000);gc()
+# k_pca_16_2= kmeans(comp2, centers = 16, nstart=45, iter.max=4000);gc()
 # k_pca_17_2= kmeans(comp2, centers = 17, nstart=155, iter.max=5000);gc()
 # k_pca_18_2= kmeans(comp2, centers = 18, nstart=155, iter.max=5000);gc()
 # k_pca_19_2= kmeans(comp2, centers = 19, nstart=155, iter.max=5000);gc()
@@ -828,19 +939,20 @@ k_pca_16_2= kmeans(comp2, centers = 16, nstart=100, iter.max=5000);gc()
 
 # k_pca_12_3= kmeans(comp1, centers = 12, nstart=25, iter.max=5000);gc()
 # k_pca_13_3= kmeans(comp1, centers = 13, nstart=35, iter.max=5000);gc()
-k_pca_14_3= kmeans(comp1, centers = 14, nstart=150, iter.max=5000);gc()
-k_pca_15_3= kmeans(comp1, centers = 15, nstart=150, iter.max=5000);gc()
-# k_pca_16_3= kmeans(comp1, centers = 16, nstart=40, iter.max=5000);gc()
+k_pca_14_3= kmeans(comp1, centers = 14, nstart=50, iter.max=5000);gc()
+k_pca_15_3= kmeans(comp1, centers = 15, nstart=55, iter.max=5000);gc()
+# k_pca_16_3= kmeans(comp1, centers = 16, nstart=52, iter.max=5000);gc()
 # k_pca_17_3= kmeans(comp1, centers = 17, nstart=25, iter.max=5000);gc()
 # k_pca_18_3= kmeans(comp1, centers = 18, nstart=155, iter.max=5000);gc()
 
 # k_pca_13_4= kmeans(comp2, centers = 13, nstart=35, iter.max=5000);gc()
-k_pca_14_4= kmeans(comp3, centers = 14, nstart=150, iter.max=5000);gc()
-k_pca_15_4= kmeans(comp3, centers = 15, nstart=150, iter.max=5000);gc()
-# k_pca_16_4= kmeans(comp2, centers = 16, nstart=41, iter.max=5000);gc()
+k_pca_14_4= kmeans(comp3, centers = 14, nstart=50, iter.max=5000);gc()
+k_pca_15_4= kmeans(comp3, centers = 15, nstart=50, iter.max=5000);gc()
+# k_pca_16_4= kmeans(comp2, centers = 16, nstart=61, iter.max=5000);gc()
 
-k_pca_14_5= kmeans(comp3, centers = 14, nstart=100, iter.max=5000);gc()
-k_pca_15_5= kmeans(comp3, centers = 15, nstart=100, iter.max=5000);gc()
+k_pca_14_5= kmeans(comp3, centers = 14, nstart=90, iter.max=5000);gc()
+k_pca_15_5= kmeans(comp3, centers = 15, nstart=90, iter.max=5000);gc()
+# k_pca_16_5= kmeans(comp3, centers = 16, nstart=90, iter.max=5000);gc()
 
 
 #### Generate groups ####
@@ -849,7 +961,7 @@ k_pca_15_5= kmeans(comp3, centers = 15, nstart=100, iter.max=5000);gc()
 # ACS_test=cbind(ACS_dat_OZs,k_pca_13_1=k_pca_13_1$cluster)
 ACS_test=cbind(ACS_dat_OZs,k_pca_14_1=k_pca_14_1$cluster)
 ACS_test=cbind(ACS_test,k_pca_15_1=k_pca_15_1$cluster)
-ACS_test=cbind(ACS_test,k_pca_16_1=k_pca_16_1$cluster)
+# ACS_test=cbind(ACS_test,k_pca_16_1=k_pca_16_1$cluster)
 # ACS_test=cbind(ACS_test,k_pca_17_1=k_pca_17_1$cluster)
 # ACS_test=cbind(ACS_test,k_pca_18_1=k_pca_18_1$cluster)
 # ACS_test=cbind(ACS_test,k_pca_19_1=k_pca_19_1$cluster)
@@ -860,7 +972,7 @@ ACS_test=cbind(ACS_test,k_pca_16_1=k_pca_16_1$cluster)
 # ACS_test=cbind(ACS_test,k_pca_13_2=k_pca_13_2$cluster)
 ACS_test=cbind(ACS_test,k_pca_14_2=k_pca_14_2$cluster)
 ACS_test=cbind(ACS_test,k_pca_15_2=k_pca_15_2$cluster)
-ACS_test=cbind(ACS_test,k_pca_16_2=k_pca_16_2$cluster)
+# ACS_test=cbind(ACS_test,k_pca_16_2=k_pca_16_2$cluster)
 # ACS_test=cbind(ACS_test,k_pca_17_2=k_pca_17_2$cluster)
 # ACS_test=cbind(ACS_test,k_pca_18_2=k_pca_18_2$cluster)
 # ACS_test=cbind(ACS_test,k_pca_19_2=k_pca_19_2$cluster)
@@ -881,8 +993,10 @@ ACS_test=cbind(ACS_test,k_pca_15_3=k_pca_15_3$cluster)
 ACS_test=cbind(ACS_test,k_pca_14_4=k_pca_14_4$cluster)
 ACS_test=cbind(ACS_test,k_pca_15_4=k_pca_15_4$cluster)
 # ACS_test=cbind(ACS_test,k_pca_16_4=k_pca_16_4$cluster)
+
 ACS_test=cbind(ACS_test,k_pca_14_5=k_pca_14_5$cluster)
 ACS_test=cbind(ACS_test,k_pca_15_5=k_pca_15_5$cluster)
+# ACS_test=cbind(ACS_test,k_pca_16_5=k_pca_16_5$cluster)
 
 
 OZ_dat_lang = readstata13::read.dta13("~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/cluster_inputs/languagesupplement.dta")
@@ -891,42 +1005,42 @@ OZ_dat_lang$admin_type=ifelse(as.numeric(OZ_dat_lang$St_Code) <= 56, "1", "0")
 OZ_dat_lang=subset(OZ_dat_lang,admin_type=="1") # Remove Puerto Rico
 ACS_test=merge(ACS_test, OZ_dat_lang[,c(1,5:7)], by = c("FIPS", "OZ"), all.y = T)
 rm(OZ_dat_lang)
-
-##### Fill empties #####
-# ACS_test$k_pca_11_1[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-# ACS_test$k_pca_12_1[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-ACS_test$k_pca_13_1[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-ACS_test$k_pca_14_1[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-ACS_test$k_pca_15_1[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-ACS_test$k_pca_16_1[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-# ACS_test$k_pca_17_1[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-# ACS_test$k_pca_18_1[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-
-# ACS_test$k_pca_11_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-# ACS_test$k_pca_12_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-# ACS_test$k_pca_13_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-ACS_test$k_pca_14_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-ACS_test$k_pca_15_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-ACS_test$k_pca_16_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-# ACS_test$k_pca_17_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-# ACS_test$k_pca_18_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-
-# ACS_test$k_pca_11_3[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-# ACS_test$k_pca_12_3[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-# ACS_test$k_pca_13_3[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-ACS_test$k_pca_14_3[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-ACS_test$k_pca_15_3[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-# ACS_test$k_pca_16_3[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-# ACS_test$k_pca_17_3[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-# ACS_test$k_pca_18_3[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-
-# ACS_test$k_pca_13_4[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-ACS_test$k_pca_14_4[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-ACS_test$k_pca_15_4[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-# ACS_test$k_pca_16_4[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-
-ACS_test$k_pca_14_5[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
-ACS_test$k_pca_15_5[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+# 
+# ##### Fill empties #####
+# # ACS_test$k_pca_11_1[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+# # ACS_test$k_pca_12_1[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+# ACS_test$k_pca_13_1[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+# ACS_test$k_pca_14_1[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+# ACS_test$k_pca_15_1[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+# ACS_test$k_pca_16_1[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+# # ACS_test$k_pca_17_1[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+# # ACS_test$k_pca_18_1[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+# 
+# # ACS_test$k_pca_11_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+# # ACS_test$k_pca_12_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+# # ACS_test$k_pca_13_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+# ACS_test$k_pca_14_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+# ACS_test$k_pca_15_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+# ACS_test$k_pca_16_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+# # ACS_test$k_pca_17_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+# # ACS_test$k_pca_18_2[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+# 
+# # ACS_test$k_pca_11_3[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+# # ACS_test$k_pca_12_3[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+# # ACS_test$k_pca_13_3[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+# ACS_test$k_pca_14_3[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+# ACS_test$k_pca_15_3[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+# # ACS_test$k_pca_16_3[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+# # ACS_test$k_pca_17_3[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+# # ACS_test$k_pca_18_3[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+# 
+# # ACS_test$k_pca_13_4[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+# ACS_test$k_pca_14_4[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+# ACS_test$k_pca_15_4[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+# # ACS_test$k_pca_16_4[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+# 
+# ACS_test$k_pca_14_5[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
+# ACS_test$k_pca_15_5[ACS_test$admin_type == "0"] = "Puerto Rico & US Territories"
 
 
 ###
@@ -950,17 +1064,18 @@ ACS_test$k_pca_16_2[is.na(ACS_test$k_pca_16_2)] = "Sparsely Populated"
 # ACS_test$k_pca_13_3[is.na(ACS_test$k_pca_13_3)] = "Sparsely Populated"
 ACS_test$k_pca_14_3[is.na(ACS_test$k_pca_14_3)] = "Sparsely Populated"
 ACS_test$k_pca_15_3[is.na(ACS_test$k_pca_15_3)] = "Sparsely Populated"
-# ACS_test$k_pca_16_3[is.na(ACS_test$k_pca_16_3)] = "Sparsely Populated"
+ACS_test$k_pca_16_3[is.na(ACS_test$k_pca_16_3)] = "Sparsely Populated"
 # ACS_test$k_pca_17_3[is.na(ACS_test$k_pca_17_3)] = "Sparsely Populated"
 # ACS_test$k_pca_18_3[is.na(ACS_test$k_pca_18_3)] = "Sparsely Populated"
 
 # ACS_test$k_pca_13_4[is.na(ACS_test$k_pca_13_4)] = "Sparsely Populated"
 ACS_test$k_pca_14_4[is.na(ACS_test$k_pca_14_4)] = "Sparsely Populated"
 ACS_test$k_pca_15_4[is.na(ACS_test$k_pca_15_4)] = "Sparsely Populated"
-# ACS_test$k_pca_16_4[is.na(ACS_test$k_pca_16_4)] = "Sparsely Populated"
+ACS_test$k_pca_16_4[is.na(ACS_test$k_pca_16_4)] = "Sparsely Populated"
 
 ACS_test$k_pca_14_5[is.na(ACS_test$k_pca_14_5)] = "Sparsely Populated"
 ACS_test$k_pca_15_5[is.na(ACS_test$k_pca_15_5)] = "Sparsely Populated"
+ACS_test$k_pca_16_5[is.na(ACS_test$k_pca_16_5)] = "Sparsely Populated"
 
 ##### Save Output ####
 ACS_test=subset(ACS_test, select = -c(admin_type,St_Code))
@@ -972,6 +1087,10 @@ ACS_test=subset(ACS_test, select = -c(admin_type,St_Code))
 # Save tables
 # openxlsx::write.xlsx(ACS_test, "~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/ACS_test_kmeans_3.xlsx")
 openxlsx::write.xlsx(ACS_test, "~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/ACS_test_kmeans_fix.xlsx")
+
+# fix_test=openxlsx::read.xlsx( "~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/ACS_test_kmeans_fix.xlsx")
+# fix_test=fix_test[duplicated(fix_test)|duplicated(fix_test, fromLast=TRUE),]
+
 # openxlsx::write.xlsx(ACS_test, "~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/ACS_test_kmeans.xlsx")
 
 # openxlsx::write.xlsx(ACS_test, "~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/Cluster_Final.xlsx")
