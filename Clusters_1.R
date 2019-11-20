@@ -773,6 +773,35 @@ openxlsx::write.xlsx(ACS_dat, "~/Desktop/Welfare_Policy/Struggling_Regions/Clust
 
 #### finishing up data prep 
 ACS_unscale=openxlsx::read.xlsx("~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/ACS_imp_unscaled.xlsx")
+ACS_unscale$FIPS= ifelse(
+       ACS_unscale$FIPS =='02270000100','02158000100',
+	ifelse(ACS_unscale$FIPS =='04019002701','04019002704',
+	ifelse(ACS_unscale$FIPS =='04019002903','04019002906',
+	ifelse(ACS_unscale$FIPS =='04019410501','04019004118',
+	ifelse(ACS_unscale$FIPS =='04019410502','04019004121',
+	ifelse(ACS_unscale$FIPS =='04019410503','04019004125',
+	ifelse(ACS_unscale$FIPS =='04019470400','04019005200',
+	ifelse(ACS_unscale$FIPS =='04019470500','04019005300',
+	ifelse(ACS_unscale$FIPS =='06037930401','06037137000',
+	ifelse(ACS_unscale$FIPS =='36053940101','36053030101',
+	ifelse(ACS_unscale$FIPS =='36053940102','36053030102',
+	ifelse(ACS_unscale$FIPS =='36053940103','36053030103',
+	ifelse(ACS_unscale$FIPS =='36053940200','36053030200',
+	ifelse(ACS_unscale$FIPS =='36053940300','36053030300',
+	ifelse(ACS_unscale$FIPS =='36053940401','36053030401',
+	ifelse(ACS_unscale$FIPS =='36053940403','36053030403',
+	ifelse(ACS_unscale$FIPS =='36053940600','36053030600',
+	ifelse(ACS_unscale$FIPS =='36053940700','36053030402',
+	ifelse(ACS_unscale$FIPS =='36065940000','36065024800',
+	ifelse(ACS_unscale$FIPS =='36065940100','36065024700',
+	ifelse(ACS_unscale$FIPS =='36065940200','36065024900',
+	ifelse(ACS_unscale$FIPS =='36085000900','36085008900',
+	ifelse(ACS_unscale$FIPS =='46113940500','46102940500',
+	ifelse(ACS_unscale$FIPS =='46113940800','46102940800',
+	ifelse(ACS_unscale$FIPS =='46113940900','46102940900',
+	ifelse(ACS_unscale$FIPS =='51515050100','51019050100',ACS_unscale$FIPS))))))))))))))))))))))))))
+
+openxlsx::write.xlsx(ACS_unscale, "~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/ACS_imp_unscaled.xlsx")
 
 # ACS_dat=openxlsx::read.xlsx("~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/ACS_dat_clean_alt.xlsx")
 ACS_dat=openxlsx::read.xlsx("~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/ACS_dat_clean_fix.xlsx")
@@ -1086,7 +1115,67 @@ ACS_test=subset(ACS_test, select = -c(admin_type,St_Code))
 
 # Save tables
 # openxlsx::write.xlsx(ACS_test, "~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/ACS_test_kmeans_3.xlsx")
-openxlsx::write.xlsx(ACS_test, "~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/ACS_test_kmeans_fix.xlsx")
+
+fix_test=openxlsx::read.xlsx( "~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/ACS_test_kmeans_fix.xlsx")
+fix_test$FIPS= ifelse(
+       fix_test$FIPS =='02270000100','02158000100',
+	ifelse(fix_test$FIPS =='04019002701','04019002704',
+	ifelse(fix_test$FIPS =='04019002903','04019002906',
+	ifelse(fix_test$FIPS =='04019410501','04019004118',
+	ifelse(fix_test$FIPS =='04019410502','04019004121',
+	ifelse(fix_test$FIPS =='04019410503','04019004125',
+	ifelse(fix_test$FIPS =='04019470400','04019005200',
+	ifelse(fix_test$FIPS =='04019470500','04019005300',
+	ifelse(fix_test$FIPS =='06037930401','06037137000',
+	ifelse(fix_test$FIPS =='36053940101','36053030101',
+	ifelse(fix_test$FIPS =='36053940102','36053030102',
+	ifelse(fix_test$FIPS =='36053940103','36053030103',
+	ifelse(fix_test$FIPS =='36053940200','36053030200',
+	ifelse(fix_test$FIPS =='36053940300','36053030300',
+	ifelse(fix_test$FIPS =='36053940401','36053030401',
+	ifelse(fix_test$FIPS =='36053940403','36053030403',
+	ifelse(fix_test$FIPS =='36053940600','36053030600',
+	ifelse(fix_test$FIPS =='36053940700','36053030402',
+	ifelse(fix_test$FIPS =='36065940000','36065024800',
+	ifelse(fix_test$FIPS =='36065940100','36065024700',
+	ifelse(fix_test$FIPS =='36065940200','36065024900',
+	ifelse(fix_test$FIPS =='36085000900','36085008900',
+	ifelse(fix_test$FIPS =='46113940500','46102940500',
+	ifelse(fix_test$FIPS =='46113940800','46102940800',
+	ifelse(fix_test$FIPS =='46113940900','46102940900',
+	ifelse(fix_test$FIPS =='51515050100','51019050100',fix_test$FIPS))))))))))))))))))))))))))
+
+
+openxlsx::write.xlsx(fix_test, "~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/ACS_test_kmeans_fix.xlsx")
+
+Clusters_df$Fips= ifelse(
+       Clusters_df$Fips =='02270000100','02158000100',
+	ifelse(Clusters_df$Fips =='04019002701','04019002704',
+	ifelse(Clusters_df$Fips =='04019002903','04019002906',
+	ifelse(Clusters_df$Fips =='04019410501','04019004118',
+	ifelse(Clusters_df$Fips =='04019410502','04019004121',
+	ifelse(Clusters_df$Fips =='04019410503','04019004125',
+	ifelse(Clusters_df$Fips =='04019470400','04019005200',
+	ifelse(Clusters_df$Fips =='04019470500','04019005300',
+	ifelse(Clusters_df$Fips =='06037930401','06037137000',
+	ifelse(Clusters_df$Fips =='36053940101','36053030101',
+	ifelse(Clusters_df$Fips =='36053940102','36053030102',
+	ifelse(Clusters_df$Fips =='36053940103','36053030103',
+	ifelse(Clusters_df$Fips =='36053940200','36053030200',
+	ifelse(Clusters_df$Fips =='36053940300','36053030300',
+	ifelse(Clusters_df$Fips =='36053940401','36053030401',
+	ifelse(Clusters_df$Fips =='36053940403','36053030403',
+	ifelse(Clusters_df$Fips =='36053940600','36053030600',
+	ifelse(Clusters_df$Fips =='36053940700','36053030402',
+	ifelse(Clusters_df$Fips =='36065940000','36065024800',
+	ifelse(Clusters_df$Fips =='36065940100','36065024700',
+	ifelse(Clusters_df$Fips =='36065940200','36065024900',
+	ifelse(Clusters_df$Fips =='36085000900','36085008900',
+	ifelse(Clusters_df$Fips =='46113940500','46102940500',
+	ifelse(Clusters_df$Fips =='46113940800','46102940800',
+	ifelse(Clusters_df$Fips =='46113940900','46102940900',
+	ifelse(Clusters_df$Fips =='51515050100','51019050100',Clusters_df$Fips))))))))))))))))))))))))))
+
 
 # fix_test=openxlsx::read.xlsx( "~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/ACS_test_kmeans_fix.xlsx")
 # fix_test=fix_test[duplicated(fix_test)|duplicated(fix_test, fromLast=TRUE),]
