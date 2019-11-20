@@ -277,7 +277,6 @@ county_16=read.csv('~/Desktop/Welfare_Policy/Struggling_Regions/Eligibility Crit
 county_16$Geo_FIPS=str_pad(county_16$Geo_FIPS, 5, pad = "0")
 names(county_16)[names(county_16) == 'SE_A14010_001'] = 'county_MFI_16'
 names(county_16)[names(county_16) == 'PCT_SE_B13004_002'] = 'county_fpl_16'
-
 county_16=county_16[c("Geo_FIPS", 'county_MFI_16','county_fpl_16')]
 
 county_shapes=merge(county_shapes,HMRC_dat,by.x="GEOID", by.y="FIPS", all.x = T)
@@ -592,6 +591,7 @@ unique(tract_shapes$intermediate_LIC)
 
 #### Generalized Taxonomy of Eligibility ####
 
+
 # Poverty 
 tract_shapes$poverty_cond=ifelse(
 	tract_shapes$cond_pov16 == T | tract_shapes$cond_pov15 == T, T, F )
@@ -629,6 +629,7 @@ tract_shapes$population_cond=ifelse(
 		(tract_shapes$cond_tpop_15 == T & tract_shapes$inter_15 == T & tract_shapes$empzone_tf == T)
 		, T, F)
 
+
 ##### Compare to other data sources ####
 
 PM_LIC_tracts=openxlsx::read.xlsx('~/Desktop/Welfare_Policy/Struggling_Regions/Eligibility Criteria/PolicyMap_OZ_Eligibility.xlsx')
@@ -665,8 +666,8 @@ PM_LIC_tracts$Tract_ID= ifelse(
 	ifelse(PM_LIC_tracts$Tract_ID =='51515050100','51019050100',PM_LIC_tracts$Tract_ID))))))))))))))))))))))))))
 
 names(PM_LIC_tracts)[names(PM_LIC_tracts) == 'New.Markets.Tax.Credit.(NMTC).eligibility.and.Qualified.Opportun'] = 'NMTC_elig_type'
-PM_LIC_tracts=PM_LIC_tracts[c("Tract_ID", 'elig_type')]
-unique(PM_LIC_tracts$elig_type)
+PM_LIC_tracts=PM_LIC_tracts[c("Tract_ID", 'NMTC_elig_type')]
+unique(PM_LIC_tracts$NMTC_elig_type)
 
 Und_LIC_tracts=read.csv('~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/Web_Map/Resources/Extra_Shapefiles/LIC Tracts/tabula-Tract-Table.csv', stringsAsFactors = F)
 
@@ -761,6 +762,8 @@ IDX.dat$FIPS= ifelse(
 	ifelse(IDX.dat$FIPS =='46113940800','46102940800',
 	ifelse(IDX.dat$FIPS =='46113940900','46102940900',
 	ifelse(IDX.dat$FIPS =='51515050100','51019050100',IDX.dat$FIPS))))))))))))))))))))))))))
+gq_dat=openxlsx::read.xlsx("~/Desktop/Welfare_Policy/Struggling_Regions/Eligibility Criteria/Prison/Group_Quarters/gq_population_calcs.xlsx")
+gq_dat=gq_dat[c('FIPS','pop_RM_institutionalized_gq_15','pop_RM_institutionalized_gq_16','gq_numb_15','gq_numb_16')]
 
 tract_shapes=subset(tract_shapes, STATEFP != "72") # remove Puerto Rico
 tract_df=merge(tract_shapes,oz_info, by.x = "GEOID", by.y = "GEOID10", all.x = T, sort = F )
@@ -768,6 +771,25 @@ tract_df=merge(tract_df,Clusters_df, by.x = "GEOID", by.y = "Fips", all.x = T, s
 tract_df=merge(tract_df,Und_LIC_tracts, by.x = "GEOID", by.y = "Tract_ID", all.x = T, sort = F )
 tract_df=merge(tract_df,PM_LIC_tracts, by.x = "GEOID", by.y = "Tract_ID", all.x = T, sort = F )
 tract_df=merge(tract_df,IDX.dat, by.x = "GEOID", by.y = "FIPS", all.x = T, sort = F )
+tract_df=merge(tract_df,gq_dat, by.x = "GEOID", by.y = "FIPS", all.x = T, sort = F )
+
+tract_df$cond_pop_RM_inst_15=ifelse( (tract_df$TPop_15-as.numeric(tract_df$pop_RM_institutionalized_gq_15)) < 2000, T, F)
+tract_df$cond_pop_RM_inst_16=ifelse( (tract_df$TPop_16-as.numeric(tract_df$pop_RM_institutionalized_gq_16)) < 2000, T, F)
+tract_df$cond_pop_RM_gq_15=ifelse( (tract_df$TPop_15-as.numeric(tract_df$gq_numb_15)) < 2000, T, F)
+tract_df$cond_pop_RM_gq_16=ifelse( (tract_df$TPop_16-as.numeric(tract_df$gq_numb_16)) < 2000, T, F)
+
+# tract_df$cond_pop_RM_correct_15=ifelse( (tract_df$pop_RM_correctional_gq_15) < 2000, T, F)
+# tract_df$cond_pop_RM_correct_16=ifelse( (tract_df$pop_RM_correctional_gq_16) < 2000, T, F)
+
+tract_df$cond_pop_RM_inst_15[is.na(tract_df$cond_pop_RM_inst_15)] <- F
+tract_df$cond_pop_RM_inst_16[is.na(tract_df$cond_pop_RM_inst_16)] <- F
+tract_df$cond_pop_RM_gq_15[is.na(tract_df$cond_pop_RM_gq_15)] <- F
+tract_df$cond_pop_RM_gq_16[is.na(tract_df$cond_pop_RM_gq_16)] <- F
+
+tract_df$pop_cond_Rm_Inst=ifelse(
+	tract_df$cond_pop_RM_inst_16 == T | tract_df$cond_pop_RM_inst_15 == T, T, F )
+tract_df$pop_cond_Rm_gq=ifelse(
+	tract_df$cond_pop_RM_gq_16 == T | tract_df$cond_pop_RM_gq_15 == T, T, F )
 
 # LIC Types
 tract_df$LIC_detailed = tract_df$LIC
@@ -804,18 +826,19 @@ tract_df$corruption = ifelse(tract_df$GEOID == '40109103200' | tract_df$GEOID ==
 tract_df$final_LIC = ifelse(tract_df$intermediate_LIC == T & tract_df$LIC_tf == F,F,tract_df$intermediate_LIC)
 
 # Conditions
-tract_shapes$poverty_cond=ifelse(tract_df$poverty_cond == T & tract_df$LIC_tf == F,F,tract_df$poverty_cond)
-tract_shapes$population_cond=ifelse(tract_df$population_cond == T & tract_df$LIC_tf == F,F,tract_df$population_cond)
-tract_shapes$income_cond=ifelse(tract_df$income_cond == T & tract_df$LIC_tf == F,F,tract_df$income_cond)
-tract_shapes$rural_cond	=ifelse(tract_df$rural_cond == T & tract_df$LIC_tf == F,F,tract_df$rural_cond)
+tract_df$poverty_cond=ifelse(tract_df$poverty_cond == T & tract_df$LIC_tf == F,F,tract_df$poverty_cond)
+tract_df$population_cond=ifelse(tract_df$population_cond == T & tract_df$LIC_tf == F,F,tract_df$population_cond)
+tract_df$income_cond=ifelse(tract_df$income_cond == T & tract_df$LIC_tf == F,F,tract_df$income_cond)
+tract_df$rural_cond	=ifelse(tract_df$rural_cond == T & tract_df$LIC_tf == F,F,tract_df$rural_cond)
 	
-tract_shapes[is.na(tract_shapes)] <- "N/A"
+tract_df[is.na(tract_df)] <- "N/A"
 
 lic_df = as.data.frame(tract_df[c("GEOID", 'LIC', 'OZ_type','tract_type','tract_type_alt','labor_idx','pov_idx','edu_idx','afford_idx','mig_idx','combined_index', 'LIC_2016', 'LIC_2015', 'LIC_2016_f', 'LIC_2015_f','Tperc_fpl_15','Tperc_fpl_16','NMTC_elig_type','METRO_NAME','COUNTY_NAME',
 	# "cond1_2015" , "cond2_2015" , "cond3_2015" ,"cond4_2015",'cond5_2015'
 	# ,"cond1_2016" , "cond2_2016" , "cond3_2016" ,"cond4_2016",'cond5_2016',
-	'poverty_cond', 'population_cond', 'rural_cond', 'income_cond',
+	'poverty_cond', 'population_cond', 'rural_cond', 'income_cond','pop_cond_Rm_Inst','cond_pop_RM_inst_15','cond_pop_RM_inst_16','pop_cond_Rm_gq',
 	'metro_MFI_15','metro_MFI_16','state_MFI_15','state_MFI_16','intermediate_LIC','Native_Tract',
+	'pop_RM_institutionalized_gq_15','pop_RM_institutionalized_gq_16','cond_pop_RM_gq_15','cond_pop_RM_gq_16',
 	'check_state_MFI_15', 'check_metro_MFI_15','check_state_MFI_16', 'check_metro_MFI_16','corruption',
 	'cond_state_MFI_15','cond_metro_MFI_15','cond_state_MFI_15_2','cond_tpop_15',
 	'TPop_16','TPop_15','tract_MFI_15','tract_MFI_16',
@@ -824,10 +847,11 @@ lic_df = as.data.frame(tract_df[c("GEOID", 'LIC', 'OZ_type','tract_type','tract_
 	'LIC_tf','final_LIC','inter_15','inter_16','empzone_tf','metro_15','metro_16','cond_pov15','cond_pov16','HMRC')])
 
 lic_df = as.data.frame(lic_df[c("GEOID", 'LIC', 'OZ_type','tract_type','tract_type_alt','labor_idx','pov_idx','edu_idx','afford_idx','mig_idx','combined_index', 'LIC_2016', 'LIC_2015', 'LIC_2016_f', 'LIC_2015_f','Tperc_fpl_15','Tperc_fpl_16','NMTC_elig_type','METRO_NAME','COUNTY_NAME',
-	'poverty_cond', 'population_cond', 'rural_cond', 'income_cond',
 	# "cond1_2015" , "cond2_2015" , "cond3_2015" ,"cond4_2015",'cond5_2015'
 	# ,"cond1_2016" , "cond2_2016" , "cond3_2016" ,"cond4_2016",'cond5_2016',
+	'poverty_cond', 'population_cond', 'rural_cond', 'income_cond','pop_cond_Rm_Inst','cond_pop_RM_inst_15','cond_pop_RM_inst_16','pop_cond_Rm_gq',
 	'metro_MFI_15','metro_MFI_16','state_MFI_15','state_MFI_16','intermediate_LIC','Native_Tract',
+	'pop_RM_institutionalized_gq_15','pop_RM_institutionalized_gq_16','cond_pop_RM_gq_15','cond_pop_RM_gq_16',
 	'check_state_MFI_15', 'check_metro_MFI_15','check_state_MFI_16', 'check_metro_MFI_16','corruption',
 	'cond_state_MFI_15','cond_metro_MFI_15','cond_state_MFI_15_2','cond_tpop_15',
 	'TPop_16','TPop_15','tract_MFI_15','tract_MFI_16',
@@ -837,8 +861,8 @@ lic_df = as.data.frame(lic_df[c("GEOID", 'LIC', 'OZ_type','tract_type','tract_ty
 
 openxlsx::write.xlsx(lic_df,'~/Desktop/Welfare_Policy/Struggling_Regions/Cluster_Analyses/Web_Map/Resources/Extra_Shapefiles/LIC Tracts/LIC.xlsx')
 save(tract_df, file = '~/Desktop/Welfare_Policy/Struggling_Regions/Eligibility Criteria/tract_df.Rdata')
-unique(tract_df$final_LIC)
-glimpse(tract_df)
+
+# glimpse(tract_df)
 
 #####################################################################
 ############# Choose Final Variables and Lat-Lng style ##############
@@ -877,6 +901,7 @@ tract_df=within(tract_df,rm(county_MFI_15,county_MFI_16,cond2_2016,cond4_2015, c
 tract_df=within(tract_df,rm(State_Name,County_Name,METRO_NAME_15,METRO_NAME_16,no_dat_MFI_15,no_dat_pov_15,no_dat_MFI_16,no_dat_pov_16))
 tract_df=within(tract_df,rm(poverty_cond,income_cond,rural_cond,population_cond))
 tract_df=within(tract_df,rm(X))
+tract_df=within(tract_df,rm(poverty_cond_Rm_Inst,cond_pop_RM_inst_15,cond_pop_RM_inst_16))
 glimpse(tract_df)
 names(tract_df)
 
