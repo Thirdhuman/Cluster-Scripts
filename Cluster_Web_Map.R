@@ -295,7 +295,6 @@ emp_zone=subset(emp_zone, TYPE == "Empowerment Zone")
 names(emp_zone)[names(emp_zone) == 'TYPE'] = 'Empowerment_Zone'
 emp_zone=emp_zone[c("Empowerment_Zone", 'geometry')]
 
-
 # op_zone=sf::st_read('/Users/rorr/Desktop/Welfare_Policy/Struggling_Regions/Eligibility Criteria/Opportunity_Zones', crs = 4269)
 # op_zone=subset(emp_zone, TYPE == "Opportunity Zone")
 # names(op_zone)[names(emp_zone) == 'TYPE'] = 'Opportunity Zone'
